@@ -4,7 +4,7 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 1,
     name: "Tingkat 1: Blokade Sederhana",
-    description: "Kenali pola gerakan dasar tempat parkir. Mobil Merahmu terperangkap secara vertikal di kolom 4. Geser penghalang A dan B yang mendatar ke samping untuk membebaskannya!",
+    description: "Kenali pola gerakan dasar tempat parkir. Taxi Kuning R terperangkap secara vertikal di kolom 6. Geser Mobil Biru B yang mendatar ke samping untuk membebaskannya!",
     difficulty: "Mudah",
     optimalSteps: 3,
     gridRows: 11,
@@ -18,7 +18,7 @@ export const LEVELS: LevelDefinition[] = [
         col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah (Pemain)",
+        label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
@@ -27,8 +27,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 3,
         length: 2,
-        color: "bg-amber-400 shadow-amber-200 border-amber-500",
-        label: "Mobil Kuning A"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah A"
       },
       {
         id: "B",
@@ -36,17 +36,17 @@ export const LEVELS: LevelDefinition[] = [
         row: 7,
         col: 6,
         length: 2,
-        color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
-        label: "Mobil Hijau B"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru B"
       },
       {
         id: "C",
         direction: "vertical",
         row: 5,
-        col:5,
+        col: 5,
         length: 2,
-        color: "bg-sky-400 shadow-sky-200 border-sky-500",
-        label: "Mobil Biru C"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu C"
       },
       {
         id: "D",
@@ -54,8 +54,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 7,
         length: 2,
-        color: "bg-violet-400 shadow-violet-200 border-violet-500",
-        label: "Mobil Ungu D"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Hijau D"
       },
       {
         id: "E",
@@ -63,24 +63,24 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 9,
         length: 2,
-        color: "bg-pink-400 shadow-pink-200 border-pink-500",
-        label: "Mobil Fuchsia E"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu E"
       }
     ],
     quizQuestions: [
       {
         id: "q1_1",
-        question: "Kendaraan manakah yang menghalangi jalan keluar Mobil Merah secara langsung?",
-        options: ["Mobil Biru C", "Mobil Kuning A dan Mobil Hijau B", "Tidak ada", "Semua mobil"],
-        correctAnswerIndex: 1,
-        explanation: "Mobil Kuning A (baris 1) dan Mobil Hijau B (baris 2) berada langsung di kolom 4, menghalangi jalur vertikal Mobil Merah."
+        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning R secara langsung?",
+        options: ["Mobil Biru B", "Mobil Merah A dan Mobil Biru B", "Tidak ada", "Semua mobil"],
+        correctAnswerIndex: 0,
+        explanation: "Mobil Biru B berada di baris 7 kolom 6-7, tepat di lintasan vertikal Taxi Kuning R menuju gerbang keluar."
       },
       {
         id: "q1_2",
-        question: "Ke arah manakah Mobil Kuning A dan Mobil Hijau B harus digeser agar lintasan Mobil Merah terbuka?",
-        options: ["Ke atas atau ke bawah", "Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 4", "Hanya bisa ke kanan", "Tidak bisa digeser"],
-        correctAnswerIndex: 1,
-        explanation: "Karena A dan B berorientasi horizontal (mendatar), mereka harus digeser ke kiri atau kanan agar kolom 4 menjadi kosong."
+        question: "Ke arah manakah Mobil Biru B harus digeser agar lintasan Taxi Kuning R terbuka?",
+        options: ["Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 6", "Ke atas atau ke bawah", "Hanya bisa ke kanan", "Tidak bisa digeser"],
+        correctAnswerIndex: 0,
+        explanation: "Karena Mobil Biru B berorientasi horizontal (mendatar), ia harus digeser ke kiri atau kanan agar kolom 6 menjadi kosong, sehingga Taxi Kuning R bisa melaju ke bawah."
       }
     ],
     walls: [{"row":4,"col":1},{"row":4,"col":2},{"row":4,"col":3},{"row":4,"col":4},{"row":4,"col":5},{"row":4,"col":6},{"row":4,"col":7},{"row":4,"col":8},{"row":4,"col":9},{"row":4,"col":10}]
@@ -88,7 +88,7 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 2,
     name: "Tingkat 2: Hambatan Berantai",
-    description: "Tantangan mulai meningkat! Mobil Kuning menghalangi jalan keluar, tapi jalurnya sendiri dihalangi oleh Mobil Hijau. Urutkan langkahmu demi jalan keluar!",
+    description: "Tantangan mulai meningkat! Mobil Merah A menghalangi jalan keluar, tapi jalurnya sendiri dihalangi oleh Mobil Biru B. Urutkan langkahmu demi jalan keluar!",
     difficulty: "Sedang",
     optimalSteps: 3,
     gridRows: 11,
@@ -102,7 +102,7 @@ export const LEVELS: LevelDefinition[] = [
         col: 1,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah (Pemain)",
+        label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
@@ -112,18 +112,18 @@ export const LEVELS: LevelDefinition[] = [
         col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Taxi 2 (Pemain)",
+        label: "Taxi Kuning T (Pemain)",
         isPlayer: true,
         exitCol: 6
       },
       {
         id: "A",
-        direction: "horizontal",
+        direction: "vertical",
         row: 1,
         col: 3,
         length: 2,
-        color: "bg-amber-400 shadow-amber-200 border-amber-500",
-        label: "Mobil Kuning A"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah A"
       },
       {
         id: "B",
@@ -131,8 +131,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 3,
         col: 2,
         length: 2,
-        color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
-        label: "Mobil Hijau B"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru B"
       },
       {
         id: "C",
@@ -140,29 +140,29 @@ export const LEVELS: LevelDefinition[] = [
         row: 0,
         col: 0,
         length: 2,
-        color: "bg-sky-400 shadow-sky-200 border-sky-500",
-        label: "Mobil Biru C"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu C"
       }
     ],
     quizQuestions: [
       {
         id: "q2_1",
-        question: "Sebelum menggeser Mobil Kuning A ke bawah, kendaraan manakah yang harus dipindahkan terlebih dahulu?",
-        options: ["Mobil Biru C", "Mobil Hijau B", "Mobil Merah R", "Tidak perlu memindahkan apa pun"],
+        question: "Sebelum menggeser Mobil Merah A ke bawah, kendaraan manakah yang harus dipindahkan terlebih dahulu?",
+        options: ["Mobil Abu-abu C", "Mobil Biru B", "Taxi Kuning R", "Tidak perlu memindahkan apa pun"],
         correctAnswerIndex: 1,
-        explanation: "Mobil Hijau B berada di baris 3 kolom 2-3, tepat di bawah posisi target Mobil Kuning A. B harus digeser ke kanan agar A bisa turun ke baris 3."
+        explanation: "Mobil Biru B berada di baris 3 kolom 2-3, tepat di bawah posisi target Mobil Merah A. B harus digeser ke kanan agar A bisa turun ke baris 3."
       },
       {
         id: "q2_2",
         question: "Urutan strategi atau algoritma logis manakah yang tepat untuk menyelesaikan tingkat ini?",
         options: [
-          "Geser R ke kanan langsung saja",
-          "Geser B ke kanan → Geser A ke bawah → Geser R ke kanan",
-          "Geser C ke bawah → Geser B ke kiri → Geser A ke atas",
-          "Geser A ke atas → Geser B ke kanan → Geser R ke kiri"
+          "Geser Taxi Kuning R ke kanan langsung saja",
+          "Geser Mobil Biru B ke kanan → Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke kanan",
+          "Geser Mobil Abu-abu C ke bawah → Geser Mobil Biru B ke kiri → Geser Mobil Merah A ke atas",
+          "Geser Mobil Merah A ke atas → Geser Mobil Biru B ke kanan → Geser Taxi Kuning R ke kiri"
         ],
         correctAnswerIndex: 1,
-        explanation: "Dengan menggeser Mobil Hijau B ke kanan, ruang di baris 3 terbuka. Kemudian geser Kuning A ke bawah, memberi jalan bagi Mobil Merah R untuk meluncur ke kanan."
+        explanation: "Dengan menggeser Mobil Biru B ke kanan, ruang di baris 3 terbuka. Kemudian geser Mobil Merah A ke bawah, memberi jalan bagi Taxi Kuning R untuk meluncur ke kanan."
       }
     ]
   },
@@ -183,17 +183,17 @@ export const LEVELS: LevelDefinition[] = [
         col: 1,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah (Pemain)",
+        label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
         id: "A",
-        direction: "horizontal",
+        direction: "vertical",
         row: 1,
         col: 3,
         length: 2,
-        color: "bg-amber-400 shadow-amber-200 border-amber-500",
-        label: "Mobil Kuning A"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah A"
       },
       {
         id: "B",
@@ -201,8 +201,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 3,
         col: 2,
         length: 2,
-        color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
-        label: "Mobil Hijau B"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru B"
       },
       {
         id: "C",
@@ -210,8 +210,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 0,
         col: 0,
         length: 2,
-        color: "bg-cyan-400 shadow-cyan-200 border-cyan-500",
-        label: "Mobil Cyan C"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu C"
       },
       {
         id: "D",
@@ -219,8 +219,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 0,
         length: 3,
-        color: "bg-violet-400 shadow-violet-200 border-violet-500",
-        label: "Truk Ungu D"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Abu-abu D"
       },
       {
         id: "E",
@@ -228,43 +228,43 @@ export const LEVELS: LevelDefinition[] = [
         row: 4,
         col: 0,
         length: 2,
-        color: "bg-fuchsia-400 shadow-fuchsia-200 border-fuchsia-500",
-        label: "Mobil Fuchsia E"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu E"
       },
       {
         id: "F",
-        direction: "horizontal",
+        direction: "vertical",
         row: 3,
         col: 4,
         length: 2,
-        color: "bg-orange-400 shadow-orange-200 border-orange-500",
-        label: "Mobil Jingga F"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru F"
       }
     ],
     quizQuestions: [
       {
         id: "q3_1",
-        question: "Jika kamu memindahkan Truk Ungu D, apakah hal tersebut berdampak langsung pada terbukanya jalan keluar Mobil Merah?",
+        question: "Jika kamu memindahkan Truk Abu-abu D, apakah hal tersebut berdampak langsung pada terbukanya jalan keluar Taxi Kuning R?",
         options: [
           "Ya, sangat impactful",
-          "Tidak, karena Truk Ungu D berada di baris 5 jauh dari jalur keluar Mobil Merah di baris 2",
+          "Tidak, karena Truk Abu-abu D berada di baris 5 jauh dari jalur keluar Taxi Kuning R",
           "Ya, karena semua truk harus dipindahkan",
           "Mungkin saja tergantung arah putaran angin"
         ],
         correctAnswerIndex: 1,
-        explanation: "Konsep Abstraction (Abstraksi): Truk Ungu D berada di baris 5 dan tidak menghalangi rantai kendaraan yang memblokir jalur keluar Mobil Merah R. Mengabaikan truk ini adalah bentuk penyederhanaan masalah."
+        explanation: "Konsep Abstraction (Abstraksi): Truk Abu-abu D berada di baris 5 dan tidak menghalangi rantai kendaraan yang memblokir jalur keluar Taxi Kuning R. Mengabaikan truk ini adalah bentuk penyederhanaan masalah."
       },
       {
         id: "q3_2",
         question: "Langkah pembuka manakah yang paling efisien untuk memulai penyelesaian tingkat ini?",
         options: [
-          "Geser Mobil Merah R langsung ke kanan",
-          "Pindahkan Truk Ungu D ke baris atas",
-          "Geser Mobil Jingga F ke bawah untuk membuka ruang bagi Mobil Hijau B",
-          "Geser Mobil Cyan C ke kanan sejauh mungkin"
+          "Geser Taxi Kuning R langsung ke kanan",
+          "Pindahkan Truk Abu-abu D ke baris atas",
+          "Geser Mobil Biru F ke bawah untuk membuka ruang bagi Mobil Biru B",
+          "Geser Mobil Abu-abu C ke kanan sejauh mungkin"
         ],
         correctAnswerIndex: 2,
-        explanation: "Mobil Jingga F di baris 3 kolom 4-5 menghalangi Mobil Hijau B untuk bergeser ke kanan. Menurunkan F ke baris 4 membuka ruang bagi B, yang kemudian memungkinkan A turun dan membuka jalur R."
+        explanation: "Mobil Biru F di kolom 4 baris 3-4 menghalangi Mobil Biru B untuk bergeser ke kanan. Menurunkan F ke bawah membuka ruang bagi B, yang kemudian memungkinkan Mobil Merah A turun dan membuka jalur Taxi Kuning R."
       }
     ]
   },
@@ -285,17 +285,17 @@ export const LEVELS: LevelDefinition[] = [
         col: 1,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah (Pemain)",
+        label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
         id: "A",
-        direction: "horizontal",
+        direction: "vertical",
         row: 0,
         col: 3,
         length: 2,
-        color: "bg-amber-400 shadow-amber-200 border-amber-500",
-        label: "Mobil Kuning A"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah A"
       },
       {
         id: "B",
@@ -303,8 +303,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 4,
         col: 0,
         length: 2,
-        color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
-        label: "Mobil Hijau B"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru B"
       },
       {
         id: "C",
@@ -312,8 +312,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 3,
         length: 2,
-        color: "bg-indigo-400 shadow-indigo-200 border-indigo-500",
-        label: "Mobil Indigo C"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu C"
       },
       {
         id: "D",
@@ -321,17 +321,17 @@ export const LEVELS: LevelDefinition[] = [
         row: 4,
         col: 2,
         length: 2,
-        color: "bg-sky-400 shadow-sky-200 border-sky-500",
-        label: "Mobil Biru D"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Hijau D"
       },
       {
         id: "E",
         direction: "horizontal",
-        row: 1,
+        row: 3,
         col: 3,
         length: 2,
-        color: "bg-teal-400 shadow-teal-200 border-teal-500",
-        label: "Mobil Teal E"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu E"
       },
       {
         id: "F",
@@ -339,8 +339,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 0,
         col: 0,
         length: 2,
-        color: "bg-pink-400 shadow-pink-200 border-pink-500",
-        label: "Mobil Merah Muda F"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru F"
       },
       {
         id: "G",
@@ -348,8 +348,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 0,
         length: 2,
-        color: "bg-lime-400 shadow-lime-200 border-lime-500",
-        label: "Mobil Limau G"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Cyan G"
       }
     ],
     quizQuestions: [
@@ -367,10 +367,15 @@ export const LEVELS: LevelDefinition[] = [
       },
       {
         id: "q4_2",
-        question: "Jika Mobil Kuning A perlu turun ke baris 2 untuk membuka jalur, kendaraan mana yang harus dipindahkan terlebih dahulu?",
-        options: ["Mobil Hijau B dan Truk Ungu D", "Mobil Teal E yang berada tepat di bawah A", "Mobil Merah R", "Semua mobil sekaligus"],
+        question: "Jika Mobil Merah A perlu turun ke baris 2 untuk membuka jalur, kendaraan mana yang harus dipindahkan terlebih dahulu?",
+        options: [
+          "Mobil Biru B dan Mobil Hijau D",
+          "Mobil Abu-abu E yang berada tepat di bawah A",
+          "Taxi Kuning R",
+          "Semua mobil sekaligus"
+        ],
         correctAnswerIndex: 1,
-        explanation: "Mobil Teal E berada di baris 1 kolom 3-4, tepat di bawah Mobil Kuning A. E harus digeser ke kanan agar A bisa turun, tetapi E sendiri terhalang dan membutuhkan persiapan terlebih dahulu."
+        explanation: "Mobil Abu-abu E berada di baris 3 kolom 3-4, tepat di bawah Mobil Merah A. E harus digeser ke kanan atau ke kiri agar kolom 3 baris 3 kosong, sehingga Mobil Merah A bisa turun ke bawah."
       }
     ]
   },
@@ -391,17 +396,17 @@ export const LEVELS: LevelDefinition[] = [
         col: 1,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah (Pemain)",
+        label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
         id: "A",
-        direction: "horizontal",
+        direction: "vertical",
         row: 0,
         col: 3,
         length: 2,
-        color: "bg-amber-400 shadow-amber-200 border-amber-500",
-        label: "Mobil Kuning A"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah A"
       },
       {
         id: "B",
@@ -409,8 +414,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 3,
         length: 2,
-        color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
-        label: "Mobil Hijau B"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Biru B"
       },
       {
         id: "C",
@@ -418,26 +423,26 @@ export const LEVELS: LevelDefinition[] = [
         row: 0,
         col: 1,
         length: 2,
-        color: "bg-indigo-400 shadow-indigo-200 border-indigo-500",
-        label: "Mobil Indigo C"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu C"
       },
       {
         id: "D",
-        direction: "horizontal",
+        direction: "vertical",
         row: 0,
         col: 4,
         length: 2,
-        color: "bg-sky-400 shadow-sky-200 border-sky-500",
-        label: "Mobil Biru D"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Hijau D"
       },
       {
         id: "E",
         direction: "horizontal",
-        row: 1,
+        row: 3,
         col: 3,
         length: 2,
-        color: "bg-pink-400 shadow-pink-200 border-pink-500",
-        label: "Mobil Merah Muda E"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Abu-abu E"
       },
       {
         id: "F",
@@ -445,8 +450,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 5,
         col: 0,
         length: 3,
-        color: "bg-teal-400 shadow-teal-200 border-teal-500",
-        label: "Truk Teal F"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Hijau F"
       },
       {
         id: "G",
@@ -454,17 +459,17 @@ export const LEVELS: LevelDefinition[] = [
         row: 4,
         col: 0,
         length: 2,
-        color: "bg-lime-400 shadow-lime-200 border-lime-500",
-        label: "Mobil Limau G"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Cyan G"
       },
       {
         id: "H",
-        direction: "horizontal",
+        direction: "vertical",
         row: 3,
         col: 2,
         length: 2,
-        color: "bg-violet-400 shadow-violet-200 border-violet-500",
-        label: "Mobil Violet H"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Cokelat H"
       },
       {
         id: "I",
@@ -472,8 +477,8 @@ export const LEVELS: LevelDefinition[] = [
         row: 2,
         col: 3,
         length: 2,
-        color: "bg-orange-400 shadow-orange-200 border-orange-500",
-        label: "Mobil Jingga I"
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Merah I"
       }
     ],
     quizQuestions: [
@@ -483,11 +488,11 @@ export const LEVELS: LevelDefinition[] = [
         options: [
           "Mencoba memindahkan semua mobil sekaligus secara acak",
           "Menyerah dan membuat level baru saja",
-          "Memfokuskan analisis hanya pada mobil yang berada di jalur keluar (baris 2 kolom 3-5), lalu melacak penyebab hambatan mobil tersebut ke belakang",
+          "Memfokuskan analisis hanya pada mobil yang menghalangi jalur keluar langsung (seperti Mobil Merah I di baris 2 kolom 3-4), lalu melacak penyebab hambatan mobil tersebut ke belakang",
           "Menghapus mobil-mobil yang sulit dipindahkan"
         ],
         correctAnswerIndex: 2,
-        explanation: "Dekomposisi adalah memecah masalah besar menjadi bagian kecil. Dengan melacak mundur hambatan mulai dari mobil keluar terdekat, kita menyederhanakan pohon pencarian solusi."
+        explanation: "Dekomposisi adalah memecah masalah besar menjadi bagian kecil. Dengan melacak mundur hambatan mulai dari mobil keluar terdekat (seperti Mobil Merah I), kita menyederhanakan pencarian solusi."
       },
       {
         id: "q5_2",

@@ -1,5 +1,4 @@
 import React from "react";
-import { Sparkles, ChevronRight } from "lucide-react";
 import { audio } from "@lib/audio";
 
 interface SplashPageProps {
@@ -7,35 +6,58 @@ interface SplashPageProps {
 }
 
 export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
-
   return (
-    <div className="relative w-full max-w-3xl mx-auto text-center py-6 flex-1 flex flex-col justify-start md:justify-center items-center overflow-y-auto pr-1 min-h-0">
+    <div
+      className="fixed inset-0 w-screen h-screen z-40 bg-cover bg-center bg-no-repeat overflow-hidden"
+      style={{ backgroundImage: "url('/img/background-judul.webp')" }}
+    >
+      {/* Decorative gradient overlay to enhance visual depth */}
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/10 via-transparent to-slate-950/20 pointer-events-none" />
 
-      <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-600 text-xs font-bold mb-6 animate-pulse">
-        <Sparkles size={12} />
-        <span>Berpikir Komputasional (CT) SD</span>
-      </div>
+      {/* Safe layout boundary: max-w-7xl container centered on viewport, aligning content to side on desktop */}
+      <div className="w-full h-full flex justify-end items-center">
+        
+        {/* Title and button stack: centered items inside this column container */}
+        <div className="flex flex-col items-center max-w-[180px] sm:max-w-[180px]  md:max-w-[180px] lg:max-w-[320px] xl:max-w-[460px] w-full z-10 mr-12 sm:mr-14 xl:mr-20">
+          
+          {/* Floating container for titles to create a smooth bobbing/wiggle effect */}
+          <div className="w-full flex flex-col items-center animate-float-wiggle">
+            {/* Title SVGs: judul-1 and judul-3 are equal (w-full), judul-2 is smaller (w-[65%]) */}
+            <img
+              src="/img/judul-1.svg"
+              alt="Escape"
+              className="w-full h-auto object-contain select-none pointer-events-none relative z-10 animate-title-1"
+            />
+            
+            <img
+              src="/img/judul-2.svg"
+              alt="Parking"
+              className="w-[35%] h-auto object-contain select-none pointer-events-none -mt-4 sm:-mt-4 md:-mt-4 lg:-mt-6 relative z-20 animate-title-2"
+            />
+            
+            <img
+              src="/img/judul-3.svg"
+              alt="Challenge"
+              className="w-full h-auto object-contain select-none pointer-events-none -mt-3 sm:-mt-4 md:-mt-3 lg:-mt-6 relative z-10 animate-title-3"
+            />
+          </div>
 
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-display tracking-tight text-slate-800 mb-4 leading-tight">
-        Belajar Strategi & Algoritma lewat{" "}
-        <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Escape Parking!
-        </span>
-      </h1>
-
-      <p className="text-xs sm:text-sm md:text-base text-slate-500 font-sans max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed font-medium">
-        Halo Calon Pemikir Hebat! Bantu mobil merah keluar dari tempat parkir yang macet dengan memecah
-        hambatan, merancang instruksi langkah, dan menguji algoritma terbaikmu!
-      </p>
-
-      <div className="mb-10 md:mb-14 flex flex-col sm:flex-row gap-3.5 justify-center items-center w-full max-w-xl mx-auto">
-        <button
-          onClick={() => { audio.playClick(); onStart(); }}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-black text-sm sm:text-base md:text-lg px-8 py-4 sm:px-10 sm:py-4.5 md:px-12 md:py-5 rounded-xl sm:rounded-2xl transition-all shadow-lg active:scale-95 cursor-pointer hover:scale-105 inline-flex items-center justify-center gap-2 sm:gap-3 animate-[pulse_2.5s_infinite]"
-        >
-          <span>MULAI SEKARANG</span>
-          <ChevronRight size={18} className="text-blue-200" />
-        </button>
+          {/* Centered forward button with pulse and hover grow effect */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              onStart();
+            }}
+            className="mt-6 sm:mt-8 2xl:mt-10 cursor-pointer transform hover:scale-110 active:scale-95 transition-all duration-300 hover:brightness-110 focus:outline-none animate-[pulse_2s_infinite] drop-shadow-2xl"
+            aria-label="Start Game"
+          >
+            <img
+              src="/img/forward.svg"
+              alt="Mulai"
+              className="w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22 object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

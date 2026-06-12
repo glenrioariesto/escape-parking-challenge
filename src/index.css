@@ -85,4 +85,46 @@ body {
   display: none !important;
 }
 
+/* Custom Floating & Wiggling Animation (Ngambang) for Splash Title Screen */
+@keyframes floatWiggle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(0.4deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-0.4deg);
+  }
+}
+
+.animate-float-wiggle {
+  animation: floatWiggle 4.5s ease-in-out infinite;
+}
+
+/* Breathing / Pulsing Scale Animation (Besar Kecil) for titles */
+@keyframes titleScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.035);
+  }
+}
+
+.animate-title-1 {
+  animation: fadeInUp 0.6s ease-out both, titleScale 4s ease-in-out infinite 0.6s;
+}
+
+.animate-title-2 {
+  animation: fadeInUp 0.8s ease-out both, titleScale 4s ease-in-out infinite 1.2s;
+}
+
+.animate-title-3 {
+  animation: fadeInUp 1.0s ease-out both, titleScale 4s ease-in-out infinite 1.8s;
+}
+
 
