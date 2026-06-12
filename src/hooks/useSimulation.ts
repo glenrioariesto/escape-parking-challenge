@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { Vehicle, MoveAction } from "@types";
-import { checkCollision } from "@pages/arena/components/ParkingGrid";
+import { checkCollision, isLevelSolved } from "@pages/arena/components/ParkingGrid";
 import { audio } from "@lib/audio";
 
 export function useSimulation(
   originalVehicles: Vehicle[],
   algorithmSteps: MoveAction[],
   onComplete: (stepsCount: number) => void,
-  gridRows = 6,
-  gridCols = 6
+  gridRows = 11,
+  gridCols = 12,
+  walls: { row: number; col: number }[] = [],
+  defaultExitRow = 4,
+  defaultExitCol = 4
 ) {
   const [activeVehicles, setActiveVehicles] = useState<Vehicle[]>(originalVehicles);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -42,11 +45,12 @@ export function useSimulation(
     if (currentStepIndex >= algorithmSteps.length) {
       setIsSimulating(false);
       setCurrentStepIndex(null);
-      const playerCar = activeVehicles.find((v) => v.isPlayer);
-      if (playerCar && playerCar.col >= gridCols - 2) {
+      const isSolved = isLevelSolved(activeVehicles, gridRows, gridCols, defaultExitRow, defaultExitCol);
+
+      if (isSolved) {
         onComplete(algorithmSteps.length);
       } else {
-        appendLog("🏁 Semua langkah selesai. Namun, Mobil Merah belum sampai pintu keluar!");
+        appendLog("🏁 Semua langkah selesai. Namun, belum semua Taxi sampai pintu keluar!");
         appendLog("💡 Tips: Analisis kembali mobil yang menghalangi.");
         audio.playError();
       }
@@ -64,7 +68,7 @@ export function useSimulation(
         return;
       }
 
-      const check = checkCollision(target, step.direction, step.distance, activeVehicles, gridRows, gridCols);
+      const check = checkCollision(target, step.direction, step.distance, activeVehicles, gridRows, gridCols, walls);
       if (!check.valid) {
         appendLog(`💥 TABRAKAN pada Langkah #${currentStepIndex + 1}: ${target.label} — "${check.reason}"!`);
         audio.playError();
@@ -86,8 +90,18 @@ export function useSimulation(
       setCurrentStepIndex((i) => (i !== null ? i + 1 : null));
     }, 1000);
 
-    return () => clearTimeout(timer);
-  }, [isSimulating, currentStepIndex, activeVehicles, algorithmSteps, gridRows, gridCols]);
+  }, [
+    isSimulating,
+    currentStepIndex,
+    activeVehicles,
+    algorithmSteps,
+    gridRows,
+    gridCols,
+    walls,
+    defaultExitRow,
+    defaultExitCol,
+    onComplete
+  ]);
 
   return { activeVehicles, setActiveVehicles, isSimulating, currentStepIndex, simulationLogs, start, reset };
 }

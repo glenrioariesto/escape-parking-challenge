@@ -4,18 +4,18 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 1,
     name: "Tingkat 1: Blokade Sederhana",
-    description: "Kenali pola gerakan dasar tempat parkir. Ada Mobil Kuning yang langsung menghalangi jalur mobil merahmu di area parkir yang luas. Bagaimana cara menyingkirkannya?",
+    description: "Kenali pola gerakan dasar tempat parkir. Mobil Merahmu terperangkap secara vertikal di kolom 4. Geser penghalang A dan B yang mendatar ke samping untuk membebaskannya!",
     difficulty: "Mudah",
-    optimalSteps: 2,
-    gridRows: 3,
-    gridCols: 10,
-    exitRow: 1,
+    optimalSteps: 3,
+    gridRows: 11,
+    gridCols: 12,
+    exitRow: 2,
     vehicles: [
       {
         id: "R",
-        direction: "horizontal",
-        row: 1,
-        col: 0,
+        direction: "vertical",
+        row: 5,
+        col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Merah (Pemain)",
@@ -23,9 +23,9 @@ export const LEVELS: LevelDefinition[] = [
       },
       {
         id: "A",
-        direction: "horizontal",
-        row: 1,
-        col: 4,
+        direction: "vertical",
+        row: 5,
+        col: 3,
         length: 2,
         color: "bg-amber-400 shadow-amber-200 border-amber-500",
         label: "Mobil Kuning A"
@@ -33,29 +33,57 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "B",
         direction: "horizontal",
-        row: 0,
-        col: 4,
+        row: 7,
+        col: 6,
         length: 2,
         color: "bg-emerald-400 shadow-emerald-200 border-emerald-500",
         label: "Mobil Hijau B"
+      },
+      {
+        id: "C",
+        direction: "vertical",
+        row: 5,
+        col:5,
+        length: 2,
+        color: "bg-sky-400 shadow-sky-200 border-sky-500",
+        label: "Mobil Biru C"
+      },
+      {
+        id: "D",
+        direction: "vertical",
+        row: 5,
+        col: 7,
+        length: 2,
+        color: "bg-violet-400 shadow-violet-200 border-violet-500",
+        label: "Mobil Ungu D"
+      },
+      {
+        id: "E",
+        direction: "vertical",
+        row: 5,
+        col: 9,
+        length: 2,
+        color: "bg-pink-400 shadow-pink-200 border-pink-500",
+        label: "Mobil Fuchsia E"
       }
     ],
     quizQuestions: [
       {
         id: "q1_1",
         question: "Kendaraan manakah yang menghalangi jalan keluar Mobil Merah secara langsung?",
-        options: ["Mobil Hijau B", "Mobil Kuning A", "Tidak ada", "Semua mobil"],
+        options: ["Mobil Biru C", "Mobil Kuning A dan Mobil Hijau B", "Tidak ada", "Semua mobil"],
         correctAnswerIndex: 1,
-        explanation: "Mobil Kuning A berada di baris 1 kolom 4-5, tepat di lintasan horizontal Mobil Merah menuju gerbang keluar di sebelah kanan."
+        explanation: "Mobil Kuning A (baris 1) dan Mobil Hijau B (baris 2) berada langsung di kolom 4, menghalangi jalur vertikal Mobil Merah."
       },
       {
         id: "q1_2",
-        question: "Ke arah manakah Mobil Kuning A harus digeser agar lintasan Mobil Merah terbuka?",
-        options: ["Ke kiri saja", "Ke bawah agar keluar dari jalur keluar Mobil Merah", "Hanya bisa ke kanan", "Tidak bisa digeser"],
+        question: "Ke arah manakah Mobil Kuning A dan Mobil Hijau B harus digeser agar lintasan Mobil Merah terbuka?",
+        options: ["Ke atas atau ke bawah", "Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 4", "Hanya bisa ke kanan", "Tidak bisa digeser"],
         correctAnswerIndex: 1,
-        explanation: "Mobil Kuning A harus diturunkan ke baris 2 untuk mengosongkan baris 1, sehingga Mobil Merah bisa melaju ke kanan menuju gerbang keluar."
+        explanation: "Karena A dan B berorientasi horizontal (mendatar), mereka harus digeser ke kiri atau kanan agar kolom 4 menjadi kosong."
       }
-    ]
+    ],
+    walls: [{"row":4,"col":1},{"row":4,"col":2},{"row":4,"col":3},{"row":4,"col":4},{"row":4,"col":5},{"row":4,"col":6},{"row":4,"col":7},{"row":4,"col":8},{"row":4,"col":9},{"row":4,"col":10}]
   },
   {
     id: 2,
@@ -63,8 +91,8 @@ export const LEVELS: LevelDefinition[] = [
     description: "Tantangan mulai meningkat! Mobil Kuning menghalangi jalan keluar, tapi jalurnya sendiri dihalangi oleh Mobil Hijau. Urutkan langkahmu demi jalan keluar!",
     difficulty: "Sedang",
     optimalSteps: 3,
-    gridRows: 6,
-    gridCols: 6,
+    gridRows: 11,
+    gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
@@ -76,6 +104,17 @@ export const LEVELS: LevelDefinition[] = [
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Merah (Pemain)",
         isPlayer: true
+      },
+      {
+        id: "T",
+        direction: "vertical",
+        row: 0,
+        col: 6,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi 2 (Pemain)",
+        isPlayer: true,
+        exitCol: 6
       },
       {
         id: "A",
@@ -133,8 +172,8 @@ export const LEVELS: LevelDefinition[] = [
     description: "Ruang gerak makin sempit dengan 6 kendaraan. Kamu harus mengurai kemacetan ini dengan analisis urutan langkah optimal agar tidak terjadi kemacetan total.",
     difficulty: "Menengah",
     optimalSteps: 5,
-    gridRows: 6,
-    gridCols: 6,
+    gridRows: 11,
+    gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
@@ -235,8 +274,8 @@ export const LEVELS: LevelDefinition[] = [
     description: "Evaluasilah jalur tercepat! Terdapat 8 kendaraan yang saling mengunci. Terdapat dua cara menggeser hambatan, temukan rute dengan jumlah gerakan paling minimal.",
     difficulty: "Sulit",
     optimalSteps: 7,
-    gridRows: 6,
-    gridCols: 6,
+    gridRows: 11,
+    gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
@@ -341,8 +380,8 @@ export const LEVELS: LevelDefinition[] = [
     description: "Tantangan akhir dengan 10 kendaraan! Struktur saling mengunci secara kompleks. Dapatkah kamu menyusun urutan langkah sempurna untuk membebaskan mobil merah?",
     difficulty: "Ahli",
     optimalSteps: 9,
-    gridRows: 6,
-    gridCols: 6,
+    gridRows: 11,
+    gridCols: 12,
     exitRow: 2,
     vehicles: [
       {

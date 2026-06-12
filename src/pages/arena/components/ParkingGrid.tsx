@@ -1,13 +1,58 @@
-import React, { useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Vehicle } from "../../../types";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
 import audio from "../../../lib/audio";
 
+// Maps a vehicle to its corresponding image path in public/img/
+function getVehicleImagePath(v: Vehicle): string {
+  if (v.isPlayer || v.id === "R") {
+    return "/img/taxi.svg";
+  }
+
+  // Use character code of vehicle ID to deterministically map to the same asset
+  const idNum = v.id.charCodeAt(0) || 0;
+
+  if (v.length >= 3) {
+    // 3-grid truck assets (6 options)
+    const trucks = [
+      "/img/truck-biru.svg",
+      "/img/truck-merah.svg",
+      "/img/truck-abu.svg",
+      "/img/truck-kuning.svg",
+      "/img/truck-hijau.svg",
+      "/img/truck-cyan.svg"
+    ];
+    return trucks[idNum % trucks.length];
+  } else {
+    // 2-grid car assets: bak, hatchback, jeep, sedan (16 options total)
+    const cars = [
+      "/img/bak-kuning.svg", "/img/bak-merah.svg", "/img/bak-biru.svg", "/img/bak-abu.svg",
+      "/img/hatchback-hijau.svg", "/img/hatchback-abu.svg", "/img/hatchback-biru.svg", "/img/hatchback-cyan.svg",
+      "/img/jeep-cokelat.svg", "/img/jeep-merah.svg", "/img/jeep-hijau.svg", "/img/jeep-putih.svg",
+      "/img/sedan-hijau.svg", "/img/sedan-kuning.svg", "/img/sedan-merah.svg", "/img/sedan-abu.svg"
+    ];
+    return cars[idNum % cars.length];
+  }
+}
+
 // Computes which cells are occupied around the board
-export function getOccupiedCells(vehicles: Vehicle[], excludeId?: string, gridRows = 6, gridCols = 6) {
+export function getOccupiedCells(
+  vehicles: Vehicle[],
+  excludeId?: string,
+  gridRows = 11,
+  gridCols = 12,
+  walls: { row: number; col: number }[] = []
+) {
   const grid = Array(gridRows)
     .fill(null)
     .map(() => Array(gridCols).fill(null) as (string | null)[]);
+
+  // Mark walls first
+  walls.forEach((w) => {
+    if (w.row >= 0 && w.row < gridRows && w.col >= 0 && w.col < gridCols) {
+      grid[w.row][w.col] = "WALL";
+    }
+  });
 
   vehicles.forEach((v) => {
     if (v.id === excludeId) return;
@@ -34,10 +79,11 @@ export function checkCollision(
   dir: "left" | "right" | "up" | "down",
   steps: number,
   vehicles: Vehicle[],
-  gridRows = 6,
-  gridCols = 6
+  gridRows = 11,
+  gridCols = 12,
+  walls: { row: number; col: number }[] = []
 ): { valid: boolean; reason?: string } {
-  const occupied = getOccupiedCells(vehicles, vehicle.id, gridRows, gridCols);
+  const occupied = getOccupiedCells(vehicles, vehicle.id, gridRows, gridCols, walls);
 
   if (vehicle.direction === "horizontal") {
     if (dir === "up" || dir === "down") {
@@ -53,17 +99,23 @@ export function checkCollision(
 
     if (dir === "right") {
       for (let c = vehicle.col + vehicle.length; c < newCol + vehicle.length; c++) {
-        if (occupied[vehicle.row][c] !== null) {
-          const blockerId = occupied[vehicle.row][c];
-          const blocker = vehicles.find(v => v.id === blockerId);
+        const blockerId = occupied[vehicle.row][c];
+        if (blockerId !== null) {
+          if (blockerId === "WALL") {
+            return { valid: false, reason: "Menabrak dinding pembatas!" };
+          }
+          const blocker = vehicles.find((v) => v.id === blockerId);
           return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
         }
       }
     } else {
       for (let c = newCol; c < vehicle.col; c++) {
-        if (occupied[vehicle.row][c] !== null) {
-          const blockerId = occupied[vehicle.row][c];
-          const blocker = vehicles.find(v => v.id === blockerId);
+        const blockerId = occupied[vehicle.row][c];
+        if (blockerId !== null) {
+          if (blockerId === "WALL") {
+            return { valid: false, reason: "Menabrak dinding pembatas!" };
+          }
+          const blocker = vehicles.find((v) => v.id === blockerId);
           return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
         }
       }
@@ -83,17 +135,23 @@ export function checkCollision(
 
     if (dir === "down") {
       for (let r = vehicle.row + vehicle.length; r < newRow + vehicle.length; r++) {
-        if (occupied[r][vehicle.col] !== null) {
-          const blockerId = occupied[r][vehicle.col];
-          const blocker = vehicles.find(v => v.id === blockerId);
+        const blockerId = occupied[r][vehicle.col];
+        if (blockerId !== null) {
+          if (blockerId === "WALL") {
+            return { valid: false, reason: "Menabrak dinding pembatas!" };
+          }
+          const blocker = vehicles.find((v) => v.id === blockerId);
           return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
         }
       }
     } else {
       for (let r = newRow; r < vehicle.row; r++) {
-        if (occupied[r][vehicle.col] !== null) {
-          const blockerId = occupied[r][vehicle.col];
-          const blocker = vehicles.find(v => v.id === blockerId);
+        const blockerId = occupied[r][vehicle.col];
+        if (blockerId !== null) {
+          if (blockerId === "WALL") {
+            return { valid: false, reason: "Menabrak dinding pembatas!" };
+          }
+          const blocker = vehicles.find((v) => v.id === blockerId);
           return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
         }
       }
@@ -101,6 +159,27 @@ export function checkCollision(
   }
 
   return { valid: true };
+}
+
+export function isLevelSolved(
+  vehicles: Vehicle[],
+  gridRows = 11,
+  gridCols = 12,
+  defaultExitRow = 4,
+  defaultExitCol = 4
+): boolean {
+  const playerCars = vehicles.filter((v) => v.isPlayer || v.id === "R");
+  if (playerCars.length === 0) return false;
+
+  return playerCars.every((v) => {
+    if (v.direction === "vertical") {
+      const col = v.exitCol !== undefined ? v.exitCol : defaultExitCol;
+      return v.row >= gridRows - v.length && v.col === col;
+    } else {
+      const row = v.exitRow !== undefined ? v.exitRow : defaultExitRow;
+      return v.col >= gridCols - v.length && v.row === row;
+    }
+  });
 }
 
 interface ParkingGridProps {
@@ -113,6 +192,11 @@ interface ParkingGridProps {
   gridRows?: number;
   gridCols?: number;
   exitRow?: number;
+  levelId?: number;
+  activeWalls?: { row: number; col: number }[];
+  onChangeWalls?: (walls: { row: number; col: number }[]) => void;
+  isDevMode?: boolean;
+  onToggleDevMode?: () => void;
 }
 
 export const ParkingGrid: React.FC<ParkingGridProps> = ({
@@ -122,290 +206,841 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
   onSelectVehicle,
   disabled = false,
   onMoveRecorded,
-  gridRows = 6,
-  gridCols = 6,
-  exitRow = 2,
+  gridRows = 11,
+  gridCols = 12,
+  exitRow = 4,
+  levelId,
+  activeWalls = [],
+  onChangeWalls,
+  isDevMode = false,
+  onToggleDevMode,
 }) => {
-  const cellW = 100 / gridCols; // percentage width per cell
-  const cellH = 100 / gridRows; // percentage height per cell
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Drag state ref for direct fluid mouse/touch sliding
-  const dragRef = useRef<{
-    vehicleId: string;
-    startX: number;
-    startY: number;
-    startCol: number;
-    startRow: number;
-    cellPixels: number;
-    direction: "horizontal" | "vertical";
-    currentShift: number;
-  } | null>(null);
+  // Zoom & Pan States
+  const [zoom, setZoom] = useState(1);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [dragState, setDragState] = useState<any | null>(null);
+  const [isPanningState, setIsPanningState] = useState(false);
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>, v: Vehicle) => {
-    e.stopPropagation();
-    onSelectVehicle(v.id);
-    audio.playClick();
+  // Image caches to avoid reloading on each frame
+  const imageCacheRef = useRef<{ [key: string]: HTMLImageElement }>({});
+  const bgImageRef = useRef<HTMLImageElement | null>(null);
 
-    if (disabled) return;
+  // Keep tracking values in refs for zero-lag drag/pan
+  const vehiclesRef = useRef<Vehicle[]>(vehicles);
+  const selectedVehicleIdRef = useRef<string | null>(selectedVehicleId);
+  const zoomRef = useRef<number>(zoom);
+  const panOffsetRef = useRef<{ x: number; y: number }>(panOffset);
+  const activeWallsRef = useRef<{ row: number; col: number }[]>(activeWalls);
+  const isDevModeRef = useRef<boolean>(isDevMode);
 
-    const board = document.getElementById("parking-board");
-    if (!board) return;
+  vehiclesRef.current = vehicles;
+  selectedVehicleIdRef.current = selectedVehicleId;
+  zoomRef.current = zoom;
+  panOffsetRef.current = panOffset;
+  activeWallsRef.current = activeWalls;
+  isDevModeRef.current = isDevMode;
 
-    const rect = board.getBoundingClientRect();
-    const cellPixels = rect.width / gridCols;
+  // Keep track of visual positions for smooth sliding animation
+  const visualPositionsRef = useRef<{ [id: string]: { col: number; row: number } }>({});
+  const animationFrameIdRef = useRef<number | null>(null);
 
-    dragRef.current = {
-      vehicleId: v.id,
-      startX: e.clientX,
-      startY: e.clientY,
-      startCol: v.col,
-      startRow: v.row,
-      cellPixels,
-      direction: v.direction,
-      currentShift: 0,
-    };
+  // Smooth sliding animation loop using requestAnimationFrame
+  const animatePositions = () => {
+    let needsMoreFrames = false;
+    const lerpSpeed = 0.15; // Speed of slide (higher = faster)
+    const threshold = 0.01;
 
-    e.currentTarget.setPointerCapture(e.pointerId);
+    vehiclesRef.current.forEach((v) => {
+      const current = visualPositionsRef.current[v.id];
+      if (!current) {
+        visualPositionsRef.current[v.id] = { col: v.col, row: v.row };
+        return;
+      }
+
+      // If being dragged, keep in sync with visual pos of drag
+      if (dragInfoRef.current && dragInfoRef.current.vehicleId === v.id) {
+        current.col = v.direction === "horizontal" ? dragInfoRef.current.visualPos : v.col;
+        current.row = v.direction === "vertical" ? dragInfoRef.current.visualPos : v.row;
+        return;
+      }
+
+      // Smoothly slide col
+      if (Math.abs(current.col - v.col) > threshold) {
+        current.col += (v.col - current.col) * lerpSpeed;
+        needsMoreFrames = true;
+      } else {
+        current.col = v.col;
+      }
+
+      // Smoothly slide row
+      if (Math.abs(current.row - v.row) > threshold) {
+        current.row += (v.row - current.row) * lerpSpeed;
+        needsMoreFrames = true;
+      } else {
+        current.row = v.row;
+      }
+    });
+
+    requestRedraw();
+
+    if (needsMoreFrames) {
+      animationFrameIdRef.current = requestAnimationFrame(animatePositions);
+    } else {
+      animationFrameIdRef.current = null;
+    }
   };
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return;
-    const drag = dragRef.current;
+  // Start animation loop when vehicles prop changes
+  useEffect(() => {
+    // Initialize any missing vehicles
+    vehicles.forEach((v) => {
+      if (!visualPositionsRef.current[v.id]) {
+        visualPositionsRef.current[v.id] = { col: v.col, row: v.row };
+      }
+    });
 
-    const diffX = e.clientX - drag.startX;
-    const diffY = e.clientY - drag.startY;
+    // Check if any position differs
+    const hasDifference = vehicles.some((v) => {
+      const current = visualPositionsRef.current[v.id];
+      return current && (Math.abs(current.col - v.col) > 0.01 || Math.abs(current.row - v.row) > 0.01);
+    });
 
-    let shift = 0;
-    if (drag.direction === "horizontal") {
-      shift = Math.round(diffX / drag.cellPixels);
-    } else {
-      shift = Math.round(diffY / drag.cellPixels);
+    if (hasDifference && !animationFrameIdRef.current) {
+      animationFrameIdRef.current = requestAnimationFrame(animatePositions);
     }
 
-    if (shift !== drag.currentShift) {
-      const currentVehicle = vehicles.find((v) => v.id === drag.vehicleId);
-      if (!currentVehicle) return;
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+        animationFrameIdRef.current = null;
+      }
+    };
+  }, [vehicles]);
 
-      const steps = Math.abs(shift);
-      const dir = drag.direction === "horizontal"
-        ? (shift > 0 ? "right" : "left")
-        : (shift > 0 ? "down" : "up");
+  // Reset zoom & pan when the level changes
+  useEffect(() => {
+    setZoom(1);
+    setPanOffset({ x: 0, y: 0 });
+    panOffsetRef.current = { x: 0, y: 0 };
+    zoomRef.current = 1;
+  }, [levelId]);
 
-      if (steps === 0) {
-        const updated = vehicles.map((v) => {
-          if (v.id === drag.vehicleId) {
-            return { ...v, col: drag.startCol, row: drag.startRow };
-          }
-          return v;
-        });
-        drag.currentShift = 0;
-        onChangeVehicles(updated);
+  // Drag visual offsets and boundaries ref
+  const dragInfoRef = useRef<{
+    vehicleId: string;
+    startCol: number;
+    startRow: number;
+    startX: number;
+    startY: number;
+    minVal: number;
+    maxVal: number;
+    visualPos: number;
+    direction: "horizontal" | "vertical";
+  } | null>(null);
+
+  // Panning info ref
+  const panningInfoRef = useRef<{
+    startX: number;
+    startY: number;
+    startOffsetX: number;
+    startOffsetY: number;
+  } | null>(null);
+
+  // Lazy loads background grid image maps-level-1.svg
+  const getBgImage = () => {
+    if (bgImageRef.current) {
+      return bgImageRef.current;
+    }
+    const img = new Image();
+    img.src = "/img/maps-level-1.svg";
+    img.onload = () => {
+      requestRedraw();
+    };
+    bgImageRef.current = img;
+    return img;
+  };
+
+  // Lazy loads a vehicle image
+  const getVehicleImage = (v: Vehicle) => {
+    const src = getVehicleImagePath(v);
+    if (imageCacheRef.current[src]) {
+      return imageCacheRef.current[src];
+    }
+
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      requestRedraw();
+    };
+    imageCacheRef.current[src] = img;
+    return img;
+  };
+
+  const handleZoomOut = () => {
+    audio.playClick();
+    setZoom((z) => {
+      const nextZ = Math.max(z - 0.25, 0.5);
+      if (nextZ === 1) {
+        setPanOffset({ x: 0, y: 0 });
+        panOffsetRef.current = { x: 0, y: 0 };
+      }
+      return nextZ;
+    });
+  };
+
+  const handleZoomIn = () => {
+    audio.playClick();
+    setZoom((z) => Math.min(z + 0.25, 3));
+  };
+
+  const handleResetZoom = () => {
+    audio.playClick();
+    setZoom(1);
+    setPanOffset({ x: 0, y: 0 });
+    panOffsetRef.current = { x: 0, y: 0 };
+  };
+
+  // Canvas drawing loop
+  const drawCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    // Adapt resolution for Retina screens (high DPI)
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.scale(dpr, dpr);
+
+    // Apply Pan and Zoom transformations from refs
+    ctx.translate(panOffsetRef.current.x, panOffsetRef.current.y);
+    ctx.scale(zoomRef.current, zoomRef.current);
+
+    // Calculate grid dimensions centered inside the square canvas
+    const maxDim = Math.max(gridCols, gridRows);
+    const cellSize = rect.width / maxDim;
+    const xOffset = (maxDim - gridCols) * cellSize / 2;
+    const yOffset = (maxDim - gridRows) * cellSize / 2;
+
+    const playerCar = vehiclesRef.current.find((v) => v.isPlayer || v.id === "R");
+    const isPlayerVertical = playerCar?.direction === "vertical";
+    const exitCol = playerCar ? playerCar.col : 4;
+
+    // Draw background (non-parking zone background)
+    ctx.fillStyle = "#0F172A"; // Dark slate background
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    ctx.save();
+    // Translate rendering origin to the centered parking grid
+    ctx.translate(xOffset, yOffset);
+
+    // Helper to draw rounded rect fallback
+    const drawRoundRect = (c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) => {
+      if (c.roundRect) {
+        c.roundRect(x, y, w, h, r);
       } else {
-        const tempVehicle = { ...currentVehicle, col: drag.startCol, row: drag.startRow };
-        const test = checkCollision(tempVehicle, dir, steps, vehicles, gridRows, gridCols);
-        if (test.valid) {
-          const updated = vehicles.map((v) => {
-            if (v.id === drag.vehicleId) {
-              if (drag.direction === "horizontal") {
-                return { ...v, col: drag.startCol + (shift > 0 ? steps : -steps) };
-              } else {
-                return { ...v, row: drag.startRow + (shift > 0 ? steps : -steps) };
-              }
-            }
-            return v;
-          });
-          drag.currentShift = shift;
-          onChangeVehicles(updated);
-          audio.playSlide();
+        c.beginPath();
+        c.moveTo(x + r, y);
+        c.lineTo(x + w - r, y);
+        c.quadraticCurveTo(x + w, y, x + w, y + r);
+        c.lineTo(x + w, y + h - r);
+        c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        c.lineTo(x + r, y + h);
+        c.quadraticCurveTo(x, y + h, x, y + h - r);
+        c.lineTo(x, y + r);
+        c.quadraticCurveTo(x, y, x + r, y);
+        c.closePath();
+      }
+    };
+
+    // 1. Draw Grid Slots and Borders
+    const bgImg = getBgImage();
+    if (bgImg.complete) {
+      ctx.drawImage(bgImg, 0, 0, gridCols * cellSize, gridRows * cellSize);
+    }
+
+    for (let r = 0; r < gridRows; r++) {
+      for (let c = 0; c < gridCols; c++) {
+        const isExitLine = isPlayerVertical
+          ? r === gridRows - 1 && c === exitCol
+          : r === exitRow && c === gridCols - 1;
+
+        if (!bgImg.complete) {
+          ctx.fillStyle = isExitLine
+            ? "#E8F5E9" // Emerald light tint for exit row slot
+            : (r + c) % 2 === 0
+            ? "#F8FAFC" // Slate 50
+            : "#F1F5F9"; // Slate 100
+
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+
+        // Grid coordinates text (only in dev mode)
+        if (isDevModeRef.current) {
+          ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
+          ctx.font = "bold 8px monospace";
+          ctx.fillText(`${r},${c}`, c * cellSize + 4, r * cellSize + 11);
         }
       }
     }
-  };
 
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return;
-    const drag = dragRef.current;
-
-    if (drag.currentShift !== 0 && onMoveRecorded) {
-      const dir = drag.direction === "horizontal"
-        ? (drag.currentShift > 0 ? "right" : "left")
-        : (drag.currentShift > 0 ? "down" : "up");
-      onMoveRecorded(drag.vehicleId, dir, Math.abs(drag.currentShift));
-    }
-
-    dragRef.current = null;
-    e.currentTarget.releasePointerCapture(e.pointerId);
-  };
-
-  const selectedVehicle = vehicles.find((v) => v.id === selectedVehicleId);
-
-
-
-  // Render grid cells
-  const renderBackgroundSlots = () => {
-    const cells = [];
-    for (let r = 0; r < gridRows; r++) {
-      for (let c = 0; c < gridCols; c++) {
-        const isExitLine = r === exitRow && c === gridCols - 1;
-        cells.push(
-          <div
-            key={`cell-${r}-${c}`}
-            className={`border border-slate-300 relative flex items-center justify-center ${
-              isExitLine
-                ? "bg-emerald-50"
-                : (r + c) % 2 === 0
-                ? "bg-slate-200"
-                : "bg-slate-100"
-            }`}
-          >
-            <div className="absolute top-0.5 left-0.5 text-[7px] font-mono text-slate-400 select-none">
-              {r},{c}
-            </div>
-            {isExitLine && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-emerald-500/15 animate-pulse pointer-events-none" />
-            )}
-          </div>
-        );
+    // Overlay grid outlines in Dev Mode
+    if (isDevModeRef.current) {
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.15)";
+      ctx.lineWidth = 1;
+      for (let r = 0; r <= gridRows; r++) {
+        ctx.beginPath();
+        ctx.moveTo(0, r * cellSize);
+        ctx.lineTo(gridCols * cellSize, r * cellSize);
+        ctx.stroke();
+      }
+      for (let c = 0; c <= gridCols; c++) {
+        ctx.beginPath();
+        ctx.moveTo(c * cellSize, 0);
+        ctx.lineTo(c * cellSize, gridRows * cellSize);
+        ctx.stroke();
       }
     }
-    return cells;
+
+    // 2. Draw Exit Gate Indicator
+    const playerCars = vehiclesRef.current.filter((v) => v.isPlayer || v.id === "R");
+    playerCars.forEach((v) => {
+      ctx.save();
+      ctx.fillStyle = "#10B981"; // Emerald 500
+      if (v.direction === "vertical") {
+        const col = v.exitCol !== undefined ? v.exitCol : exitCol;
+        ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
+
+        ctx.fillStyle = "#10B981";
+        ctx.font = "bold 9px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+      } else {
+        const row = v.exitRow !== undefined ? v.exitRow : exitRow;
+        const exitLeftOnGrid = gridCols * cellSize;
+        ctx.fillRect(exitLeftOnGrid - 5, row * cellSize, 5, cellSize);
+
+        ctx.fillStyle = "#10B981";
+        ctx.font = "bold 9px monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText("EXIT ➔", exitLeftOnGrid + 4, row * cellSize + cellSize / 2);
+      }
+      ctx.restore();
+    });
+
+    // 3. Draw Walls
+    activeWallsRef.current.forEach((w) => {
+      const wx = w.col * cellSize;
+      const wy = w.row * cellSize;
+      
+      ctx.save();
+      if (isDevModeRef.current) {
+        // Dev mode: draw a visible gray hazard block with yellow warnings
+        ctx.fillStyle = "#334155"; // Slate 700
+        ctx.beginPath();
+        drawRoundRect(ctx, wx + 2, wy + 2, cellSize - 4, cellSize - 4, 6);
+        ctx.fill();
+        
+        // Draw stripes
+        ctx.strokeStyle = "#F59E0B"; // Amber 500
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = "round";
+        ctx.save();
+        ctx.beginPath();
+        drawRoundRect(ctx, wx + 2, wy + 2, cellSize - 4, cellSize - 4, 6);
+        ctx.clip();
+        
+        for (let offset = -cellSize; offset < cellSize * 2; offset += 14) {
+          ctx.beginPath();
+          ctx.moveTo(wx + offset, wy);
+          ctx.lineTo(wx + offset + cellSize, wy + cellSize);
+          ctx.stroke();
+        }
+        ctx.restore();
+        
+        // Border
+        ctx.strokeStyle = "#1E293B";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        drawRoundRect(ctx, wx + 2, wy + 2, cellSize - 4, cellSize - 4, 6);
+        ctx.stroke();
+        
+        // Text
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 8px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("WALL", wx + cellSize / 2, wy + cellSize / 2);
+      } else {
+        // Production mode: completely transparent
+      }
+      ctx.restore();
+    });
+
+    // 4. Draw Vehicles
+    vehiclesRef.current.forEach((v) => {
+      const isSelected = selectedVehicleIdRef.current === v.id;
+
+      // Draw vehicle based on visual state (if currently dragged, use visual pos from ref, else use animated visualPos)
+      const isThisVehicleDragged = dragInfoRef.current?.vehicleId === v.id;
+      const visualPos = visualPositionsRef.current[v.id] || { col: v.col, row: v.row };
+      const drawCol = (isThisVehicleDragged && dragInfoRef.current?.direction === "horizontal")
+        ? dragInfoRef.current.visualPos
+        : visualPos.col;
+      const drawRow = (isThisVehicleDragged && dragInfoRef.current?.direction === "vertical")
+        ? dragInfoRef.current.visualPos
+        : visualPos.row;
+
+      const vx = drawCol * cellSize;
+      const vy = drawRow * cellSize;
+      const vw = (v.direction === "horizontal" ? v.length : 1) * cellSize;
+      const vh = (v.direction === "vertical" ? v.length : 1) * cellSize;
+
+      ctx.save();
+
+      // Selected ring highlights
+      if (isSelected) {
+        ctx.strokeStyle = "#3B82F6";
+        ctx.lineWidth = 3.5;
+      } else {
+        ctx.strokeStyle = "#475569";
+        ctx.lineWidth = 2;
+      }
+
+      // Draw as WebP Image
+      const img = getVehicleImage(v);
+      if (img.complete) {
+        ctx.save();
+        if (v.direction === "horizontal") {
+          // Horizontal vehicle: needs to be rotated 90 degrees clockwise since asset is vertical (facing UP)
+          const cx = vx + vw / 2;
+          const cy = vy + vh / 2;
+          ctx.translate(cx, cy);
+          ctx.rotate(Math.PI / 2);
+          
+          // Width in rotated space is grid vertical (cellSize)
+          // Height in rotated space is grid horizontal (v.length * cellSize)
+          const drawW = cellSize;
+          const drawH = v.length * cellSize;
+          ctx.drawImage(img, -drawW / 2 + 3, -drawH / 2 + 3, drawW - 6, drawH - 6);
+        } else {
+          // Vertical vehicle: draw directly since asset is already vertical (facing UP)
+          ctx.drawImage(img, vx + 3, vy + 3, vw - 6, vh - 6);
+        }
+        ctx.restore();
+      } else {
+        // Fallback: draw rounded rect
+        let bodyColor = "#3B82F6";
+        let borderColor = "#1D4ED8";
+        if (v.id === "R" || v.isPlayer) {
+          bodyColor = "#EF4444";
+          borderColor = "#B91C1C";
+        } else if (v.length >= 3) {
+          bodyColor = "#F59E0B";
+          borderColor = "#B45309";
+        }
+        ctx.fillStyle = bodyColor;
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        drawRoundRect(ctx, vx + 4, vy + 4, vw - 8, vh - 8, 10);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Draw selection border highlight
+      if (isSelected) {
+        ctx.strokeStyle = "#3B82F6";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        drawRoundRect(ctx, vx + 2, vy + 2, vw - 4, vh - 4, 11);
+        ctx.stroke();
+      }
+
+      // Label text with shadow (vehicle labels are only shown in Dev Mode)
+      if (isDevModeRef.current) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 9px sans-serif";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+        ctx.shadowBlur = 4;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(
+          v.id === "R" ? "TAXI" : `MOBIL ${v.id}`,
+          vx + vw / 2,
+          vy + vh / 2
+        );
+      }
+
+      ctx.restore();
+    });
+
+    ctx.restore();
+    ctx.restore();
   };
 
-  // Exit gate positioning (percentage-based)
-  const exitTopPct = (exitRow / gridRows) * 100;
-  const exitHeightPct = (1 / gridRows) * 100;
-  const exitMidPct = exitTopPct + exitHeightPct / 2;
+  // High performance throttle for animation frames
+  const renderScheduledRef = useRef(false);
+  const requestRedraw = () => {
+    if (renderScheduledRef.current) return;
+    renderScheduledRef.current = true;
+    requestAnimationFrame(() => {
+      drawCanvas();
+      renderScheduledRef.current = false;
+    });
+  };
+
+  // Redraw when states or props change
+  useEffect(() => {
+    requestRedraw();
+  }, [vehicles, selectedVehicleId, zoom, panOffset, gridRows, gridCols, exitRow, activeWalls, isDevMode]);
+
+  // Global pointer move & up event listeners on window
+  useEffect(() => {
+    const handleGlobalPointerMove = (e: PointerEvent) => {
+      if (!dragInfoRef.current && !panningInfoRef.current) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const maxDim = Math.max(gridCols, gridRows);
+      const cellSize = rect.width / maxDim;
+
+      if (dragInfoRef.current) {
+        const diffX = e.clientX - dragInfoRef.current.startX;
+        const diffY = e.clientY - dragInfoRef.current.startY;
+
+        const zoomAdjustedDiffX = diffX / zoomRef.current;
+        const zoomAdjustedDiffY = diffY / zoomRef.current;
+
+        if (dragInfoRef.current.direction === "horizontal") {
+          const diffCol = zoomAdjustedDiffX / cellSize;
+          const targetCol = Math.max(
+            dragInfoRef.current.minVal,
+            Math.min(dragInfoRef.current.maxVal, dragInfoRef.current.startCol + diffCol)
+          );
+          dragInfoRef.current.visualPos = targetCol;
+        } else {
+          const diffRow = zoomAdjustedDiffY / cellSize;
+          const targetRow = Math.max(
+            dragInfoRef.current.minVal,
+            Math.min(dragInfoRef.current.maxVal, dragInfoRef.current.startRow + diffRow)
+          );
+          dragInfoRef.current.visualPos = targetRow;
+        }
+        
+        requestRedraw();
+        audio.playSlide();
+      } else if (panningInfoRef.current) {
+        const diffX = e.clientX - panningInfoRef.current.startX;
+        const diffY = e.clientY - panningInfoRef.current.startY;
+
+        const limitX = window.innerWidth * 0.5;
+        const limitY = window.innerHeight * 0.5;
+
+        const boundedX = Math.max(-limitX, Math.min(limitX, panningInfoRef.current.startOffsetX + diffX));
+        const boundedY = Math.max(-limitY, Math.min(limitY, panningInfoRef.current.startOffsetY + diffY));
+
+        panOffsetRef.current = { x: boundedX, y: boundedY };
+        requestRedraw();
+      }
+    };
+
+    const handleGlobalPointerUp = () => {
+      if (dragInfoRef.current) {
+        const finalVal = Math.round(dragInfoRef.current.visualPos);
+        const dragId = dragInfoRef.current.vehicleId;
+        const startC = dragInfoRef.current.startCol;
+        const startR = dragInfoRef.current.startRow;
+        const dragDir = dragInfoRef.current.direction;
+
+        const updated = vehiclesRef.current.map((v) => {
+          if (v.id === dragId) {
+            if (dragDir === "horizontal") {
+              return { ...v, col: finalVal };
+            } else {
+              return { ...v, row: finalVal };
+            }
+          }
+          return v;
+        });
+
+        dragInfoRef.current = null;
+        setDragState(null);
+        onChangeVehicles(updated);
+
+        const stepsMoved = dragDir === "horizontal"
+          ? Math.abs(finalVal - startC)
+          : Math.abs(finalVal - startR);
+
+        if (stepsMoved > 0 && onMoveRecorded) {
+          const dir = dragDir === "horizontal"
+            ? (finalVal > startC ? "right" : "left")
+            : (finalVal > startR ? "down" : "up");
+          onMoveRecorded(dragId, dir, stepsMoved);
+        }
+      } else if (panningInfoRef.current) {
+        setPanOffset(panOffsetRef.current);
+        panningInfoRef.current = null;
+        setIsPanningState(false);
+      }
+    };
+
+    window.addEventListener("pointermove", handleGlobalPointerMove, { passive: true });
+    window.addEventListener("pointerup", handleGlobalPointerUp);
+    window.addEventListener("pointercancel", handleGlobalPointerUp);
+
+    return () => {
+      window.removeEventListener("pointermove", handleGlobalPointerMove);
+      window.removeEventListener("pointerup", handleGlobalPointerUp);
+      window.removeEventListener("pointercancel", handleGlobalPointerUp);
+    };
+  }, [gridCols, gridRows, onChangeVehicles, onMoveRecorded]);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const xOnCanvas = (e.clientX - rect.left) * (canvas.width / (rect.width * window.devicePixelRatio));
+    const yOnCanvas = (e.clientY - rect.top) * (canvas.height / (rect.height * window.devicePixelRatio));
+
+    // Reverse pan and zoom transforms
+    const xInGridPixels = (xOnCanvas - panOffsetRef.current.x) / zoomRef.current;
+    const yInGridPixels = (yOnCanvas - panOffsetRef.current.y) / zoomRef.current;
+
+    // Calculate grid dimensions centered inside the square canvas
+    const maxDim = Math.max(gridCols, gridRows);
+    const cellSize = rect.width / maxDim;
+    const xOffset = (maxDim - gridCols) * cellSize / 2;
+    const yOffset = (maxDim - gridRows) * cellSize / 2;
+
+    const xActive = xInGridPixels - xOffset;
+    const yActive = yInGridPixels - yOffset;
+
+    let clickedVehicle: Vehicle | null = null;
+    for (const v of vehiclesRef.current) {
+      const vx = v.col * cellSize;
+      const vy = v.row * cellSize;
+      const vw = (v.direction === "horizontal" ? v.length : 1) * cellSize;
+      const vh = (v.direction === "vertical" ? v.length : 1) * cellSize;
+
+      if (
+        xActive >= vx &&
+        xActive <= vx + vw &&
+        yActive >= vy &&
+        yActive <= vy + vh
+      ) {
+        clickedVehicle = v;
+        break;
+      }
+    }
+
+    // Toggle wall in Dev Mode if empty space clicked
+    if (isDevModeRef.current && !clickedVehicle) {
+      const clickCol = Math.floor(xActive / cellSize);
+      const clickRow = Math.floor(yActive / cellSize);
+      if (clickRow >= 0 && clickRow < gridRows && clickCol >= 0 && clickCol < gridCols) {
+        // Toggle wall at coordinates
+        const wallIndex = activeWalls.findIndex((w) => w.row === clickRow && w.col === clickCol);
+        let updatedWalls;
+        if (wallIndex > -1) {
+          updatedWalls = activeWalls.filter((_, idx) => idx !== wallIndex);
+        } else {
+          updatedWalls = [...activeWalls, { row: clickRow, col: clickCol }];
+        }
+        if (onChangeWalls) {
+          onChangeWalls(updatedWalls);
+        }
+        audio.playClick();
+        return;
+      }
+    }
+
+    audio.playClick();
+
+    if (clickedVehicle) {
+      onSelectVehicle(clickedVehicle.id);
+      if (disabled) return;
+
+      const occupied = getOccupiedCells(vehiclesRef.current, clickedVehicle.id, gridRows, gridCols, activeWalls);
+      let minVal = 0;
+      let maxVal = 0;
+
+      if (clickedVehicle.direction === "horizontal") {
+        minVal = 0;
+        maxVal = gridCols - clickedVehicle.length;
+        for (let c = clickedVehicle.col - 1; c >= 0; c--) {
+          if (occupied[clickedVehicle.row][c] !== null) {
+            minVal = c + 1;
+            break;
+          }
+        }
+        for (let c = clickedVehicle.col + clickedVehicle.length; c < gridCols; c++) {
+          if (occupied[clickedVehicle.row][c] !== null) {
+            maxVal = c - clickedVehicle.length;
+            break;
+          }
+        }
+      } else {
+        minVal = 0;
+        maxVal = gridRows - clickedVehicle.length;
+        for (let r = clickedVehicle.row - 1; r >= 0; r--) {
+          if (occupied[r][clickedVehicle.col] !== null) {
+            minVal = r + 1;
+            break;
+          }
+        }
+        for (let r = clickedVehicle.row + clickedVehicle.length; r < gridRows; r++) {
+          if (occupied[r][clickedVehicle.col] !== null) {
+            maxVal = r - clickedVehicle.length;
+            break;
+          }
+        }
+      }
+
+      const info = {
+        vehicleId: clickedVehicle.id,
+        startCol: clickedVehicle.col,
+        startRow: clickedVehicle.row,
+        startX: e.clientX,
+        startY: e.clientY,
+        minVal,
+        maxVal,
+        visualPos: clickedVehicle.direction === "horizontal" ? clickedVehicle.col : clickedVehicle.row,
+        direction: clickedVehicle.direction,
+      };
+
+      dragInfoRef.current = info;
+      setDragState(info);
+    } else {
+      panningInfoRef.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startOffsetX: panOffsetRef.current.x,
+        startOffsetY: panOffsetRef.current.y,
+      };
+      setIsPanningState(true);
+    }
+  };
+
+  // Calculate exit label mid percentage relative to the square canvas height/width
+  const maxDim = Math.max(gridCols, gridRows);
+  const playerCar = vehicles.find((v) => v.isPlayer || v.id === "R");
+  const isPlayerVertical = playerCar?.direction === "vertical";
+  const exitCol = playerCar ? playerCar.col : 4;
+
+  const exitLabelStyle = isPlayerVertical
+    ? {
+        left: `${(((maxDim - gridCols) / 2 + exitCol + 0.5) / maxDim) * 100}%`,
+        bottom: "-20px",
+        transform: "translateX(-50%)",
+      }
+    : {
+        top: `${(((maxDim - gridRows) / 2 + exitRow + 0.5) / maxDim) * 100}%`,
+        right: "-20px",
+        transform: "translateY(-50%) rotate(90deg)",
+      };
 
   return (
-    <div className="flex flex-col items-center w-full">
-      {/* Parking Board Frame */}
+    <div className="flex flex-col items-center w-full relative">
+      {/* Board Viewport Wrapper (Perfect Square ratio) */}
       <div
-        id="parking-board"
-        className="relative w-full bg-slate-400 border-8 border-slate-700 rounded-2xl shadow-xl overflow-hidden p-1 select-none"
-        style={{ aspectRatio: `${gridCols} / ${gridRows}`, maxWidth: gridCols > 6 ? "600px" : "420px", minWidth: "260px" }}
+        className="w-full overflow-hidden relative flex items-center justify-center rounded-2xl animate-[fadeIn_0.5s_ease-out]"
+        style={{
+          aspectRatio: "1 / 1",
+          width: "100%",
+          maxWidth: `min(${gridCols > 6 ? "520px" : "450px"}, calc(100vh - 240px))`,
+          minWidth: "220px",
+          cursor: isPanningState ? "grabbing" : "grab"
+        }}
       >
-        {/* Background Slots Grid */}
-        <div
-          className="absolute inset-0 grid"
-          style={{ gridTemplateColumns: `repeat(${gridCols}, 1fr)`, gridTemplateRows: `repeat(${gridRows}, 1fr)` }}
-        >
-          {renderBackgroundSlots()}
+        <canvas
+          ref={canvasRef}
+          id="parking-canvas"
+          className="w-full h-full select-none touch-none block bg-[#999999]"
+          onPointerDown={handlePointerDown}
+        />
+
+        {/* Floating Zoom and Dev Mode Controls (Vertical) */}
+        <div className="absolute top-3 right-3 z-40 flex flex-col items-center gap-1.5 select-none">
+          <button
+            type="button"
+            onClick={handleZoomIn}
+            disabled={zoom === 3}
+            className="w-7 h-7 flex items-center justify-center bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-700 font-extrabold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
+            title="Zoom In"
+          >
+            <ZoomIn size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={handleZoomOut}
+            disabled={zoom <= 0.5}
+            className="w-7 h-7 flex items-center justify-center bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-700 font-extrabold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
+            title="Zoom Out"
+          >
+            <ZoomOut size={13} />
+          </button>
+          {(zoom !== 1 || panOffset.x !== 0 || panOffset.y !== 0) && (
+            <button
+              type="button"
+              onClick={handleResetZoom}
+              className="w-7 h-7 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
+              title="Reset Tampilan"
+            >
+              <Maximize2 size={11} />
+            </button>
+          )}
+
+          {/* Dev Mode toggle button */}
+          {onToggleDevMode && (
+            <button
+              type="button"
+              onClick={() => {
+                audio.playClick();
+                onToggleDevMode();
+              }}
+              className={`w-7.5 h-7.5 mt-2 flex items-center justify-center text-[9px] font-black rounded-lg cursor-pointer border transition-all select-none ${
+                isDevMode
+                  ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-600 shadow-md scale-105"
+                  : "bg-slate-800 hover:bg-slate-900 text-slate-350 border-slate-700 shadow-sm"
+              }`}
+              title="Toggle Dev Mode (Click grid to place/remove walls)"
+            >
+              DEV
+            </button>
+          )}
         </div>
 
-        {/* Exit Gate Marker */}
-        <div
-          className="absolute right-0 w-2 bg-emerald-500 z-10 shadow-md rounded-l flex flex-col justify-between py-1"
-          style={{ top: `${exitTopPct}%`, height: `${exitHeightPct}%` }}
-        >
-          <div className="w-full h-[2px] bg-white animate-pulse" />
-          <div className="w-full h-[2px] bg-white animate-pulse" />
-          <div className="w-full h-[2px] bg-white animate-pulse" />
-        </div>
-
-        {/* EXIT Label */}
-        <div
-          className="absolute right-[-20px] origin-center rotate-90 text-[9px] tracking-widest font-mono text-white font-extrabold bg-emerald-600 px-2.5 py-0.5 rounded shadow border border-emerald-700 z-30"
-          style={{ top: `${exitMidPct}%` }}
-        >
-          EXIT ➔
-        </div>
-
-        {/* Vehicles layer */}
-        <div className="absolute inset-0 pointer-events-none">
-          {vehicles.map((v) => {
-            const isSelected = selectedVehicleId === v.id;
-            const top = v.row * cellH;
-            const left = v.col * cellW;
-            const width = v.direction === "horizontal" ? v.length * cellW : cellW;
-            const height = v.direction === "vertical" ? v.length * cellH : cellH;
-
-            let vehicleStyleClasses = "";
-            if (v.id === "R" || v.isPlayer) {
-              vehicleStyleClasses = "bg-[#EF4444] border-[3px] border-[#B91C1C] text-white shadow-[inset_0_-4px_0_rgba(0,0,0,0.2)]";
-            } else if (v.length >= 3) {
-              vehicleStyleClasses = "bg-[#F59E0B] border-[3px] border-[#B45309] text-white shadow-[inset_0_-4px_0_rgba(0,0,0,0.2)]";
-            } else {
-              vehicleStyleClasses = "bg-[#3B82F6] border-[3px] border-[#1D4ED8] text-white shadow-[inset_0_-4px_0_rgba(0,0,0,0.2)]";
-            }
-
-            return (
-              <div
-                key={v.id}
-                onPointerDown={(e) => handlePointerDown(e, v)}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onClick={(e) => { e.stopPropagation(); }}
-                style={{
-                  top: `${top}%`,
-                  left: `${left}%`,
-                  width: `${width}%`,
-                  height: `${height}%`,
-                }}
-                className={`absolute p-1 cursor-grab active:cursor-grabbing pointer-events-auto rounded-xl select-none touch-none transition-all duration-300 ease-out ${
-                  isSelected
-                    ? "ring-4 ring-blue-500 ring-offset-2 ring-offset-slate-100 z-30 scale-[1.02]"
-                    : "hover:scale-[1.01] hover:brightness-105 z-20"
-                }`}
-              >
-                <div
-                  className={`w-full h-full rounded-lg relative flex flex-col items-center justify-center overflow-hidden ${vehicleStyleClasses}`}
-                >
-                  <div className="absolute inset-[2px] rounded border border-white/20 pointer-events-none flex flex-col justify-between">
-                    <div className="flex justify-between p-1">
-                      <div className="w-2 h-1.5 bg-neutral-950/40 rounded-sm" />
-                      <div className="w-2 h-1.5 bg-neutral-950/40 rounded-sm" />
-                    </div>
-                    <div className="flex justify-between p-1">
-                      <div className="w-1.5 h-1.5 bg-yellow-300 rounded-full" />
-                      <div className="w-1.5 h-1.5 bg-yellow-300 rounded-full" />
-                    </div>
-                  </div>
-
-                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded bg-neutral-950/25 border border-white/10 ${
-                    v.direction === "horizontal" ? "w-[50%] h-[40%]" : "w-[40%] h-[50%]"
-                  }`} />
-
-                  <span className="font-sans font-black text-white text-xs select-none z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] flex flex-col items-center">
-                    {v.id === "R" ? "MOBIL R" : `MOBIL ${v.id}`}
-                    {v.isPlayer && (
-                      <span className="text-[7px] tracking-tighter uppercase text-rose-200 font-bold">
-                        PEMAIN
-                      </span>
-                    )}
-                  </span>
-
-                  <div className={`absolute opacity-50 text-[10px] pointer-events-none flex ${
-                    v.direction === "horizontal" ? "flex-row justify-between w-full px-2" : "flex-col justify-between h-full py-2"
-                  }`}>
-                    {v.direction === "horizontal" ? (
-                      <>
-                        <span className="text-white text-[8px]">◀</span>
-                        <span className="text-white text-[8px]">▶</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-white text-[8px]">▲</span>
-                        <span className="text-white text-[8px]">▼</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Instructions Overlay */}
-        {!selectedVehicleId && !disabled && (
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full border border-slate-200 shadow-sm flex items-center gap-1.5 pointer-events-none">
-            <HelpCircle size={13} className="text-amber-500 animate-bounce" />
-            <span className="text-[10px] font-sans font-medium text-slate-600">
-              Sentuh mobil untuk memindahkan
-            </span>
-          </div>
-        )}
+        {/* HTML EXIT Label removed: exit indicators are drawn dynamically on canvas */}
       </div>
 
+      {/* Instructions Overlay */}
+      {!selectedVehicleId && !disabled && !isDevMode && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full border border-slate-200 shadow-sm flex items-center gap-1.5 pointer-events-none z-10">
+          <HelpCircle size={13} className="text-amber-500 animate-bounce" />
+          <span className="text-[10px] font-sans font-medium text-slate-600">
+            Sentuh mobil untuk memindahkan
+          </span>
+        </div>
+      )}
+
+      {isDevMode && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-amber-500/90 text-slate-950 backdrop-blur px-3 py-1.5 rounded-full border border-amber-600 shadow-sm flex items-center gap-1.5 pointer-events-none z-10 text-[9px] font-bold">
+          🛠️ Mode Dev Aktif: Klik slot kosong untuk atur koordinat dinding (wall)
+        </div>
+      )}
     </div>
   );
 };

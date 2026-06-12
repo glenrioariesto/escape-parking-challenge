@@ -4,6 +4,7 @@ import { audio } from "@lib/audio";
 import { useProgress } from "@hooks/useProgress";
 import { useLevelManager } from "@hooks/useLevelManager";
 import { useSimulation } from "@hooks/useSimulation";
+import { isLevelSolved } from "@pages/arena/components/ParkingGrid";
 
 export interface SimResult {
   success: boolean;
@@ -17,8 +18,11 @@ export function useGameState() {
   const [simResult, setSimResult] = useState<SimResult | null>(null);
 
   const activeLevel = LEVELS.find((l) => l.id === level.activeLevelId);
-  const gridRows = activeLevel?.gridRows ?? 6;
-  const gridCols = activeLevel?.gridCols ?? 6;
+  const gridRows = activeLevel?.gridRows ?? 11;
+  const gridCols = activeLevel?.gridCols ?? 12;
+  const defaultExitRow = activeLevel?.exitRow ?? 4;
+  const playerCar = level.activeVehicles.find((v) => v.isPlayer || v.id === "R");
+  const defaultExitCol = playerCar ? playerCar.col : 4;
 
   const handleCompleteLevel = (stepsCount: number) => {
     audio.playLevelComplete();
@@ -28,7 +32,16 @@ export function useGameState() {
     level.setCtStage("evaluation");
   };
 
-  const sim = useSimulation(level.originalVehicles, level.algorithmSteps, handleCompleteLevel, gridRows, gridCols);
+  const sim = useSimulation(
+    level.originalVehicles,
+    level.algorithmSteps,
+    handleCompleteLevel,
+    gridRows,
+    gridCols,
+    level.activeWalls,
+    defaultExitRow,
+    defaultExitCol
+  );
 
   const handleLoadLevel = (levelId: number) => {
     audio.playClick();
@@ -49,10 +62,8 @@ export function useGameState() {
 
   const handleSandboxMoveRecorded = () => {
     level.setSandboxMoveCount((prev) => prev + 1);
-    const playerCar = level.activeVehicles.find((v) => v.isPlayer);
-    const activeLevel = LEVELS.find((l) => l.id === level.activeLevelId);
-    const gridCols = activeLevel?.gridCols ?? 6;
-    if (playerCar && playerCar.col >= gridCols - 2) {
+    const isSolved = isLevelSolved(level.activeVehicles, gridRows, gridCols, defaultExitRow, defaultExitCol);
+    if (isSolved) {
       setTimeout(() => handleCompleteLevel(level.sandboxMoveCount + 1), 350);
     }
   };
@@ -67,6 +78,8 @@ export function useGameState() {
     activeVehicles,
     setActiveVehicles,
     originalVehicles: level.originalVehicles,
+    activeWalls: level.activeWalls,
+    setActiveWalls: level.setActiveWalls,
     selectedVehicleId: level.selectedVehicleId,
     setSelectedVehicleId: level.setSelectedVehicleId,
     ctStage: level.ctStage,
@@ -80,6 +93,8 @@ export function useGameState() {
     simulationLogs: sim.simulationLogs,
     simResult,
     sandboxMoveCount: level.sandboxMoveCount,
+    isDevMode: level.isDevMode,
+    setIsDevMode: level.setIsDevMode,
     handleLoadLevel,
     handleResetLevel,
     handleQuizComplete,

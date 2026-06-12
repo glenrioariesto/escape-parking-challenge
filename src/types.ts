@@ -9,6 +9,8 @@ export interface Vehicle {
   color: string; // Tailwind color class or hex
   label: string; // Friendly name like "Mobil Merah", "Truk Kuning"
   isPlayer?: boolean;
+  exitRow?: number; // custom exit row for horizontal player cars
+  exitCol?: number; // custom exit col for vertical player cars
 }
 
 export type MoveAction = {
@@ -36,6 +38,7 @@ export interface LevelDefinition {
   vehicles: Vehicle[];
   exitRow: number;
   quizQuestions: QuizQuestion[];
+  walls?: { row: number; col: number }[];
 }
 
 export type CTStage = "analysis" | "sandbox" | "algorithm" | "simulation" | "evaluation";

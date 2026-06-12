@@ -110,39 +110,25 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col h-full justify-between text-slate-800">
+    <div className="flex flex-col h-full justify-between text-slate-800 p-1">
       <div>
         {/* Header Title */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
-              <Cpu size={16} className="sm:w-[18px] sm:h-[18px]" />
-            </span>
-            <div>
-              <h3 className="text-xs sm:text-sm font-black text-slate-800 font-sans tracking-tight">
-                Aktivitas CT: Rancang Algoritma
-              </h3>
-              <p className="text-[9px] sm:text-[10px] text-slate-400 font-mono">
-                PENYUSUNAN LANGKAH (SEQUENCING)
-              </p>
-            </div>
-          </div>
-          <span className="text-[9px] sm:text-[10px] bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-mono">
-            {steps.length} Langkah Terancang
+        <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
+          <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider font-mono">
+            Algoritma
+          </h4>
+          <span className="text-[10px] bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-mono">
+            {steps.length} Langkah
           </span>
         </div>
 
         {/* Builder Panel Form */}
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 space-y-3">
-          <p className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">
-            ✦ Rancang instruksi gerakan baru:
-          </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {/* Pick Vehicle */}
             <div className="flex flex-col gap-1">
               <label className="text-[10px] uppercase font-mono font-black text-slate-400">
-                Pilih Kendaraan
+                Mobil
               </label>
               <select
                 value={selectedVehicleId}
@@ -153,19 +139,19 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                 disabled={isSimulating}
                 className="bg-white text-xs text-slate-700 border border-slate-300 rounded-lg p-2 focus:ring-1 focus:ring-blue-500 outline-none"
               >
-                <option value="">-- Pilih Mobil --</option>
+                <option value="">-- Pilih --</option>
                 {vehicles.map((v) => (
                   <option key={v.id} value={v.id}>
-                    {v.id === "R" ? "🔴 (Pemain)" : `${v.id} - ${v.label}`}
+                    {v.id === "R" ? "🔴 R" : `${v.id} - ${v.label}`}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Pick Direction (Dynamic depending on Vehicle Orientation) */}
+            {/* Pick Direction */}
             <div className="flex flex-col gap-1">
               <label className="text-[10px] uppercase font-mono font-black text-slate-400">
-                Pilih Arah
+                Arah
               </label>
               <select
                 value={direction}
@@ -179,14 +165,14 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                 {!selectedVehicleId && <option value="">Pilih mobil dulu</option>}
                 {selectedVehicle?.direction === "horizontal" && (
                   <>
-                    <option value="left">◀ Mundur Kiri</option>
-                    <option value="right">▶ Maju Kanan</option>
+                    <option value="left">◀ Kiri</option>
+                    <option value="right">▶ Kanan</option>
                   </>
                 )}
                 {selectedVehicle?.direction === "vertical" && (
                   <>
-                    <option value="up">▲ Maju Ke Atas</option>
-                    <option value="down">▼ Mundur Ke Bawah</option>
+                    <option value="up">▲ Ke Atas</option>
+                    <option value="down">▼ Ke Bawah</option>
                   </>
                 )}
               </select>
@@ -195,7 +181,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
             {/* Pick Distance */}
             <div className="flex flex-col gap-1">
               <label className="text-[10px] uppercase font-mono font-black text-slate-400">
-                Jarak (Kotak)
+                Jarak
               </label>
               <select
                 value={distance}
@@ -221,17 +207,16 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm cursor-pointer border-none"
           >
             <Plus size={14} />
-            <span>Masukkan Langkah ke Algoritma</span>
+            <span>Tambah Langkah</span>
           </button>
         </div>
 
         {/* Algorithm List Block Container */}
         <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1">
           {steps.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 px-4 text-center border border-dashed border-slate-200 rounded-xl bg-slate-50">
-              <span className="text-2xl mb-1">📋</span>
-              <p className="text-xs text-slate-400 font-sans max-w-[220px]">
-                Belum ada kode algoritma. Silakan susun instruksi baru di atas untuk memulai.
+            <div className="flex flex-col items-center justify-center py-6 px-4 text-center border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+              <p className="text-[11px] text-slate-400 font-medium">
+                Belum ada langkah terancang.
               </p>
             </div>
           ) : (

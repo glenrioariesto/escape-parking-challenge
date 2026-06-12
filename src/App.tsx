@@ -76,7 +76,7 @@ export default function App() {
         </div>
       )}
 
-      <main className="flex-1 overflow-hidden flex flex-col max-w-7xl w-full mx-auto p-3 sm:p-4 min-h-0">
+      <main className="flex-1 overflow-hidden flex flex-col max-w-7xl w-full mx-auto p-0 sm:p-4 min-h-0">
         {currentScreen === "splash" && (
           <SplashPage onStart={() => setCurrentScreen("dashboard")} />
         )}
@@ -117,6 +117,10 @@ export default function App() {
             onSandboxMoveRecorded={game.handleSandboxMoveRecorded}
             onNextLevel={handleNextLevel}
             onSetCtStage={game.setCtStage}
+            activeWalls={game.activeWalls}
+            onChangeWalls={game.setActiveWalls}
+            isDevMode={game.isDevMode}
+            onToggleDevMode={() => game.setIsDevMode(prev => !prev)}
           />
         )}
       </main>
