@@ -1,39 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vehicle } from "../../../types";
-import { HelpCircle, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import audio from "../../../lib/audio";
-
-// Maps a vehicle to its corresponding image path in public/img/
-function getVehicleImagePath(v: Vehicle): string {
-  if (v.isPlayer || v.id === "R") {
-    return "/img/taxi.svg";
-  }
-
-  // Use character code of vehicle ID to deterministically map to the same asset
-  const idNum = v.id.charCodeAt(0) || 0;
-
-  if (v.length >= 3) {
-    // 3-grid truck assets (6 options)
-    const trucks = [
-      "/img/truck-biru.svg",
-      "/img/truck-merah.svg",
-      "/img/truck-abu.svg",
-      "/img/truck-kuning.svg",
-      "/img/truck-hijau.svg",
-      "/img/truck-cyan.svg"
-    ];
-    return trucks[idNum % trucks.length];
-  } else {
-    // 2-grid car assets: bak, hatchback, jeep, sedan (16 options total)
-    const cars = [
-      "/img/bak-kuning.svg", "/img/bak-merah.svg", "/img/bak-biru.svg", "/img/bak-abu.svg",
-      "/img/hatchback-hijau.svg", "/img/hatchback-abu.svg", "/img/hatchback-biru.svg", "/img/hatchback-cyan.svg",
-      "/img/jeep-cokelat.svg", "/img/jeep-merah.svg", "/img/jeep-hijau.svg", "/img/jeep-putih.svg",
-      "/img/sedan-hijau.svg", "/img/sedan-kuning.svg", "/img/sedan-merah.svg", "/img/sedan-abu.svg"
-    ];
-    return cars[idNum % cars.length];
-  }
-}
+import { getVehicleImagePath, getVehicleDisplayNamesMap, getVehicleBaseName } from "../../../lib/vehicleHelpers";
 
 // Computes which cells are occupied around the board
 export function getOccupiedCells(
@@ -84,6 +53,8 @@ export function checkCollision(
   walls: { row: number; col: number }[] = []
 ): { valid: boolean; reason?: string } {
   const occupied = getOccupiedCells(vehicles, vehicle.id, gridRows, gridCols, walls);
+  const nameMap = getVehicleDisplayNamesMap(vehicles);
+  const getBlockerName = (b?: Vehicle) => b ? (nameMap[b.id] || getVehicleBaseName(b)) : "kendaraan lain";
 
   if (vehicle.direction === "horizontal") {
     if (dir === "up" || dir === "down") {
@@ -105,7 +76,7 @@ export function checkCollision(
             return { valid: false, reason: "Menabrak dinding pembatas!" };
           }
           const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
+          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
         }
       }
     } else {
@@ -116,7 +87,7 @@ export function checkCollision(
             return { valid: false, reason: "Menabrak dinding pembatas!" };
           }
           const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
+          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
         }
       }
     }
@@ -141,7 +112,7 @@ export function checkCollision(
             return { valid: false, reason: "Menabrak dinding pembatas!" };
           }
           const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
+          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
         }
       }
     } else {
@@ -152,7 +123,7 @@ export function checkCollision(
             return { valid: false, reason: "Menabrak dinding pembatas!" };
           }
           const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${blocker?.label || blockerId || "kendaraan lain"}!` };
+          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
         }
       }
     }
@@ -217,11 +188,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Zoom & Pan States
-  const [zoom, setZoom] = useState(1);
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [dragState, setDragState] = useState<any | null>(null);
-  const [isPanningState, setIsPanningState] = useState(false);
 
   // Image caches to avoid reloading on each frame
   const imageCacheRef = useRef<{ [key: string]: HTMLImageElement }>({});
@@ -230,15 +197,11 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
   // Keep tracking values in refs for zero-lag drag/pan
   const vehiclesRef = useRef<Vehicle[]>(vehicles);
   const selectedVehicleIdRef = useRef<string | null>(selectedVehicleId);
-  const zoomRef = useRef<number>(zoom);
-  const panOffsetRef = useRef<{ x: number; y: number }>(panOffset);
   const activeWallsRef = useRef<{ row: number; col: number }[]>(activeWalls);
   const isDevModeRef = useRef<boolean>(isDevMode);
 
   vehiclesRef.current = vehicles;
   selectedVehicleIdRef.current = selectedVehicleId;
-  zoomRef.current = zoom;
-  panOffsetRef.current = panOffset;
   activeWallsRef.current = activeWalls;
   isDevModeRef.current = isDevMode;
 
@@ -319,14 +282,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     };
   }, [vehicles]);
 
-  // Reset zoom & pan when the level changes
-  useEffect(() => {
-    setZoom(1);
-    setPanOffset({ x: 0, y: 0 });
-    panOffsetRef.current = { x: 0, y: 0 };
-    zoomRef.current = 1;
-  }, [levelId]);
-
   // Drag visual offsets and boundaries ref
   const dragInfoRef = useRef<{
     vehicleId: string;
@@ -338,14 +293,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     maxVal: number;
     visualPos: number;
     direction: "horizontal" | "vertical";
-  } | null>(null);
-
-  // Panning info ref
-  const panningInfoRef = useRef<{
-    startX: number;
-    startY: number;
-    startOffsetX: number;
-    startOffsetY: number;
   } | null>(null);
 
   // Lazy loads background grid image maps-level-1.svg
@@ -378,30 +325,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     return img;
   };
 
-  const handleZoomOut = () => {
-    audio.playClick();
-    setZoom((z) => {
-      const nextZ = Math.max(z - 0.25, 0.5);
-      if (nextZ === 1) {
-        setPanOffset({ x: 0, y: 0 });
-        panOffsetRef.current = { x: 0, y: 0 };
-      }
-      return nextZ;
-    });
-  };
-
-  const handleZoomIn = () => {
-    audio.playClick();
-    setZoom((z) => Math.min(z + 0.25, 3));
-  };
-
-  const handleResetZoom = () => {
-    audio.playClick();
-    setZoom(1);
-    setPanOffset({ x: 0, y: 0 });
-    panOffsetRef.current = { x: 0, y: 0 };
-  };
-
   // Canvas drawing loop
   const drawCanvas = () => {
     const canvas = canvasRef.current;
@@ -409,40 +332,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-
-    // Adapt resolution for Retina screens (high DPI)
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.scale(dpr, dpr);
-
-    // Apply Pan and Zoom transformations from refs
-    ctx.translate(panOffsetRef.current.x, panOffsetRef.current.y);
-    ctx.scale(zoomRef.current, zoomRef.current);
-
-    // Calculate grid dimensions centered inside the square canvas
-    const maxDim = Math.max(gridCols, gridRows);
-    const cellSize = rect.width / maxDim;
-    const xOffset = (maxDim - gridCols) * cellSize / 2;
-    const yOffset = (maxDim - gridRows) * cellSize / 2;
-
-    const playerCar = vehiclesRef.current.find((v) => v.isPlayer || v.id === "R");
-    const isPlayerVertical = playerCar?.direction === "vertical";
-    const exitCol = playerCar ? playerCar.col : 4;
-
-    // Draw background (non-parking zone background)
-    ctx.fillStyle = "#0F172A"; // Dark slate background
-    ctx.fillRect(0, 0, rect.width, rect.height);
-
-    ctx.save();
-    // Translate rendering origin to the centered parking grid
-    ctx.translate(xOffset, yOffset);
-
-    // Helper to draw rounded rect fallback
     const drawRoundRect = (c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) => {
       if (c.roundRect) {
         c.roundRect(x, y, w, h, r);
@@ -460,6 +349,47 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         c.closePath();
       }
     };
+
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    // Adapt resolution for Retina screens (high DPI)
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.scale(dpr, dpr);
+
+
+    // Calculate grid dimensions centered inside the fluid canvas with padding for coordinates
+    const padLeft = 28;
+    const padTop = 28;
+    const cellSize = Math.min((rect.width - padLeft) / gridCols, (rect.height - padTop) / gridRows);
+    const xOffset = (rect.width - padLeft - gridCols * cellSize) / 2 + padLeft;
+    const yOffset = (rect.height - padTop - gridRows * cellSize) / 2 + padTop;
+
+    const playerCar = vehiclesRef.current.find((v) => v.isPlayer || v.id === "R");
+    const isPlayerVertical = playerCar?.direction === "vertical";
+    const exitCol = playerCar ? playerCar.col : 4;
+
+    ctx.save();
+    // Translate rendering origin to the centered parking grid
+    ctx.translate(xOffset, yOffset);
+
+    // Draw grid coordinates (column numbers on top, row numbers on left)
+    ctx.save();
+    ctx.fillStyle = "rgba(71, 85, 105, 0.8)";
+    ctx.font = "600 11px 'JetBrains Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (let c = 0; c < gridCols; c++) {
+      ctx.fillText(String(c), c * cellSize + cellSize / 2, -14);
+    }
+    for (let r = 0; r < gridRows; r++) {
+      ctx.fillText(String(r), -14, r * cellSize + cellSize / 2);
+    }
+    ctx.restore();
 
     // 1. Draw Grid Slots and Borders
     const bgImg = getBgImage();
@@ -492,22 +422,20 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       }
     }
 
-    // Overlay grid outlines in Dev Mode
-    if (isDevModeRef.current) {
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.15)";
-      ctx.lineWidth = 1;
-      for (let r = 0; r <= gridRows; r++) {
-        ctx.beginPath();
-        ctx.moveTo(0, r * cellSize);
-        ctx.lineTo(gridCols * cellSize, r * cellSize);
-        ctx.stroke();
-      }
-      for (let c = 0; c <= gridCols; c++) {
-        ctx.beginPath();
-        ctx.moveTo(c * cellSize, 0);
-        ctx.lineTo(c * cellSize, gridRows * cellSize);
-        ctx.stroke();
-      }
+    // Overlay thin grid outlines (always visible, only lines, no text)
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
+    ctx.lineWidth = 1;
+    for (let r = 0; r <= gridRows; r++) {
+      ctx.beginPath();
+      ctx.moveTo(0, r * cellSize);
+      ctx.lineTo(gridCols * cellSize, r * cellSize);
+      ctx.stroke();
+    }
+    for (let c = 0; c <= gridCols; c++) {
+      ctx.beginPath();
+      ctx.moveTo(c * cellSize, 0);
+      ctx.lineTo(c * cellSize, gridRows * cellSize);
+      ctx.stroke();
     }
 
     // 2. Draw Exit Gate Indicator
@@ -703,35 +631,42 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
   // Redraw when states or props change
   useEffect(() => {
     requestRedraw();
-  }, [vehicles, selectedVehicleId, zoom, panOffset, gridRows, gridCols, exitRow, activeWalls, isDevMode]);
+  }, [vehicles, selectedVehicleId, gridRows, gridCols, exitRow, activeWalls, isDevMode]);
+
+  // Redraw when the window resizes to adapt the fluid canvas resolution
+  useEffect(() => {
+    const handleResize = () => {
+      requestRedraw();
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Global pointer move & up event listeners on window
   useEffect(() => {
     const handleGlobalPointerMove = (e: PointerEvent) => {
-      if (!dragInfoRef.current && !panningInfoRef.current) return;
+      if (!dragInfoRef.current) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
 
       const rect = canvas.getBoundingClientRect();
-      const maxDim = Math.max(gridCols, gridRows);
-      const cellSize = rect.width / maxDim;
+      const padLeft = 28;
+      const padTop = 28;
+      const cellSize = Math.min((rect.width - padLeft) / gridCols, (rect.height - padTop) / gridRows);
 
       if (dragInfoRef.current) {
         const diffX = e.clientX - dragInfoRef.current.startX;
         const diffY = e.clientY - dragInfoRef.current.startY;
 
-        const zoomAdjustedDiffX = diffX / zoomRef.current;
-        const zoomAdjustedDiffY = diffY / zoomRef.current;
-
         if (dragInfoRef.current.direction === "horizontal") {
-          const diffCol = zoomAdjustedDiffX / cellSize;
+          const diffCol = diffX / cellSize;
           const targetCol = Math.max(
             dragInfoRef.current.minVal,
             Math.min(dragInfoRef.current.maxVal, dragInfoRef.current.startCol + diffCol)
           );
           dragInfoRef.current.visualPos = targetCol;
         } else {
-          const diffRow = zoomAdjustedDiffY / cellSize;
+          const diffRow = diffY / cellSize;
           const targetRow = Math.max(
             dragInfoRef.current.minVal,
             Math.min(dragInfoRef.current.maxVal, dragInfoRef.current.startRow + diffRow)
@@ -741,18 +676,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         
         requestRedraw();
         audio.playSlide();
-      } else if (panningInfoRef.current) {
-        const diffX = e.clientX - panningInfoRef.current.startX;
-        const diffY = e.clientY - panningInfoRef.current.startY;
-
-        const limitX = window.innerWidth * 0.5;
-        const limitY = window.innerHeight * 0.5;
-
-        const boundedX = Math.max(-limitX, Math.min(limitX, panningInfoRef.current.startOffsetX + diffX));
-        const boundedY = Math.max(-limitY, Math.min(limitY, panningInfoRef.current.startOffsetY + diffY));
-
-        panOffsetRef.current = { x: boundedX, y: boundedY };
-        requestRedraw();
       }
     };
 
@@ -789,10 +712,6 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
             : (finalVal > startR ? "down" : "up");
           onMoveRecorded(dragId, dir, stepsMoved);
         }
-      } else if (panningInfoRef.current) {
-        setPanOffset(panOffsetRef.current);
-        panningInfoRef.current = null;
-        setIsPanningState(false);
       }
     };
 
@@ -808,22 +727,21 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
   }, [gridCols, gridRows, onChangeVehicles, onMoveRecorded]);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
+const canvas = canvasRef.current;
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
     const xOnCanvas = (e.clientX - rect.left) * (canvas.width / (rect.width * window.devicePixelRatio));
     const yOnCanvas = (e.clientY - rect.top) * (canvas.height / (rect.height * window.devicePixelRatio));
+    const xInGridPixels = xOnCanvas;
+    const yInGridPixels = yOnCanvas;
 
-    // Reverse pan and zoom transforms
-    const xInGridPixels = (xOnCanvas - panOffsetRef.current.x) / zoomRef.current;
-    const yInGridPixels = (yOnCanvas - panOffsetRef.current.y) / zoomRef.current;
-
-    // Calculate grid dimensions centered inside the square canvas
-    const maxDim = Math.max(gridCols, gridRows);
-    const cellSize = rect.width / maxDim;
-    const xOffset = (maxDim - gridCols) * cellSize / 2;
-    const yOffset = (maxDim - gridRows) * cellSize / 2;
+    // Calculate grid dimensions centered inside the fluid canvas with padding for coordinates
+    const padLeft = 28;
+    const padTop = 28;
+    const cellSize = Math.min((rect.width - padLeft) / gridCols, (rect.height - padTop) / gridRows);
+    const xOffset = (rect.width - padLeft - gridCols * cellSize) / 2 + padLeft;
+    const yOffset = (rect.height - padTop - gridRows * cellSize) / 2 + padTop;
 
     const xActive = xInGridPixels - xOffset;
     const yActive = yInGridPixels - yOffset;
@@ -924,94 +842,48 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       dragInfoRef.current = info;
       setDragState(info);
     } else {
-      panningInfoRef.current = {
-        startX: e.clientX,
-        startY: e.clientY,
-        startOffsetX: panOffsetRef.current.x,
-        startOffsetY: panOffsetRef.current.y,
-      };
-      setIsPanningState(true);
+      onSelectVehicle(null);
     }
   };
 
-  // Calculate exit label mid percentage relative to the square canvas height/width
-  const maxDim = Math.max(gridCols, gridRows);
-  const playerCar = vehicles.find((v) => v.isPlayer || v.id === "R");
-  const isPlayerVertical = playerCar?.direction === "vertical";
-  const exitCol = playerCar ? playerCar.col : 4;
 
-  const exitLabelStyle = isPlayerVertical
-    ? {
-        left: `${(((maxDim - gridCols) / 2 + exitCol + 0.5) / maxDim) * 100}%`,
-        bottom: "-20px",
-        transform: "translateX(-50%)",
-      }
-    : {
-        top: `${(((maxDim - gridRows) / 2 + exitRow + 0.5) / maxDim) * 100}%`,
-        right: "-20px",
-        transform: "translateY(-50%) rotate(90deg)",
-      };
 
   return (
-    <div className="flex flex-col items-center w-full relative">
-      {/* Board Viewport Wrapper (Perfect Square ratio) */}
+    <div className="flex flex-col items-center w-full h-full relative">
+      {/* Board Viewport Wrapper (Fluid Ratio) */}
       <div
-        className="w-full overflow-hidden relative flex items-center justify-center rounded-2xl animate-[fadeIn_0.5s_ease-out]"
+        className="w-full h-full overflow-hidden relative flex items-center justify-center rounded-2xl animate-[fadeIn_0.5s_ease-out]"
         style={{
-          aspectRatio: "1 / 1",
           width: "100%",
-          maxWidth: `min(${gridCols > 6 ? "520px" : "450px"}, calc(100vh - 240px))`,
-          minWidth: "220px",
-          cursor: isPanningState ? "grabbing" : "grab"
+          height: "100%",
+          cursor: "default",
+          border: "none",
+          outline: "none",
+          boxShadow: "none"
         }}
       >
         <canvas
           ref={canvasRef}
           id="parking-canvas"
-          className="w-full h-full select-none touch-none block bg-[#999999]"
+          className="w-full h-full select-none touch-none block bg-transparent"
+          style={{
+            border: "none",
+            outline: "none",
+            boxShadow: "none"
+          }}
           onPointerDown={handlePointerDown}
         />
 
-        {/* Floating Zoom and Dev Mode Controls (Vertical) */}
-        <div className="absolute top-3 right-3 z-40 flex flex-col items-center gap-1.5 select-none">
-          <button
-            type="button"
-            onClick={handleZoomIn}
-            disabled={zoom === 3}
-            className="w-7 h-7 flex items-center justify-center bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-700 font-extrabold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
-            title="Zoom In"
-          >
-            <ZoomIn size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={handleZoomOut}
-            disabled={zoom <= 0.5}
-            className="w-7 h-7 flex items-center justify-center bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-700 font-extrabold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
-            title="Zoom Out"
-          >
-            <ZoomOut size={13} />
-          </button>
-          {(zoom !== 1 || panOffset.x !== 0 || panOffset.y !== 0) && (
-            <button
-              type="button"
-              onClick={handleResetZoom}
-              className="w-7 h-7 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg cursor-pointer border border-slate-200 transition-all select-none"
-              title="Reset Tampilan"
-            >
-              <Maximize2 size={11} />
-            </button>
-          )}
-
-          {/* Dev Mode toggle button */}
-          {onToggleDevMode && (
+        {/* Floating Dev Mode Controls (Vertical) */}
+        {onToggleDevMode && (
+          <div className="absolute top-3 right-3 z-40 flex flex-col items-center gap-1.5 select-none">
             <button
               type="button"
               onClick={() => {
                 audio.playClick();
                 onToggleDevMode();
               }}
-              className={`w-7.5 h-7.5 mt-2 flex items-center justify-center text-[9px] font-black rounded-lg cursor-pointer border transition-all select-none ${
+              className={`w-7.5 h-7.5 flex items-center justify-center text-[9px] font-black rounded-lg cursor-pointer border transition-all select-none ${
                 isDevMode
                   ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-600 shadow-md scale-105"
                   : "bg-slate-800 hover:bg-slate-900 text-slate-350 border-slate-700 shadow-sm"
@@ -1020,8 +892,8 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
             >
               DEV
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* HTML EXIT Label removed: exit indicators are drawn dynamically on canvas */}
       </div>

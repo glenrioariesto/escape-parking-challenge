@@ -65,19 +65,10 @@ body {
 
 /* Target the Board Viewport Wrapper inside ParkingGrid */
 .arena-left-column div:has(> #parking-canvas) {
-  max-width: min(100%, calc(100vh - 100px)) !important;
-  max-height: min(100%, calc(100vh - 100px)) !important;
   width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1 / 1 !important;
-}
-
-/* For landscape mobile or short viewports (height < 500px), maximize grid height further */
-@media (max-height: 500px) {
-  .arena-left-column div:has(> #parking-canvas) {
-    max-width: min(100%, calc(100vh - 30px)) !important;
-    max-height: min(100%, calc(100vh - 30px)) !important;
-  }
+  height: 100% !important;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Hide the sidebar button panel from GridPanel to keep left column clean */
@@ -126,5 +117,37 @@ body {
 .animate-title-3 {
   animation: fadeInUp 1.0s ease-out both, titleScale 4s ease-in-out infinite 1.8s;
 }
+
+/* Hide scrollbars for clean custom horizontal lists */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom Scale-in Animation for Modals */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-scaleIn {
+  animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Mobile landscape specific styles (height-based for rotated viewports) */
+@media (max-height: 520px) {
+  .mobile-landscape-hidden {
+    display: none !important;
+  }
+  .mobile-landscape-flex {
+    display: flex !important;
+  }
+  .mobile-landscape-block {
+    display: block !important;
+  }
+}
+
 
 

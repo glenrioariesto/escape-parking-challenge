@@ -1,7 +1,6 @@
 import React from "react";
 import { Vehicle, MoveAction, CTStage } from "@types";
 import { StepBuilder } from "./StepBuilder";
-import { SimulationConsole } from "./SimulationConsole";
 
 interface AlgorithmPanelProps {
   activeVehicles: Vehicle[];
@@ -14,6 +13,8 @@ interface AlgorithmPanelProps {
   onStartSimulation: () => void;
   onResetLevel: () => void;
   onSetCtStage: (stage: CTStage) => void;
+  selectedVehicleId: string | null;
+  onSelectVehicle: (id: string | null) => void;
 }
 
 export const AlgorithmPanel: React.FC<AlgorithmPanelProps> = ({
@@ -27,29 +28,26 @@ export const AlgorithmPanel: React.FC<AlgorithmPanelProps> = ({
   onStartSimulation,
   onResetLevel,
   onSetCtStage,
+  selectedVehicleId,
+  onSelectVehicle,
 }) => (
-  <div className="h-full flex flex-col min-h-0 overflow-hidden space-y-4">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0 overflow-hidden">
-      {/* Step Builder */}
-      <div className="md:col-span-1 flex flex-col min-h-0 overflow-hidden">
-        <StepBuilder
-          vehicles={activeVehicles}
-          steps={algorithmSteps}
-          onUpdateSteps={onUpdateSteps}
-          onRunSimulation={onStartSimulation}
-          onResetSimulation={onResetLevel}
-          isSimulating={isSimulating}
-          currentSimulatingStepIndex={currentStepIndex}
-        />
-      </div>
-
-      {/* Simulation Console */}
-      <SimulationConsole simulationLogs={simulationLogs} />
+  <div className="h-full flex flex-col min-h-0 overflow-hidden space-y-3">
+    {/* Step Builder */}
+    <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+      <StepBuilder
+        vehicles={activeVehicles}
+        steps={algorithmSteps}
+        onUpdateSteps={onUpdateSteps}
+        isSimulating={isSimulating}
+        currentSimulatingStepIndex={currentStepIndex}
+        selectedVehicleId={selectedVehicleId}
+        onSelectVehicle={onSelectVehicle}
+      />
     </div>
 
     {/* Proceed to evaluation banner */}
     {algorithmSteps.length > 0 && !isSimulating && ctStage === "simulation" && (
-      <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center justify-between text-xs text-blue-700 font-bold shadow-xs flex-shrink-0 animate-pulse">
+      <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl flex items-center justify-between text-xs text-blue-700 font-bold shadow-xs flex-shrink-0 animate-pulse">
         <span>Skenario berjalan sukses, silakan simpan atau revisi programmu.</span>
         <button
           onClick={() => onSetCtStage("evaluation")}

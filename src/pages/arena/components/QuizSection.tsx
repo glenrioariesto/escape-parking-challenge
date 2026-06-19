@@ -66,30 +66,10 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm flex flex-col justify-between h-full text-slate-800">
-      <div>
-        {/* CT Stage Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
-              <GraduationCap size={16} className="sm:w-[18px] sm:h-[18px]" />
-            </span>
-            <div>
-              <h3 className="text-xs sm:text-sm font-black text-slate-800 font-sans tracking-tight">
-                Aktivitas CT: Analisis Hambatan
-              </h3>
-              <p className="text-[9px] sm:text-[10px] text-slate-400 font-mono">
-                PENGURAIAN & PENYEDERHANAAN
-              </p>
-            </div>
-          </div>
-          <span className="text-[9px] sm:text-[10px] bg-slate-100 border border-slate-200 px-2 sm:px-2.5 py-0.5 rounded-full text-slate-600 font-mono">
-            Soal {currentQuestionIndex + 1} dari {questions.length}
-          </span>
-        </div>
-
+    <div className="bg-white border-none rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-0 flex-1 overflow-hidden text-slate-800">
+      <div className="flex-1 overflow-y-auto pr-1 min-h-0 mb-4 space-y-3">
         {/* Question Text */}
-        <div className="mb-4">
+        <div className="pr-8 sm:pr-10">
           <div className="flex gap-2 items-start">
             <HelpCircle size={16} className="text-blue-500 mt-0.5 sm:mt-1 flex-shrink-0 sm:w-[18px] sm:h-[18px]" />
             <h4 className="text-xs sm:text-sm md:text-base text-slate-800 font-black leading-relaxed font-sans">
@@ -99,7 +79,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
         </div>
 
         {/* Options */}
-        <div className="space-y-2 mb-4">
+        <div className="space-y-2">
           {question.options.map((option, idx) => {
             let optionStyles = "bg-slate-50 hover:bg-slate-105 border-slate-200 text-slate-700 font-medium hover:border-slate-350";
             
@@ -122,7 +102,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                 key={idx}
                 disabled={isAnswerSubmitted}
                 onClick={() => handleSelectAnswer(idx)}
-                className={`w-full text-left p-2.5 sm:p-3 rounded-xl border text-[11px] sm:text-xs md:text-sm transition-all duration-200 flex items-center justify-between shadow-xs ${optionStyles}`}
+                className={`w-full text-left p-2.5 sm:p-3 rounded-xl border text-[11px] sm:text-xs md:text-sm transition-all duration-200 flex items-center justify-between shadow-xs cursor-pointer ${optionStyles}`}
               >
                 <span>{option}</span>
                 {isAnswerSubmitted && idx === question.correctAnswerIndex && (
@@ -138,7 +118,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
 
         {/* Explanation / Feedback */}
         {isAnswerSubmitted && (
-          <div className={`p-4 rounded-xl border text-xs leading-relaxed mb-4 ${
+          <div className={`p-4 rounded-xl border text-xs leading-relaxed ${
             isCorrect 
               ? "bg-emerald-50 border-emerald-300 text-emerald-800"
               : "bg-rose-50 border-rose-200 text-rose-800"
@@ -152,12 +132,12 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
       </div>
 
       {/* Button footer controls */}
-      <div className="flex items-center justify-between mt-auto border-t border-slate-200 pt-3">
+      <div className="flex items-center justify-between mt-auto border-t border-slate-200 pt-3 flex-shrink-0">
         {onPrevStage && (
           <button
             onClick={onPrevStage}
             disabled={isAnswerSubmitted}
-            className="text-xs text-slate-500 hover:text-slate-800 font-bold transition-colors"
+            className="text-xs text-slate-500 hover:text-slate-800 font-bold transition-colors cursor-pointer"
           >
             ← Kembali ke Arena
           </button>
@@ -169,7 +149,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             disabled={selectedAnswerIndex === null}
             className={`px-4 py-2 text-xs font-extrabold font-sans rounded-xl transition-all ${
               selectedAnswerIndex !== null
-                ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-xs"
+                ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-xs border-none"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
             }`}
           >
@@ -178,7 +158,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
         ) : (
           <button
             onClick={handleNextQuestion}
-            className="bg-emerald-600 hover:bg-emerald-750 text-white px-4 py-2 text-xs font-extrabold font-sans rounded-xl flex items-center gap-1 shadow-xs transition-all cursor-pointer"
+            className="bg-emerald-600 hover:bg-emerald-750 text-white px-4 py-2 text-xs font-extrabold font-sans rounded-xl flex items-center gap-1 shadow-xs transition-all cursor-pointer border-none"
           >
             <span>{currentQuestionIndex + 1 < questions.length ? "Muat Soal Berikutnya" : "Simpan Analisis & Lanjut"}</span>
             <ArrowRight size={13} />

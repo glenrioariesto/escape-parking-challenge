@@ -18,7 +18,7 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
       <div className="w-full h-full flex justify-end items-center">
         
         {/* Title and button stack: centered items inside this column container */}
-        <div className="flex flex-col items-center max-w-[180px] sm:max-w-[180px]  md:max-w-[180px] lg:max-w-[320px] xl:max-w-[460px] w-full z-10 mr-12 sm:mr-14 xl:mr-20">
+        <div className="flex flex-col items-center max-w-[180px] sm:max-w-[180px]  md:max-w-[180px] lg:max-w-[320px] xl:max-w-[460px] w-full z-10 mr-12 sm:mr-14 xl:mr-24 2xl:mr-40">
           
           {/* Floating container for titles to create a smooth bobbing/wiggle effect */}
           <div className="w-full flex flex-col items-center animate-float-wiggle">
@@ -54,7 +54,7 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
             <img
               src="/img/forward.svg"
               alt="Mulai"
-              className="w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22 object-contain select-none pointer-events-none"
+              className="w-14 h-14 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 xl:w-22 xl:h-22 2xl:w-22 2xl:h-22 object-contain select-none pointer-events-none"
             />
           </button>
         </div>

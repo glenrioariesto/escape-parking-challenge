@@ -1,6 +1,5 @@
 import React from "react";
 import { PlayerProgress } from "@types";
-import { DashboardHeader } from "./components/DashboardHeader";
 import { LevelSelector } from "./components/LevelSelector";
 
 interface DashboardPageProps {
@@ -18,11 +17,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onGoToSplash,
   onLoadLevel,
 }) => (
-  <div className="flex-1 overflow-hidden flex flex-col space-y-4 h-full min-h-0 w-full text-slate-800">
-    <DashboardHeader
-      progress={progress}
-      onGoToSplash={onGoToSplash}
-    />
+  <div
+    className="flex-1 overflow-hidden flex flex-col h-full min-h-0 w-full bg-cover bg-center bg-no-repeat"
+    style={{ backgroundImage: "url('/img/background-level.webp')" }}
+  >
     <LevelSelector
       progress={progress}
       onLoadLevel={onLoadLevel}
