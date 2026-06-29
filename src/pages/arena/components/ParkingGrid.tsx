@@ -301,7 +301,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       return bgImageRef.current;
     }
     const img = new Image();
-    img.src = "/img/maps-level-1.svg";
+    img.src = `${import.meta.env.BASE_URL}img/maps-level-1.svg`;
     img.onload = () => {
       requestRedraw();
     };

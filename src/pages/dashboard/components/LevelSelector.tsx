@@ -20,7 +20,7 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
       {/* Title banner — lebih besar dari level cards */}
       <div className="flex justify-center flex-shrink-0">
         <img
-          src="/img/pilih-level.webp"
+          src={`${import.meta.env.BASE_URL}img/pilih-level.webp`}
           alt="Pilih Tingkat"
           style={{ height: "clamp(65px, 26vh, 170px)" }}
           className="w-auto object-contain select-none pointer-events-none drop-shadow-lg"

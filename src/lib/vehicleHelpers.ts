@@ -3,7 +3,7 @@ import { Vehicle, QuizQuestion } from "../types";
 // Maps a vehicle to its corresponding image path in public/img/
 export function getVehicleImagePath(v: Vehicle): string {
   if (v.isPlayer || v.id === "R") {
-    return "/img/taxi.svg";
+    return `${import.meta.env.BASE_URL}img/taxi.svg`;
   }
 
   // Use character code of vehicle ID to deterministically map to the same asset
@@ -11,22 +11,24 @@ export function getVehicleImagePath(v: Vehicle): string {
 
   if (v.length >= 3) {
     // 3-grid truck assets (6 options)
+    const base = import.meta.env.BASE_URL;
     const trucks = [
-      "/img/truck-biru.svg",
-      "/img/truck-merah.svg",
-      "/img/truck-abu.svg",
-      "/img/truck-kuning.svg",
-      "/img/truck-hijau.svg",
-      "/img/truck-cyan.svg"
+      `${base}img/truck-biru.svg`,
+      `${base}img/truck-merah.svg`,
+      `${base}img/truck-abu.svg`,
+      `${base}img/truck-kuning.svg`,
+      `${base}img/truck-hijau.svg`,
+      `${base}img/truck-cyan.svg`
     ];
     return trucks[idNum % trucks.length];
   } else {
     // 2-grid car assets: bak, hatchback, jeep, sedan (16 options total)
+    const base = import.meta.env.BASE_URL;
     const cars = [
-      "/img/bak-kuning.svg", "/img/bak-merah.svg", "/img/bak-biru.svg", "/img/bak-putih.svg",
-      "/img/hatchback-hijau.svg", "/img/hatchback-abu.svg", "/img/hatchback-biru.svg", "/img/hatchback-cyan.svg",
-      "/img/jeep-cokelat.svg", "/img/jeep-merah.svg", "/img/jeep-hijau.svg", "/img/jeep-putih.svg",
-      "/img/sedan-hijau.svg", "/img/sedan-kuning.svg", "/img/sedan-merah.svg", "/img/sedan-abu.svg"
+      `${base}img/bak-kuning.svg`, `${base}img/bak-merah.svg`, `${base}img/bak-biru.svg`, `${base}img/bak-putih.svg`,
+      `${base}img/hatchback-hijau.svg`, `${base}img/hatchback-abu.svg`, `${base}img/hatchback-biru.svg`, `${base}img/hatchback-cyan.svg`,
+      `${base}img/jeep-cokelat.svg`, `${base}img/jeep-merah.svg`, `${base}img/jeep-hijau.svg`, `${base}img/jeep-putih.svg`,
+      `${base}img/sedan-hijau.svg`, `${base}img/sedan-kuning.svg`, `${base}img/sedan-merah.svg`, `${base}img/sedan-abu.svg`
     ];
     return cars[idNum % cars.length];
   }
