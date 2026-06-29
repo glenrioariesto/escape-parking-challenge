@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: '/escape-parking-challenge/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
