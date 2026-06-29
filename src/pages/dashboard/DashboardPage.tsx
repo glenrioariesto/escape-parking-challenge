@@ -19,7 +19,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 }) => (
   <div
     className="flex-1 overflow-hidden flex flex-col h-full min-h-0 w-full bg-cover bg-center bg-no-repeat"
-    style={{ backgroundImage: "url('/img/background-level.webp')" }}
+    style={{ backgroundImage: `url('${import.meta.env.BASE_URL}img/background-level.webp')` }}
   >
     <LevelSelector
       progress={progress}

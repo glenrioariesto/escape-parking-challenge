@@ -39,8 +39,8 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
           {LEVELS.map((level) => {
             const isUnlocked = level.id <= progress.unlockedLevel;
             const levelImage = isUnlocked
-              ? `/img/level-${level.id}.svg`
-              : `/img/level-gembok.svg`;
+              ? `${import.meta.env.BASE_URL}img/level-${level.id}.svg`
+              : `${import.meta.env.BASE_URL}img/level-gembok.svg`;
 
             return (
               <div
