@@ -67,7 +67,7 @@ export default function App() {
 
       {/* Tut Wuri Handayani Logo — fixed top-left screen corner */}
       <img
-        src="/img/tut-wuri-handayani.png"
+        src={`${import.meta.env.BASE_URL}img/tut-wuri-handayani.png`}
         alt="Tut Wuri Handayani"
         className="fixed top-3 left-3 md:top-4 md:left-4 w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full shadow-md z-50 pointer-events-none"
       />

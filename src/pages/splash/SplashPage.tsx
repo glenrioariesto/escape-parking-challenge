@@ -9,7 +9,7 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
   return (
     <div
       className="fixed inset-0 w-screen h-screen z-40 bg-cover bg-center bg-no-repeat overflow-hidden"
-      style={{ backgroundImage: "url('/img/background-judul.webp')" }}
+      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}img/background-judul.webp')` }}
     >
       {/* Decorative gradient overlay to enhance visual depth */}
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/10 via-transparent to-slate-950/20 pointer-events-none" />
@@ -24,19 +24,19 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
           <div className="w-full flex flex-col items-center animate-float-wiggle">
             {/* Title SVGs: judul-1 and judul-3 are equal (w-full), judul-2 is smaller (w-[65%]) */}
             <img
-              src="/img/judul-1.svg"
+              src={`${import.meta.env.BASE_URL}img/judul-1.svg`}
               alt="Escape"
               className="w-full h-auto object-contain select-none pointer-events-none relative z-10 animate-title-1"
             />
             
             <img
-              src="/img/judul-2.svg"
+              src={`${import.meta.env.BASE_URL}img/judul-2.svg`}
               alt="Parking"
               className="w-[35%] h-auto object-contain select-none pointer-events-none -mt-4 sm:-mt-4 md:-mt-4 lg:-mt-6 relative z-20 animate-title-2"
             />
             
             <img
-              src="/img/judul-3.svg"
+              src={`${import.meta.env.BASE_URL}img/judul-3.svg`}
               alt="Challenge"
               className="w-full h-auto object-contain select-none pointer-events-none -mt-3 sm:-mt-4 md:-mt-3 lg:-mt-6 relative z-10 animate-title-3"
             />
@@ -52,7 +52,7 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
             aria-label="Start Game"
           >
             <img
-              src="/img/forward.svg"
+              src={`${import.meta.env.BASE_URL}img/forward.svg`}
               alt="Mulai"
               className="w-14 h-14 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 xl:w-22 xl:h-22 2xl:w-22 2xl:h-22 object-contain select-none pointer-events-none"
             />
