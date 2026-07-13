@@ -90,7 +90,7 @@ export const LEVELS: LevelDefinition[] = [
     name: "Tingkat 2: Hambatan Berantai",
     description: "Tantangan mulai meningkat! Mobil Merah A menghalangi jalan keluar, tapi jalurnya sendiri dihalangi oleh Mobil Biru B. Urutkan langkahmu demi jalan keluar!",
     difficulty: "Sedang",
-    optimalSteps: 3,
+    optimalSteps: 7,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
@@ -142,27 +142,54 @@ export const LEVELS: LevelDefinition[] = [
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Abu-abu C"
+      },
+      {
+        id: "D",
+        direction: "vertical",
+        row: 3,
+        col: 4,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Hijau D"
+      },
+      {
+        id: "E",
+        direction: "horizontal",
+        row: 5,
+        col: 4,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Cokelat E"
+      },
+      {
+        id: "F",
+        direction: "vertical",
+        row: 5,
+        col: 2,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Cyan F"
       }
     ],
     quizQuestions: [
       {
         id: "q2_1",
-        question: "Sebelum menggeser Mobil Merah A ke bawah, kendaraan manakah yang harus dipindahkan terlebih dahulu?",
-        options: ["Mobil Abu-abu C", "Mobil Biru B", "Taxi Kuning R", "Tidak perlu memindahkan apa pun"],
-        correctAnswerIndex: 1,
-        explanation: "Mobil Biru B berada di baris 3 kolom 2-3, tepat di bawah posisi target Mobil Merah A. B harus digeser ke kanan agar A bisa turun ke baris 3."
+        question: "Dalam rantai dekomposisi tingkat ini, kendaraan manakah yang harus pertama kali dipindahkan agar kendaraan lain bisa bergeser?",
+        options: ["Mobil Merah A", "Mobil Hijau D", "Mobil Cyan F", "Taxi Kuning R"],
+        correctAnswerIndex: 2,
+        explanation: "Mobil Cyan F menghalangi Mobil Cokelat E untuk bergerak ke kiri. Menggeser F ke bawah adalah langkah pertama yang membuka seluruh rantai hambatan."
       },
       {
         id: "q2_2",
         question: "Urutan strategi atau algoritma logis manakah yang tepat untuk menyelesaikan tingkat ini?",
         options: [
-          "Geser Taxi Kuning R ke kanan langsung saja",
-          "Geser Mobil Biru B ke kanan → Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke kanan",
-          "Geser Mobil Abu-abu C ke bawah → Geser Mobil Biru B ke kiri → Geser Mobil Merah A ke atas",
+          "Geser Taxi Kuning R ke kanan dan Taxi Kuning T ke bawah langsung saja",
+          "Geser Mobil Cyan F ke bawah → Geser Mobil Cokelat E ke kiri → Geser Mobil Hijau D ke bawah → Geser Mobil Biru B ke kanan → Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke kanan → Geser Taxi Kuning T ke bawah",
+          "Geser Mobil Abu-abu C ke bawah → Geser Mobil Biru B ke kiri → Geser Mobil Merah A ke atas → Geser Taxi Kuning R ke kanan",
           "Geser Mobil Merah A ke atas → Geser Mobil Biru B ke kanan → Geser Taxi Kuning R ke kiri"
         ],
         correctAnswerIndex: 1,
-        explanation: "Dengan menggeser Mobil Biru B ke kanan, ruang di baris 3 terbuka. Kemudian geser Mobil Merah A ke bawah, memberi jalan bagi Taxi Kuning R untuk meluncur ke kanan."
+        explanation: "Menggeser F ke bawah memungkinkan E bergeser ke kiri, membuka jalan bagi D untuk turun. D turun membuka jalan bagi B untuk bergeser ke kanan, sehingga A bisa turun ke bawah dan memberi jalan bagi Taxi Kuning R lalu Taxi Kuning T untuk keluar."
       }
     ]
   },
