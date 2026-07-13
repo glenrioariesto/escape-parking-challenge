@@ -26,7 +26,7 @@ export function useLevelManager() {
     return lvl1?.walls ? JSON.parse(JSON.stringify(lvl1.walls)) : [];
   });
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
-  const [ctStage, setCtStage] = useState<CTStage>("analysis");
+  const [ctStage, setCtStage] = useState<CTStage>("algorithm");
   const [isSandboxMode, setIsSandboxMode] = useState(false);
   const [algorithmSteps, setAlgorithmSteps] = useState<MoveAction[]>([]);
   const [sandboxMoveCount, setSandboxMoveCount] = useState(0);
@@ -55,7 +55,7 @@ export function useLevelManager() {
     setOriginalVehicles(cloneVehicles(l.vehicles));
     setActiveWalls(l.walls ? JSON.parse(JSON.stringify(l.walls)) : []);
     setOriginalWalls(l.walls ? JSON.parse(JSON.stringify(l.walls)) : []);
-    setCtStage("analysis");
+    setCtStage("algorithm");
     setIsSandboxMode(false);
     setAlgorithmSteps([]);
     setSandboxMoveCount(0);

@@ -63,11 +63,23 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
     props.ctStage !== prevCtStageRef.current ||
     props.isSandboxMode !== prevIsSandboxModeRef.current
   ) {
+    const isNewLevel = props.activeLevelId !== prevLevelIdRef.current;
     prevLevelIdRef.current = props.activeLevelId;
     prevCtStageRef.current = props.ctStage;
     prevIsSandboxModeRef.current = props.isSandboxMode;
-    setIsDecompositionModalOpen(props.ctStage === "analysis" && !props.isSandboxMode);
+    if (isNewLevel && !props.isSandboxMode && props.ctStage === "algorithm") {
+      setIsDecompositionModalOpen(true);
+    } else if (props.isSandboxMode) {
+      setIsDecompositionModalOpen(false);
+    }
   }
+
+  // Open quiz automatically when stage transitions to 'analysis'
+  useEffect(() => {
+    if (props.ctStage === "analysis") {
+      props.onOpenQuiz();
+    }
+  }, [props.ctStage]);
 
 
   return (
@@ -141,8 +153,8 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                 <Flame size={16} />
               </button>
 
-              {/* Eye icon for decomposition hint, visible only in analysis stage and NOT in sandbox mode */}
-              {!props.isSandboxMode && props.ctStage === "analysis" && (
+              {/* Eye icon for game guide, visible only in analysis/algorithm stage and NOT in sandbox mode */}
+              {!props.isSandboxMode && (props.ctStage === "analysis" || props.ctStage === "algorithm") && (
                 <button
                   type="button"
                   onClick={() => {
@@ -150,7 +162,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                     setIsDecompositionModalOpen(true);
                   }}
                   className="w-9.5 h-9.5 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-all cursor-pointer hover:scale-105"
-                  title="Lihat Petunjuk Dekomposisi"
+                  title="Lihat Panduan Game"
                 >
                   <Eye size={16} />
                 </button>
@@ -228,7 +240,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
 
       {/* Decomposition (Fase 1) Modal */}
       <DecompositionModal
-        isOpen={!props.isSandboxMode && props.ctStage === "analysis" && isDecompositionModalOpen}
+        isOpen={!props.isSandboxMode && (props.ctStage === "analysis" || props.ctStage === "algorithm") && isDecompositionModalOpen}
         onClose={() => setIsDecompositionModalOpen(false)}
         levelName={activeLevel?.name || ""}
       />

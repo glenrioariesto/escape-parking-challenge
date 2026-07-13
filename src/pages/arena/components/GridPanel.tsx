@@ -95,8 +95,8 @@ export const GridPanel: React.FC<GridPanelProps> = ({
           <Flame size={14} />
         </button>
 
-        {/* Petunjuk Dekomposisi (Eye Icon) */}
-        {!isSandboxMode && ctStage === "analysis" && (
+        {/* Panduan Game (Eye Icon) */}
+        {!isSandboxMode && (ctStage === "analysis" || ctStage === "algorithm") && (
           <button
             type="button"
             onClick={() => {
@@ -104,7 +104,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
               onOpenDecompositionModal();
             }}
             className="w-9 h-9 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-colors cursor-pointer"
-            title="Lihat Petunjuk Dekomposisi"
+            title="Lihat Panduan Game"
           >
             <Eye size={14} />
           </button>

@@ -25,11 +25,18 @@ export function useGameState() {
   const defaultExitCol = playerCar ? playerCar.col : 4;
 
   const handleCompleteLevel = (stepsCount: number) => {
-    audio.playLevelComplete();
-    const { nextProgress, stars } = computeLevelComplete(level.activeLevelId, stepsCount);
-    saveProgress(nextProgress);
-    setSimResult({ success: true, totalSteps: stepsCount, scoreStars: stars });
-    level.setCtStage("evaluation");
+    if (level.isSandboxMode) {
+      audio.playLevelComplete();
+      const { nextProgress, stars } = computeLevelComplete(level.activeLevelId, stepsCount);
+      saveProgress(nextProgress);
+      setSimResult({ success: true, totalSteps: stepsCount, scoreStars: stars });
+      level.setCtStage("evaluation");
+    } else {
+      audio.playSuccess();
+      const { stars } = computeLevelComplete(level.activeLevelId, stepsCount);
+      setSimResult({ success: true, totalSteps: stepsCount, scoreStars: stars });
+      level.setCtStage("analysis");
+    }
   };
 
   const sim = useSimulation(
@@ -57,7 +64,12 @@ export function useGameState() {
   };
 
   const handleQuizComplete = (scorePercentage: number) => {
-    level.setCtStage("algorithm");
+    audio.playLevelComplete();
+    if (simResult) {
+      const { nextProgress } = computeLevelComplete(level.activeLevelId, simResult.totalSteps);
+      saveProgress(nextProgress);
+    }
+    level.setCtStage("evaluation");
   };
 
   const handleSandboxMoveRecorded = () => {

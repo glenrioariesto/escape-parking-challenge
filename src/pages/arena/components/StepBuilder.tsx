@@ -391,10 +391,17 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
         <div className="flex-1 min-h-0 flex flex-col">
           {/* Header Title */}
           <div className="flex mobile-landscape-hidden items-center justify-between border-b border-slate-200 pb-1 sm:pb-2 mb-1 sm:mb-2 flex-shrink-0">
-            <h4 className="text-[10px] sm:text-xs font-black text-slate-800 uppercase tracking-wider font-mono">
-              Algoritma
-            </h4>
-            <span className="text-[8px] sm:text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full text-slate-600 font-mono">
+            <div className="flex flex-col gap-0.5">
+              <h4 className="text-[10px] sm:text-xs font-black text-slate-800 uppercase tracking-wider font-mono">
+                Algoritma
+              </h4>
+              {steps.length > 0 && (
+                <span className="text-[7px] sm:text-[9px] text-slate-400 font-medium">
+                  Seret langkah untuk mengurutkan, tarik ke luar untuk menghapus.
+                </span>
+              )}
+            </div>
+            <span className="text-[8px] sm:text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full text-slate-600 font-mono self-start">
               {steps.length} Langkah
             </span>
           </div>

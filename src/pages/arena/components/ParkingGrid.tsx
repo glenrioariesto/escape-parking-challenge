@@ -876,7 +876,7 @@ const canvas = canvasRef.current;
 
         {/* Floating Dev Mode Controls (Vertical) */}
         {onToggleDevMode && (
-          <div className="absolute top-3 right-3 z-40 flex flex-col items-center gap-1.5 select-none">
+          <div className="absolute top-3 right-3 z-40 hidden flex-col items-center gap-1.5 select-none">
             <button
               type="button"
               onClick={() => {
