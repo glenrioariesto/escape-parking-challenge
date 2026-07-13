@@ -41,31 +41,23 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
   const slides = [
     {
       title: "1. Tujuan Utama",
-      emoji: "🎯",
       text: "Bantu Taxi Kuning (R) keluar dari area parkir menuju pintu keluar yang ditandai dengan panah hijau di tepi jalan.",
       bgClass: "bg-amber-50/40 border-amber-100",
-      emojiBg: "bg-amber-50 text-amber-600",
     },
     {
       title: "2. Aturan Gerakan",
-      emoji: "🚗",
       text: "Setiap mobil hanya bisa bergerak maju atau mundur sesuai orientasinya. Mobil Mendatar (Horizontal) hanya bisa digeser Kiri/Kanan, sedangkan mobil Tegak (Vertikal) hanya bisa digeser Atas/Bawah.",
       bgClass: "bg-blue-50/40 border-blue-100",
-      emojiBg: "bg-blue-50 text-blue-600",
     },
     {
       title: "3. Buat Langkah Algoritma",
-      emoji: "✍️",
       text: "Pilih mobil dengan mengekliknya pada papan parkir. Tentukan arah dan jarak geser pada panel kanan, lalu klik Tambahkan Langkah. Terakhir, klik Jalankan untuk menyimulasikan gerakan secara otomatis. Tips: Kamu bisa menyeret (drag) langkah untuk menyusun ulang urutannya, atau menariknya ke luar daftar (drag to outside) untuk menghapusnya.",
       bgClass: "bg-emerald-50/40 border-emerald-100",
-      emojiBg: "bg-emerald-50 text-emerald-600",
     },
     {
       title: "4. Uji Pemahaman Kuis",
-      emoji: "🧠",
       text: "Setelah taxi berhasil lolos dari kemacetan, kamu harus menjawab Kuis Pemahaman untuk menganalisis penyelesaian masalah menggunakan Berpikir Komputasional sebelum maju ke level berikutnya.",
       bgClass: "bg-purple-50/40 border-purple-100",
-      emojiBg: "bg-purple-50 text-purple-600",
     },
   ];
 
@@ -76,8 +68,7 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
       <div className="relative max-w-sm sm:max-w-md md:max-w-lg w-full mx-auto shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col bg-white border border-slate-100">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 sm:p-4 pb-2 sm:pb-3 relative flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="text-xl sm:text-2xl p-0.5 sm:p-1 bg-white/10 rounded-lg sm:rounded-xl">🎮</span>
+          <div className="flex items-center">
             <div>
               <h3 className="text-[10px] sm:text-xs md:text-sm font-black tracking-tight">
                 Cara Bermain & Aturan Game
@@ -98,10 +89,7 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
 
         {/* Content Body */}
         <div className="p-3 sm:p-5 flex-1 min-h-0 overflow-y-auto flex flex-col justify-center">
-          <div className={`p-3 sm:p-4 border rounded-xl sm:rounded-2xl flex items-start gap-2.5 sm:gap-3.5 transition-all duration-300 ${slide.bgClass}`}>
-            <span className={`text-xl sm:text-2xl w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 font-bold ${slide.emojiBg}`}>
-              {slide.emoji}
-            </span>
+          <div className={`p-3 sm:p-4 border rounded-xl sm:rounded-2xl transition-all duration-300 ${slide.bgClass}`}>
             <div className="flex-1 min-w-0">
               <h4 className="text-[10px] sm:text-xs font-black text-slate-800 font-mono uppercase tracking-wide">
                 {slide.title}

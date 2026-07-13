@@ -6,7 +6,7 @@ export const LEVELS: LevelDefinition[] = [
     name: "Tingkat 1: Blokade Sederhana",
     description: "Kenali pola gerakan dasar tempat parkir. Taxi Kuning R terperangkap secara vertikal di kolom 6. Geser Mobil Biru B yang mendatar ke samping untuk membebaskannya!",
     difficulty: "Mudah",
-    optimalSteps: 2,
+    optimalSteps: 5,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
