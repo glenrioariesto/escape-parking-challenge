@@ -44,6 +44,14 @@ export function getVehicleBaseName(v: Vehicle): string {
     type = "Truk";
   } else if (filename.includes("taxi")) {
     return "Taxi Kuning";
+  } else if (filename.includes("bak")) {
+    type = "Bak";
+  } else if (filename.includes("hatchback")) {
+    type = "Hatchback";
+  } else if (filename.includes("jeep")) {
+    type = "Jeep";
+  } else if (filename.includes("sedan")) {
+    type = "Sedan";
   }
   
   let color = "Abu-abu";

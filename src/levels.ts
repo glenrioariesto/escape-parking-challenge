@@ -90,7 +90,7 @@ export const LEVELS: LevelDefinition[] = [
     name: "Tingkat 2: Hambatan Berantai",
     description: "Tantangan mulai meningkat! Papan parkir vertikal seperti Tingkat 1. Taxi Kuning R terhalang langsung oleh Mobil Abu-abu C, namun Mobil Abu-abu C sendiri terkunci oleh Mobil Putih G di kiri dan Mobil Biru B di kanan. Bebaskan kuncian ini!",
     difficulty: "Sedang",
-    optimalSteps: 3,
+    optimalSteps: 6,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
@@ -194,102 +194,117 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 3,
     name: "Tingkat 3: Labirin Parkir Padat",
-    description: "Ruang gerak makin sempit dengan 6 kendaraan. Kamu harus mengurai kemacetan ini dengan analisis urutan langkah optimal agar tidak terjadi kemacetan total.",
+    description: "Tantangan parkir dengan dua Taxi Kuning (R dan T) yang terhalang jalan keluarnya oleh Truk Abu-abu D yang sangat panjang. Geser truk tersebut untuk membebaskan kedua Taxi!",
     difficulty: "Menengah",
-    optimalSteps: 5,
+    optimalSteps: 14,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
         id: "R",
-        direction: "horizontal",
-        row: 2,
-        col: 1,
+        direction: "vertical",
+        row: 5,
+        col: 7,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
+        id: "T",
+        direction: "vertical",
+        row: 5,
+        col: 3,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi Kuning T (Pemain)",
+        isPlayer: true,
+        exitCol: 3
+      },
+      {
         id: "A",
         direction: "vertical",
-        row: 1,
-        col: 3,
+        row: 5,
+        col: 4,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Merah A"
       },
       {
         id: "B",
-        direction: "horizontal",
-        row: 3,
-        col: 2,
+        direction: "vertical",
+        row: 5,
+        col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Biru B"
       },
       {
-        id: "C",
-        direction: "horizontal",
-        row: 0,
-        col: 0,
-        length: 2,
-        color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Abu-abu C"
-      },
-      {
         id: "D",
         direction: "horizontal",
-        row: 5,
-        col: 0,
+        row: 7,
+        col: 6,
         length: 3,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Truk Abu-abu D"
       },
       {
         id: "E",
-        direction: "horizontal",
-        row: 4,
-        col: 0,
+        direction: "vertical",
+        row: 5,
+        col: 2,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Abu-abu E"
+        label: "Mobil Cokelat E"
       },
       {
         id: "F",
-        direction: "vertical",
-        row: 3,
+        direction: "horizontal",
+        row: 7,
         col: 4,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Biru F"
+        label: "Mobil Cyan F"
+      },
+      {
+        id: "G",
+        direction: "vertical",
+        row: 5,
+        col: 9,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Putih G"
+      },
+      {
+        id: "H",
+        direction: "horizontal",
+        row: 7,
+        col: 1,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Hijau H"
       }
     ],
     quizQuestions: [
       {
         id: "q3_1",
-        question: "Jika kamu memindahkan Truk Abu-abu D, apakah hal tersebut berdampak langsung pada terbukanya jalan keluar Taxi Kuning R?",
-        options: [
-          "Ya, sangat impactful",
-          "Tidak, karena Truk Abu-abu D berada di baris 5 jauh dari jalur keluar Taxi Kuning R",
-          "Ya, karena semua truk harus dipindahkan",
-          "Mungkin saja tergantung arah putaran angin"
-        ],
-        correctAnswerIndex: 1,
-        explanation: "Konsep Abstraction (Abstraksi): Truk Abu-abu D berada di baris 5 dan tidak menghalangi rantai kendaraan yang memblokir jalur keluar Taxi Kuning R. Mengabaikan truk ini adalah bentuk penyederhanaan masalah."
+        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning T secara langsung di kolom 3?",
+        options: ["Truk Hijau H", "Truk Abu-abu D", "Mobil Cokelat E", "Mobil Cyan F"],
+        correctAnswerIndex: 0,
+        explanation: "Truk Hijau H melintang di baris 7 kolom 1-3, sehingga secara langsung menutup lintasan vertikal Taxi Kuning T di kolom 3."
       },
       {
         id: "q3_2",
-        question: "Langkah pembuka manakah yang paling efisien untuk memulai penyelesaian tingkat ini?",
+        question: "Bagaimana cara yang logis untuk memindahkan Truk Abu-abu D agar tidak menghalangi jalan keluar Taxi Kuning R (kolom 7)?",
         options: [
-          "Geser Taxi Kuning R langsung ke kanan",
-          "Pindahkan Truk Abu-abu D ke baris atas",
-          "Geser Mobil Biru F ke bawah untuk membuka ruang bagi Mobil Biru B",
-          "Geser Mobil Abu-abu C ke kanan sejauh mungkin"
+          "Geser Truk Putih G ke bawah terlebih dahulu, lalu geser Truk D ke kanan",
+          "Geser Mobil Cyan F ke kanan, lalu geser Truk D ke kiri",
+          "Langsung geser Truk D ke atas",
+          "Truk D tidak perlu dipindahkan"
         ],
-        correctAnswerIndex: 2,
-        explanation: "Mobil Biru F di kolom 4 baris 3-4 menghalangi Mobil Biru B untuk bergeser ke kanan. Menurunkan F ke bawah membuka ruang bagi B, yang kemudian memungkinkan Mobil Merah A turun dan membuka jalur Taxi Kuning R."
+        correctAnswerIndex: 0,
+        explanation: "Truk Putih G di kolom 9 menghalangi Truk D untuk bergeser ke kanan. Dengan menurunkan G ke bawah, Truk D memiliki ruang untuk bergeser ke kanan (kolom 7-9 menjadi bersih untuk R)."
       }
     ]
   },
