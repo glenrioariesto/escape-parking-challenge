@@ -88,38 +88,27 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 2,
     name: "Tingkat 2: Hambatan Berantai",
-    description: "Tantangan mulai meningkat! Mobil Merah A menghalangi jalan keluar, tapi jalurnya sendiri dihalangi oleh Mobil Biru B. Urutkan langkahmu demi jalan keluar!",
+    description: "Tantangan mulai meningkat! Papan parkir vertikal seperti Tingkat 1. Taxi Kuning R terhalang langsung oleh Mobil Abu-abu C, namun Mobil Abu-abu C sendiri terkunci oleh Mobil Putih G di kiri dan Mobil Biru B di kanan. Bebaskan kuncian ini!",
     difficulty: "Sedang",
-    optimalSteps: 7,
+    optimalSteps: 3,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
         id: "R",
-        direction: "horizontal",
-        row: 2,
-        col: 1,
+        direction: "vertical",
+        row: 5,
+        col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Taxi Kuning R (Pemain)",
         isPlayer: true
       },
       {
-        id: "T",
-        direction: "vertical",
-        row: 0,
-        col: 6,
-        length: 2,
-        color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Taxi Kuning T (Pemain)",
-        isPlayer: true,
-        exitCol: 6
-      },
-      {
         id: "A",
         direction: "vertical",
-        row: 1,
+        row: 5,
         col: 3,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
@@ -128,8 +117,8 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "B",
         direction: "horizontal",
-        row: 3,
-        col: 2,
+        row: 7,
+        col: 7,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Biru B"
@@ -137,8 +126,8 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "C",
         direction: "horizontal",
-        row: 0,
-        col: 0,
+        row: 7,
+        col: 5,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Abu-abu C"
@@ -146,17 +135,17 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "D",
         direction: "vertical",
-        row: 3,
-        col: 4,
+        row: 5,
+        col: 9,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Hijau D"
       },
       {
         id: "E",
-        direction: "horizontal",
+        direction: "vertical",
         row: 5,
-        col: 4,
+        col: 5,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Cokelat E"
@@ -169,27 +158,36 @@ export const LEVELS: LevelDefinition[] = [
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Cyan F"
+      },
+      {
+        id: "G",
+        direction: "horizontal",
+        row: 7,
+        col: 3,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Mobil Putih G"
       }
     ],
     quizQuestions: [
       {
         id: "q2_1",
-        question: "Dalam rantai dekomposisi tingkat ini, kendaraan manakah yang harus pertama kali dipindahkan agar kendaraan lain bisa bergeser?",
-        options: ["Mobil Merah A", "Mobil Hijau D", "Mobil Cyan F", "Taxi Kuning R"],
-        correctAnswerIndex: 2,
-        explanation: "Mobil Cyan F menghalangi Mobil Cokelat E untuk bergerak ke kiri. Menggeser F ke bawah adalah langkah pertama yang membuka seluruh rantai hambatan."
+        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning R secara langsung?",
+        options: ["Mobil Abu-abu C", "Mobil Biru B dan Mobil Cokelat E", "Tidak ada", "Semua mobil"],
+        correctAnswerIndex: 0,
+        explanation: "Mobil Abu-abu C berada di baris 7 kolom 5-6, sehingga secara langsung menutup lintasan vertikal Taxi Kuning R di kolom 6."
       },
       {
         id: "q2_2",
         question: "Urutan strategi atau algoritma logis manakah yang tepat untuk menyelesaikan tingkat ini?",
         options: [
-          "Geser Taxi Kuning R ke kanan dan Taxi Kuning T ke bawah langsung saja",
-          "Geser Mobil Cyan F ke bawah → Geser Mobil Cokelat E ke kiri → Geser Mobil Hijau D ke bawah → Geser Mobil Biru B ke kanan → Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke kanan → Geser Taxi Kuning T ke bawah",
-          "Geser Mobil Abu-abu C ke bawah → Geser Mobil Biru B ke kiri → Geser Mobil Merah A ke atas → Geser Taxi Kuning R ke kanan",
-          "Geser Mobil Merah A ke atas → Geser Mobil Biru B ke kanan → Geser Taxi Kuning R ke kiri"
+          "Geser Taxi Kuning R ke bawah langsung",
+          "Geser Mobil Putih G ke kiri (atau Mobil Biru B ke kanan) → Geser Mobil Abu-abu C ke samping → Geser Taxi Kuning R ke bawah",
+          "Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke bawah",
+          "Geser Taxi Kuning R ke atas"
         ],
         correctAnswerIndex: 1,
-        explanation: "Menggeser F ke bawah memungkinkan E bergeser ke kiri, membuka jalan bagi D untuk turun. D turun membuka jalan bagi B untuk bergeser ke kanan, sehingga A bisa turun ke bawah dan memberi jalan bagi Taxi Kuning R lalu Taxi Kuning T untuk keluar."
+        explanation: "Kita perlu membuka ruang gerak untuk C dengan menggeser G ke kiri (atau B ke kanan) terlebih dahulu, baru kemudian menggeser C ke samping agar kolom 6 bersih, lalu menjalankan Taxi Kuning R ke bawah."
       }
     ]
   },

@@ -80,6 +80,13 @@ export function useSimulation(
   const [simulationLogs, setSimulationLogs] = useState<string[]>([]);
   const [phase, setPhase] = useState<SimPhase>("idle");
 
+  // Keep active vehicles in sync with original vehicles when not simulating (e.g., when switching levels)
+  useEffect(() => {
+    if (!isSimulating) {
+      setActiveVehicles(JSON.parse(JSON.stringify(originalVehicles)));
+    }
+  }, [originalVehicles, isSimulating]);
+
   // Merged steps computed once when simulation starts (stored in ref-like state)
   const [mergedSteps, setMergedSteps] = useState<MoveAction[]>([]);
 
