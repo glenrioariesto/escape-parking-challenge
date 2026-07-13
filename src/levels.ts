@@ -71,15 +71,15 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "q1_1",
         question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning R secara langsung?",
-        options: ["Mobil Biru B", "Mobil Merah A dan Mobil Biru B", "Tidak ada", "Semua mobil"],
-        correctAnswerIndex: 0,
+        options: ["Tidak ada", "Mobil Merah A", "Mobil Biru B", "Semua mobil"],
+        correctAnswerIndex: 2,
         explanation: "Mobil Biru B berada di baris 7 kolom 6-7, tepat di lintasan vertikal Taxi Kuning R menuju gerbang keluar."
       },
       {
         id: "q1_2",
         question: "Ke arah manakah Mobil Biru B harus digeser agar lintasan Taxi Kuning R terbuka?",
-        options: ["Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 6", "Ke atas atau ke bawah", "Hanya bisa ke kanan", "Tidak bisa digeser"],
-        correctAnswerIndex: 0,
+        options: ["Hanya bisa digeser ke kanan", "Ke atas atau ke bawah secara vertikal", "Tidak bisa digeser sama sekali", "Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 6"],
+        correctAnswerIndex: 3,
         explanation: "Karena Mobil Biru B berorientasi horizontal (mendatar), ia harus digeser ke kiri atau kanan agar kolom 6 menjadi kosong, sehingga Taxi Kuning R bisa melaju ke bawah."
       }
     ],
@@ -173,8 +173,8 @@ export const LEVELS: LevelDefinition[] = [
       {
         id: "q2_1",
         question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning R secara langsung?",
-        options: ["Mobil Abu-abu C", "Mobil Biru B dan Mobil Cokelat E", "Tidak ada", "Semua mobil"],
-        correctAnswerIndex: 0,
+        options: ["Tidak ada", "Mobil Biru B dan Mobil Cokelat E", "Semua mobil", "Mobil Abu-abu C"],
+        correctAnswerIndex: 3,
         explanation: "Mobil Abu-abu C berada di baris 7 kolom 5-6, sehingga secara langsung menutup lintasan vertikal Taxi Kuning R di kolom 6."
       },
       {
@@ -182,11 +182,11 @@ export const LEVELS: LevelDefinition[] = [
         question: "Urutan strategi atau algoritma logis manakah yang tepat untuk menyelesaikan tingkat ini?",
         options: [
           "Geser Taxi Kuning R ke bawah langsung",
-          "Geser Mobil Putih G ke kiri (atau Mobil Biru B ke kanan) → Geser Mobil Abu-abu C ke samping → Geser Taxi Kuning R ke bawah",
           "Geser Mobil Merah A ke bawah → Geser Taxi Kuning R ke bawah",
+          "Geser Mobil Putih G ke kiri (atau Mobil Biru B ke kanan) → Geser Mobil Abu-abu C ke samping → Geser Taxi Kuning R ke bawah",
           "Geser Taxi Kuning R ke atas"
         ],
-        correctAnswerIndex: 1,
+        correctAnswerIndex: 2,
         explanation: "Kita perlu membuka ruang gerak untuk C dengan menggeser G ke kiri (atau B ke kanan) terlebih dahulu, baru kemudian menggeser C ke samping agar kolom 6 bersih, lalu menjalankan Taxi Kuning R ke bawah."
       }
     ]
