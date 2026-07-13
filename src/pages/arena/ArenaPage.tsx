@@ -270,18 +270,16 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
       {/* Reflection Modal */}
       {!props.isSandboxMode && props.ctStage === "evaluation" && props.simResult && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 select-none">
-          <div className="relative max-w-xl w-full mx-auto shadow-2xl rounded-3xl overflow-hidden max-h-[90vh] flex flex-col bg-white">
-            <Reflection
-              levelId={props.activeLevelId}
-              levelName={activeLevel?.name || ""}
-              playerStepsCount={props.simResult.totalSteps}
-              optimalStepsCount={activeLevel?.optimalSteps || 1}
-              starsEarned={props.simResult.scoreStars}
-              onRestartLevel={props.onResetLevel}
-              onNextLevel={props.onNextLevel}
-              isLastLevel={props.activeLevelId === LEVELS.length}
-            />
-          </div>
+          <Reflection
+            levelId={props.activeLevelId}
+            levelName={activeLevel?.name || ""}
+            playerStepsCount={props.simResult.totalSteps}
+            optimalStepsCount={activeLevel?.optimalSteps || 1}
+            starsEarned={props.simResult.scoreStars}
+            onRestartLevel={props.onResetLevel}
+            onNextLevel={props.onNextLevel}
+            isLastLevel={props.activeLevelId === LEVELS.length}
+          />
         </div>
       )}
     </div>
