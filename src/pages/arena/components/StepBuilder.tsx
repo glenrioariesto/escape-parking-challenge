@@ -460,7 +460,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                         onSelectVehicle(step.vehicleId);
                       }
                     }}
-                    className={`relative z-0 flex items-center justify-between p-1 pl-3 pr-7 sm:p-2.5 sm:pl-5 sm:pr-11 h-8 sm:h-12 w-full bg-transparent hover:bg-transparent text-[8px] sm:text-xs font-mono select-none touch-none cursor-grab active:cursor-grabbing hover:brightness-90 ${isDragged ? 'opacity-50' : 'opacity-100'} ${opacityClass} ${ringClass}`}
+                    className={`relative z-0 flex items-center justify-between pb-1.5 pl-3 pr-7  sm:pl-5 sm:pr-11 h-8 sm:h-12 w-full bg-transparent hover:bg-transparent text-[8px] sm:text-xs font-mono select-none touch-none cursor-grab active:cursor-grabbing hover:brightness-90 ${isDragged ? 'opacity-50' : 'opacity-100'} ${opacityClass} ${ringClass}`}
                     style={getDragItemStyle(idx)}
                   >
                     {/* SVG Bubble Background (3-slice scaled to prevent distortion) */}
