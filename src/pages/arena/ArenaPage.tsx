@@ -83,7 +83,21 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
 
 
   return (
-    <div className="flex-1 overflow-hidden flex flex-col min-h-0 h-full w-full p-0">
+    <div className="flex-1 overflow-hidden flex flex-col min-h-0 h-full w-full p-0 relative">
+      {/* Level Badge Fixed at Bottom Left of Arena */}
+      <div className="absolute bottom-2 left-2 z-30 flex flex-col items-center pointer-events-none select-none drop-shadow-xl">
+        <img
+          src={`${import.meta.env.BASE_URL}img/level.webp`}
+          alt="Level"
+          className="w-12 sm:w-12 lg:w-20 object-contain mb-2"
+        />
+        <img
+          src={`${import.meta.env.BASE_URL}img/level-${props.activeLevelId || 1}.svg`}
+          alt={`Level ${props.activeLevelId || 1}`}
+          className="w-10 sm:w-10 lg:w-16 object-contain"
+        />
+      </div>
+
       <div className="flex flex-row gap-0 items-stretch w-full flex-1 min-h-0 overflow-hidden">
         {/* Left/Main Column: Grid Panel (Fixed, not collapsible) */}
         <div className={`${

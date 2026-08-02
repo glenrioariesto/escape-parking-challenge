@@ -87,11 +87,8 @@ export default function App() {
             <span className="absolute -right-2 -bottom-2 text-3xl animate-[bounce_1.2s_infinite]">↩</span>
           </div>
 
-          <h2 className="text-2xl font-black mb-3 tracking-tight text-white drop-shadow-lg">
-            🌄 Mode Lansekap Diperlukan
-          </h2>
-          <p className="text-sm text-slate-300 max-w-xs mb-8 leading-relaxed font-medium">
-            Putar perangkat Anda ke posisi mendatar (landscape) untuk memainkan <span className="text-blue-400 font-bold">Escape Parking Challenge</span>.
+          <p className="text-sm text-slate-300 max-w-xs my-8 leading-relaxed font-medium">
+            Putar perangkat Anda ke posisi mendatar (landscape) untuk memainkan <span className="text-blue-400 font-bold">Strategi Keluar dari Tempat Parkir</span>.
           </p>
 
           {/* Visual instruction arrows */}

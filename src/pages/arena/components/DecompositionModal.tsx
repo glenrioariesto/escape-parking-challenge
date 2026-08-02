@@ -73,9 +73,6 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
               <h3 className="text-[10px] sm:text-xs md:text-sm font-black tracking-tight">
                 Cara Bermain & Aturan Game
               </h3>
-              <p className="text-[8px] sm:text-[9px] font-mono text-blue-200 tracking-wider uppercase">
-                Slide {currentSlide + 1} dari {totalSlides} • {levelName}
-              </p>
             </div>
           </div>
           <button

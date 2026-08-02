@@ -295,13 +295,19 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     direction: "horizontal" | "vertical";
   } | null>(null);
 
-  // Lazy loads background grid image maps-level-1.svg
+  // Lazy loads background grid image based on levelId
+  const prevLevelIdRef = useRef<number | undefined>(levelId);
   const getBgImage = () => {
+    if (prevLevelIdRef.current !== levelId) {
+      bgImageRef.current = null;
+      prevLevelIdRef.current = levelId;
+    }
     if (bgImageRef.current) {
       return bgImageRef.current;
     }
     const img = new Image();
-    img.src = `${import.meta.env.BASE_URL}img/maps-level-1.svg`;
+    const bgFile = (levelId === 4 || levelId === 5) ? "maps-level-2.webp" : "maps-level-1.svg";
+    img.src = `${import.meta.env.BASE_URL}img/${bgFile}`;
     img.onload = () => {
       requestRedraw();
     };
