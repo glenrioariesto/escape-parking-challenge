@@ -60,6 +60,7 @@ export function useGameState() {
   const handleResetLevel = () => {
     level.resetLevel(level.originalVehicles);
     sim.reset(level.originalVehicles);
+    level.setAlgorithmSteps([]);
     setSimResult(null);
   };
 
@@ -103,6 +104,8 @@ export function useGameState() {
     isSimulating: sim.isSimulating,
     currentStepIndex: sim.currentStepIndex,
     simulationLogs: sim.simulationLogs,
+    collisionInfo: sim.collisionInfo,
+    dismissCollision: sim.dismissCollision,
     simResult,
     sandboxMoveCount: level.sandboxMoveCount,
     isDevMode: level.isDevMode,

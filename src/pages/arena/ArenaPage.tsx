@@ -8,6 +8,7 @@ import { GridPanel } from "./components/GridPanel";
 import { SandboxPanel } from "./components/SandboxPanel";
 import { AlgorithmPanel } from "./components/AlgorithmPanel";
 import { DecompositionModal } from "./components/DecompositionModal";
+import { CollisionModal } from "./components/CollisionModal";
 import { AnalysisWorkspace } from "./components/AnalysisWorkspace";
 import { Info, ChevronRight, Cpu, Flame, Eye, RotateCcw, Play } from "lucide-react";
 import { syncQuizQuestionWithVehicles } from "@lib/vehicleHelpers";
@@ -47,6 +48,8 @@ interface ArenaPageProps {
   onChangeWalls: (walls: { row: number; col: number }[]) => void;
   isDevMode: boolean;
   onToggleDevMode: () => void;
+  collisionInfo?: { stepIndex: number; vehicleName: string; reason: string } | null;
+  onDismissCollision?: () => void;
 }
 
 export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
@@ -296,6 +299,13 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
           />
         </div>
       )}
+
+      {/* Collision Alert Modal */}
+      <CollisionModal
+        isOpen={!!props.collisionInfo}
+        onClose={props.onDismissCollision || (() => {})}
+        collisionInfo={props.collisionInfo || null}
+      />
     </div>
   );
 };

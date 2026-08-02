@@ -51,85 +51,106 @@ export function checkCollision(
   gridRows = 11,
   gridCols = 12,
   walls: { row: number; col: number }[] = []
-): { valid: boolean; reason?: string } {
+): { valid: boolean; reason?: string; maxAllowedSteps?: number } {
   const occupied = getOccupiedCells(vehicles, vehicle.id, gridRows, gridCols, walls);
   const nameMap = getVehicleDisplayNamesMap(vehicles);
   const getBlockerName = (b?: Vehicle) => b ? (nameMap[b.id] || getVehicleBaseName(b)) : "kendaraan lain";
+  const isPlayerVehicle = vehicle.isPlayer || vehicle.id === "R";
 
   if (vehicle.direction === "horizontal") {
     if (dir === "up" || dir === "down") {
-      return { valid: false, reason: "Arah gerakan tidak sesuai dengan orientasi mobil mendatar." };
+      return { valid: false, reason: "Arah gerakan tidak sesuai dengan orientasi mobil mendatar.", maxAllowedSteps: 0 };
     }
+
+    let allowedSteps = 0;
     const stepSign = dir === "right" ? 1 : -1;
-    const newCol = vehicle.col + stepSign * steps;
 
-    // Check boundary
-    if (newCol < 0 || newCol + vehicle.length > gridCols) {
-      return { valid: false, reason: "Gerakan keluar dari area parkir (batas grid)." };
-    }
+    for (let s = 1; s <= steps; s++) {
+      const targetCol = vehicle.col + stepSign * s;
 
-    if (dir === "right") {
-      for (let c = vehicle.col + vehicle.length; c < newCol + vehicle.length; c++) {
-        const blockerId = occupied[vehicle.row][c];
-        if (blockerId !== null) {
-          if (blockerId === "WALL") {
-            return { valid: false, reason: "Menabrak dinding pembatas!" };
+      // Boundary check
+      if (!isPlayerVehicle && (targetCol < 0 || targetCol + vehicle.length > gridCols)) {
+        return { valid: false, reason: "Gerakan keluar dari area parkir (batas grid).", maxAllowedSteps: allowedSteps };
+      }
+
+      // Check cell occupied
+      if (dir === "right") {
+        const c = targetCol + vehicle.length - 1;
+        if (c < gridCols) {
+          const blockerId = occupied[vehicle.row][c];
+          if (blockerId !== null) {
+            if (blockerId === "WALL") {
+              return { valid: false, reason: "Menabrak dinding pembatas!", maxAllowedSteps: allowedSteps };
+            }
+            const blocker = vehicles.find((v) => v.id === blockerId);
+            return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!`, maxAllowedSteps: allowedSteps };
           }
-          const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
+        }
+      } else {
+        const c = targetCol;
+        if (c >= 0) {
+          const blockerId = occupied[vehicle.row][c];
+          if (blockerId !== null) {
+            if (blockerId === "WALL") {
+              return { valid: false, reason: "Menabrak dinding pembatas!", maxAllowedSteps: allowedSteps };
+            }
+            const blocker = vehicles.find((v) => v.id === blockerId);
+            return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!`, maxAllowedSteps: allowedSteps };
+          }
         }
       }
-    } else {
-      for (let c = newCol; c < vehicle.col; c++) {
-        const blockerId = occupied[vehicle.row][c];
-        if (blockerId !== null) {
-          if (blockerId === "WALL") {
-            return { valid: false, reason: "Menabrak dinding pembatas!" };
-          }
-          const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
-        }
-      }
+
+      allowedSteps = s;
     }
   } else {
     // vertical
     if (dir === "left" || dir === "right") {
-      return { valid: false, reason: "Arah gerakan tidak sesuai dengan orientasi mobil tegak." };
+      return { valid: false, reason: "Arah gerakan tidak sesuai dengan orientasi mobil tegak.", maxAllowedSteps: 0 };
     }
+
+    let allowedSteps = 0;
     const stepSign = dir === "down" ? 1 : -1;
-    const newRow = vehicle.row + stepSign * steps;
 
-    // Check boundary
-    if (newRow < 0 || newRow + vehicle.length > gridRows) {
-      return { valid: false, reason: "Gerakan keluar dari area parkir (batas grid)." };
-    }
+    for (let s = 1; s <= steps; s++) {
+      const targetRow = vehicle.row + stepSign * s;
 
-    if (dir === "down") {
-      for (let r = vehicle.row + vehicle.length; r < newRow + vehicle.length; r++) {
-        const blockerId = occupied[r][vehicle.col];
-        if (blockerId !== null) {
-          if (blockerId === "WALL") {
-            return { valid: false, reason: "Menabrak dinding pembatas!" };
+      // Boundary check
+      if (!isPlayerVehicle && (targetRow < 0 || targetRow + vehicle.length > gridRows)) {
+        return { valid: false, reason: "Gerakan keluar dari area parkir (batas grid).", maxAllowedSteps: allowedSteps };
+      }
+
+      // Check cell occupied
+      if (dir === "down") {
+        const r = targetRow + vehicle.length - 1;
+        if (r < gridRows) {
+          const blockerId = occupied[r][vehicle.col];
+          if (blockerId !== null) {
+            if (blockerId === "WALL") {
+              return { valid: false, reason: "Menabrak dinding pembatas!", maxAllowedSteps: allowedSteps };
+            }
+            const blocker = vehicles.find((v) => v.id === blockerId);
+            return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!`, maxAllowedSteps: allowedSteps };
           }
-          const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
+        }
+      } else {
+        const r = targetRow;
+        if (r >= 0) {
+          const blockerId = occupied[r][vehicle.col];
+          if (blockerId !== null) {
+            if (blockerId === "WALL") {
+              return { valid: false, reason: "Menabrak dinding pembatas!", maxAllowedSteps: allowedSteps };
+            }
+            const blocker = vehicles.find((v) => v.id === blockerId);
+            return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!`, maxAllowedSteps: allowedSteps };
+          }
         }
       }
-    } else {
-      for (let r = newRow; r < vehicle.row; r++) {
-        const blockerId = occupied[r][vehicle.col];
-        if (blockerId !== null) {
-          if (blockerId === "WALL") {
-            return { valid: false, reason: "Menabrak dinding pembatas!" };
-          }
-          const blocker = vehicles.find((v) => v.id === blockerId);
-          return { valid: false, reason: `Menabrak ${getBlockerName(blocker)}!` };
-        }
-      }
+
+      allowedSteps = s;
     }
   }
 
-  return { valid: true };
+  return { valid: true, maxAllowedSteps: steps };
 }
 
 export function isLevelSolved(
@@ -145,10 +166,14 @@ export function isLevelSolved(
   return playerCars.every((v) => {
     if (v.direction === "vertical") {
       const col = v.exitCol !== undefined ? v.exitCol : defaultExitCol;
-      return v.row >= gridRows - v.length && v.col === col;
+      const isAtExitCol = v.col === col;
+      const isAtTopOrBottom = v.row <= 0 || v.row >= gridRows - v.length;
+      return isAtExitCol && isAtTopOrBottom;
     } else {
       const row = v.exitRow !== undefined ? v.exitRow : defaultExitRow;
-      return v.col >= gridCols - v.length && v.row === row;
+      const isAtExitRow = v.row === row;
+      const isAtLeftOrRight = v.col <= 0 || v.col >= gridCols - v.length;
+      return isAtExitRow && isAtLeftOrRight;
     }
   });
 }
@@ -451,13 +476,25 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       ctx.fillStyle = "#10B981"; // Emerald 500
       if (v.direction === "vertical") {
         const col = v.exitCol !== undefined ? v.exitCol : exitCol;
-        ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
-
-        ctx.fillStyle = "#10B981";
-        ctx.font = "bold 9px monospace";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+        const isUpperArea = v.row < 5;
+        
+        if (isUpperArea) {
+          // Draw Top Exit Gate (for upper area player cars)
+          ctx.fillStyle = "#10B981";
+          ctx.fillRect(col * cellSize, 0, cellSize, 5);
+          ctx.font = "bold 9px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("EXIT ▲", col * cellSize + cellSize / 2, -2);
+        } else {
+          // Draw Bottom Exit Gate (for lower area player cars)
+          ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
+          ctx.fillStyle = "#10B981";
+          ctx.font = "bold 9px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+        }
       } else {
         const row = v.exitRow !== undefined ? v.exitRow : exitRow;
         const exitLeftOnGrid = gridCols * cellSize;
@@ -568,8 +605,17 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
           const drawH = v.length * cellSize;
           ctx.drawImage(img, -drawW / 2 + 3, -drawH / 2 + 3, drawW - 6, drawH - 6);
         } else {
-          // Vertical vehicle: draw directly since asset is already vertical (facing UP)
-          ctx.drawImage(img, vx + 3, vy + 3, vw - 6, vh - 6);
+          // Vertical vehicle: draw directly or rotate 180 deg if above row 5 wall (so it faces UP towards top exit)
+          const cx = vx + vw / 2;
+          const cy = vy + vh / 2;
+          ctx.translate(cx, cy);
+          
+          if (drawRow < 5) {
+            // Vehicle is above row 5 (facing UP towards top exit)
+            ctx.rotate(Math.PI);
+          }
+          
+          ctx.drawImage(img, -vw / 2 + 3, -vh / 2 + 3, vw - 6, vh - 6);
         }
         ctx.restore();
       } else {

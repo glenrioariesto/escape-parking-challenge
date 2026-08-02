@@ -221,6 +221,8 @@ export default function App() {
             onChangeWalls={game.setActiveWalls}
             isDevMode={game.isDevMode}
             onToggleDevMode={() => game.setIsDevMode(prev => !prev)}
+            collisionInfo={game.collisionInfo}
+            onDismissCollision={game.dismissCollision}
           />
         )}
       </main>

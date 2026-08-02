@@ -31,9 +31,6 @@ export const Reflection: React.FC<ReflectionProps> = ({
         <h2 className="text-lg font-black font-sans text-slate-800 tracking-tight">
           Skenario Simulasi Berhasil!
         </h2>
-        <p className="text-[10px] text-slate-400 font-mono mt-1 uppercase tracking-wider font-bold">
-          {levelName}
-        </p>
       </div>
 
       {/* Step Comparison Metrics */}
@@ -80,12 +77,7 @@ export const Reflection: React.FC<ReflectionProps> = ({
           </div>
         </div>
 
-        {/* Feedback message depending on score */}
-        <p className="text-xs text-slate-500 font-medium font-sans mt-3 px-1 leading-relaxed">
-          {starsEarned === 3 && "Luar biasa! Kamu menyelesaikan level ini dengan algoritma yang paling efektif (Bintang Sempurna)! 🌟"}
-          {starsEarned === 2 && "Hebat! Langkahmu hampir sesempurna strategi minimal. Bisakah kamu memperbaikinya lagi? 🎯"}
-          {starsEarned === 1 && "Kamu berhasil meloloskan mobil! Namun, cobalah merancang urutan langkah lain agar lebih hemat energi. 🔋"}
-        </p>
+
       </div>
 
       {/* Stage footer controls */}
