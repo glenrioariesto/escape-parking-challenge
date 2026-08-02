@@ -389,6 +389,76 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
     <div id="step-builder-root" className="flex flex-col h-full min-h-0 justify-between text-slate-800 pt-2">
       <div id="step-builder-panel" className="flex-1 min-h-0 flex flex-col justify-between">
         <div className="flex-1 min-h-0 flex flex-col">
+          {/* Builder Panel Form */}
+          <div id="builder-form-panel" className="bg-slate-50 border border-slate-200 rounded-xl p-1 sm:p-3 space-y-1 sm:space-y-3 flex-shrink-0 mb-1 sm:mb-2">
+            <div className="grid grid-cols-2 gap-1 sm:gap-3">
+              {/* Pick Vehicle */}
+              <div className="flex flex-col gap-0.5 sm:gap-1">
+                <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
+                  Mobil
+                </label>
+                <select
+                  id="select-vehicle-input"
+                  value={selectedVehicleId || ""}
+                  onChange={(e) => {
+                    audio.playClick();
+                    onSelectVehicle(e.target.value || null);
+                  }}
+                  disabled={isSimulating}
+                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none"
+                >
+                  <option value="">-- Pilih --</option>
+                  {vehicles.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {getVehicleDisplayName(v)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Pick Direction */}
+              <div className="flex flex-col gap-0.5 sm:gap-1">
+                <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
+                  Arah
+                </label>
+                <select
+                  id="select-direction-input"
+                  value={direction}
+                  onChange={(e) => {
+                    audio.playClick();
+                    setDirection(e.target.value as any);
+                  }}
+                  disabled={isSimulating || !selectedVehicleId}
+                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-50"
+                >
+                  {!selectedVehicleId && <option value="">Pilih mobil</option>}
+                  {selectedVehicle?.direction === "horizontal" && (
+                    <>
+                      <option value="left">◀ Kiri</option>
+                      <option value="right">▶ Kanan</option>
+                    </>
+                  )}
+                  {selectedVehicle?.direction === "vertical" && (
+                    <>
+                      <option value="up">▲ Ke Atas</option>
+                      <option value="down">▼ Ke Bawah</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </div>
+
+            <button
+              id="add-step-btn"
+              onClick={handleAddStep}
+              disabled={isSimulating || !selectedVehicleId || !direction}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-[9px] sm:text-xs py-1 px-2.5 sm:py-2 sm:px-3 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm cursor-pointer border-none"
+            >
+              <Plus size={12} />
+              <span>Tambah Langkah</span>
+            </button>
+          </div>
+
           {/* Header Title */}
           <div className="flex mobile-landscape-hidden items-center justify-between border-b border-slate-200 pb-1 sm:pb-2 mb-1 sm:mb-2 flex-shrink-0">
             <div className="flex flex-col gap-0.5">
@@ -542,75 +612,6 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
           </div>
         </div>
 
-        {/* Builder Panel Form */}
-        <div id="builder-form-panel" className="bg-slate-50 border border-slate-200 rounded-xl p-1 sm:p-3 space-y-1 sm:space-y-3 flex-shrink-0">
-          <div className="grid grid-cols-2 gap-1 sm:gap-3">
-            {/* Pick Vehicle */}
-            <div className="flex flex-col gap-0.5 sm:gap-1">
-              <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
-                Mobil
-              </label>
-              <select
-                id="select-vehicle-input"
-                value={selectedVehicleId || ""}
-                onChange={(e) => {
-                  audio.playClick();
-                  onSelectVehicle(e.target.value || null);
-                }}
-                disabled={isSimulating}
-                className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none"
-              >
-                <option value="">-- Pilih --</option>
-                {vehicles.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {getVehicleDisplayName(v)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Pick Direction */}
-            <div className="flex flex-col gap-0.5 sm:gap-1">
-              <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
-                Arah
-              </label>
-              <select
-                id="select-direction-input"
-                value={direction}
-                onChange={(e) => {
-                  audio.playClick();
-                  setDirection(e.target.value as any);
-                }}
-                disabled={isSimulating || !selectedVehicleId}
-                className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-50"
-              >
-                {!selectedVehicleId && <option value="">Pilih mobil</option>}
-                {selectedVehicle?.direction === "horizontal" && (
-                  <>
-                    <option value="left">◀ Kiri</option>
-                    <option value="right">▶ Kanan</option>
-                  </>
-                )}
-                {selectedVehicle?.direction === "vertical" && (
-                  <>
-                    <option value="up">▲ Ke Atas</option>
-                    <option value="down">▼ Ke Bawah</option>
-                  </>
-                )}
-              </select>
-            </div>
-          </div>
-
-          <button
-            id="add-step-btn"
-            onClick={handleAddStep}
-            disabled={isSimulating || !selectedVehicleId || !direction}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-[9px] sm:text-xs py-1 px-2.5 sm:py-2 sm:px-3 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm cursor-pointer border-none"
-          >
-            <Plus size={12} />
-            <span>Tambah Langkah</span>
-          </button>
-        </div>
       </div>
     </div>
   );

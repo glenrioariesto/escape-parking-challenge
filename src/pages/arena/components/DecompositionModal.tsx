@@ -41,7 +41,7 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
   const slides = [
     {
       title: "1. Tujuan Utama",
-      text: "Bantu Taxi Kuning (R) keluar dari area parkir menuju pintu keluar yang ditandai dengan panah hijau di tepi jalan.",
+      text: "Bantu Taxi Kuning keluar dari area parkir menuju pintu keluar yang ditandai dengan panah hijau di tepi jalan.",
       bgClass: "bg-amber-50/40 border-amber-100",
     },
     {
