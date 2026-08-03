@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Vehicle, MoveAction } from "../../../types";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import audio from "../../../lib/audio";
 import { getVehicleDisplayNamesMap, getVehicleBaseName, getVehicleImagePath } from "../../../lib/vehicleHelpers";
 
-const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean, isOutside: boolean) => {
+const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean, isOutside: boolean, vehicles?: Vehicle[]) => {
   if (isDragged && isOutside) {
     return {
       fill: "#EF4444",
@@ -26,7 +26,7 @@ const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean,
     };
   }
 
-  const path = getVehicleImagePath(matchedVehicle);
+  const path = getVehicleImagePath(matchedVehicle, vehicles);
   const filename = path.split("/").pop() || "";
 
   let colorKey = "abu";
@@ -498,7 +498,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                 const isCurrentlyRunning = currentSimulatingStepIndex === idx;
                 const isDragged = draggedIndex === idx;
                 const isSelected = selectedVehicleId === step.vehicleId;
-                const visuals = getStepVisuals(matchedVehicle, isDragged, isOutside);
+                const visuals = getStepVisuals(matchedVehicle, isDragged, isOutside, vehicles);
 
                 const opacityClass = selectedVehicleId && !isSelected ? "opacity-45" : "opacity-100";
                 const ringClass = isCurrentlyRunning
@@ -594,10 +594,29 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                           {matchedVehicle ? getVehicleDisplayName(matchedVehicle) : `Mobil [${step.vehicleId}]`}
                         </strong>
                       </div>
-                      <span className={`flex items-center gap-0.5 sm:gap-1 px-1 sm:px-1.5 py-0.5 rounded border text-[7px] sm:text-[9px] font-bold ${visuals.badgeClass} flex-shrink-0 whitespace-nowrap`}>
-                        <span>{getDirectionSymbol(step.direction)}</span>
-                        <span>{getDirectionText(step.direction)}</span>
-                      </span>
+                      <div className="flex items-center gap-1 flex-shrink-0 h-5 sm:h-6">
+                        <span className={`flex items-center justify-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 rounded border text-[7px] sm:text-[9px] font-bold ${visuals.badgeClass} whitespace-nowrap h-full`}>
+                          <span>{getDirectionSymbol(step.direction)}</span>
+                          <span>{getDirectionText(step.direction)}</span>
+                        </span>
+                        <button
+                          type="button"
+                          disabled={isSimulating}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isSimulating) {
+                              audio.playClick();
+                              const updated = steps.filter((_, i) => i !== idx);
+                              onUpdateSteps(updated);
+                            }
+                          }}
+                          className={`aspect-square rounded border ${visuals.badgeClass} flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none active:scale-95 hover:brightness-110 h-full p-0`}
+                          title="Hapus langkah"
+                        >
+                          <Trash2 className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
+                        </button>
+                      </div>
                     </div>
 
                     {isDragged && isOutside && (

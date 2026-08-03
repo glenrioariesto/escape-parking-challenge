@@ -404,7 +404,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
   // Lazy loads a vehicle image
   const getVehicleImage = (v: Vehicle) => {
-    const src = getVehicleImagePath(v);
+    const src = getVehicleImagePath(v, vehiclesRef.current);
     if (imageCacheRef.current[src]) {
       return imageCacheRef.current[src];
     }
