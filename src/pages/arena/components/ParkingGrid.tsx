@@ -215,6 +215,68 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
   const [dragState, setDragState] = useState<any | null>(null);
 
+  // Tooltip state (supports both desktop hover & mobile tap)
+  const [tooltipInfo, setTooltipInfo] = useState<{ id: string; name: string; x: number; y: number } | null>(null);
+  const hoveredVehicleRef = useRef<string | null>(null);
+  const tooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Helper: compute a vehicle's center position (px) relative to the canvas container
+  const getVehicleCenterOnCanvas = (v: Vehicle) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const padLeft = 28;
+    const padTop = 28;
+    const cellSize = Math.min((rect.width - padLeft) / gridCols, (rect.height - padTop) / gridRows);
+    const xOffset = (rect.width - padLeft - gridCols * cellSize) / 2 + padLeft;
+    const yOffset = (rect.height - padTop - gridRows * cellSize) / 2 + padTop;
+    const vw = (v.direction === "horizontal" ? v.length : 1) * cellSize;
+    const vh = (v.direction === "vertical" ? v.length : 1) * cellSize;
+    return {
+      x: xOffset + v.col * cellSize + vw / 2,
+      y: yOffset + v.row * cellSize,  // top edge of vehicle
+    };
+  };
+
+  // Show tooltip for a vehicle (used by both hover and tap)
+  const showTooltip = (v: Vehicle, x: number, y: number, autoHide = false) => {
+    const nameMap = getVehicleDisplayNamesMap(vehiclesRef.current);
+    const displayName = nameMap[v.id] || getVehicleBaseName(v);
+    // Clamp position within canvas bounds
+    const canvas = canvasRef.current;
+    const cw = canvas ? canvas.getBoundingClientRect().width : 999;
+    const ch = canvas ? canvas.getBoundingClientRect().height : 999;
+    const clampedX = Math.max(50, Math.min(cw - 50, x));
+    const clampedY = Math.max(30, Math.min(ch - 10, y));
+    setTooltipInfo({ id: v.id, name: displayName, x: clampedX, y: clampedY });
+
+    // Auto-hide for touch interactions
+    if (autoHide) {
+      if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+      tooltipTimerRef.current = setTimeout(() => {
+        setTooltipInfo(null);
+        hoveredVehicleRef.current = null;
+        tooltipTimerRef.current = null;
+      }, 2000);
+    }
+  };
+
+  const hideTooltip = () => {
+    hoveredVehicleRef.current = null;
+    setTooltipInfo(null);
+    if (tooltipTimerRef.current) {
+      clearTimeout(tooltipTimerRef.current);
+      tooltipTimerRef.current = null;
+    }
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+    };
+  }, []);
+
   // Image caches to avoid reloading on each frame
   const imageCacheRef = useRef<{ [key: string]: HTMLImageElement }>({});
   const bgImageRef = useRef<HTMLImageElement | null>(null);
@@ -694,6 +756,68 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Handle hover tooltip on desktop (mousemove) — touch devices use tap via handlePointerDown
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Skip if a touch/pen event (handled by tap logic instead)
+      const rect = canvas.getBoundingClientRect();
+      const padLeft = 28;
+      const padTop = 28;
+      const cellSize = Math.min((rect.width - padLeft) / gridCols, (rect.height - padTop) / gridRows);
+      const xOffset = (rect.width - padLeft - gridCols * cellSize) / 2 + padLeft;
+      const yOffset = (rect.height - padTop - gridRows * cellSize) / 2 + padTop;
+
+      const xActive = e.clientX - rect.left - xOffset;
+      const yActive = e.clientY - rect.top - yOffset;
+
+      let foundVehicle: Vehicle | null = null;
+      for (const v of vehiclesRef.current) {
+        const vx = v.col * cellSize;
+        const vy = v.row * cellSize;
+        const vw = (v.direction === "horizontal" ? v.length : 1) * cellSize;
+        const vh = (v.direction === "vertical" ? v.length : 1) * cellSize;
+
+        if (xActive >= vx && xActive <= vx + vw && yActive >= vy && yActive <= vy + vh) {
+          foundVehicle = v;
+          break;
+        }
+      }
+
+      if (foundVehicle) {
+        if (hoveredVehicleRef.current !== foundVehicle.id) {
+          hoveredVehicleRef.current = foundVehicle.id;
+          showTooltip(foundVehicle, e.clientX - rect.left, e.clientY - rect.top);
+        } else {
+          setTooltipInfo((prev) =>
+            prev ? { ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top } : prev
+          );
+        }
+        canvas.style.cursor = disabled ? "default" : "grab";
+      } else {
+        if (hoveredVehicleRef.current !== null) {
+          hideTooltip();
+        }
+        canvas.style.cursor = "default";
+      }
+    };
+
+    const handleMouseLeave = () => {
+      hideTooltip();
+      canvas.style.cursor = "default";
+    };
+
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [gridCols, gridRows, disabled]);
+
   // Global pointer move & up event listeners on window
   useEffect(() => {
     const handleGlobalPointerMove = (e: PointerEvent) => {
@@ -841,6 +965,14 @@ const canvas = canvasRef.current;
 
     if (clickedVehicle) {
       onSelectVehicle(clickedVehicle.id);
+
+      // Show tooltip on tap (for touch/mobile devices)
+      // Use pointerType to detect touch; position tooltip at vehicle center
+      if (e.pointerType === "touch" || e.pointerType === "pen") {
+        const center = getVehicleCenterOnCanvas(clickedVehicle);
+        showTooltip(clickedVehicle, center.x, center.y, true);
+      }
+
       if (disabled) return;
 
       const occupied = getOccupiedCells(vehiclesRef.current, clickedVehicle.id, gridRows, gridCols, activeWalls);
@@ -895,6 +1027,7 @@ const canvas = canvasRef.current;
       setDragState(info);
     } else {
       onSelectVehicle(null);
+      hideTooltip();
     }
   };
 
@@ -925,6 +1058,49 @@ const canvas = canvasRef.current;
           }}
           onPointerDown={handlePointerDown}
         />
+
+        {/* Vehicle Tooltip (desktop hover + mobile tap) */}
+        {tooltipInfo && !dragState && (
+          <div
+            className="absolute z-50 pointer-events-none"
+            style={{
+              left: `clamp(40px, ${tooltipInfo.x}px, calc(100% - 40px))`,
+              top: tooltipInfo.y - 8,
+              transform: "translate(-50%, -100%)",
+              transition: "left 0.08s ease-out, top 0.08s ease-out",
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg, #1E293B 0%, #334155 100%)",
+                color: "#F8FAFC",
+                fontSize: "11px",
+                fontWeight: 700,
+                padding: "5px 10px",
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.3px",
+                backdropFilter: "blur(8px)",
+                animation: "fadeIn 0.15s ease-out",
+              }}
+            >
+              {tooltipInfo.name}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "-4px",
+                  left: "50%",
+                  transform: "translateX(-50%) rotate(45deg)",
+                  width: "8px",
+                  height: "8px",
+                  background: "#334155",
+                  boxShadow: "2px 2px 4px rgba(0,0,0,0.2)",
+                }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Floating Dev Mode Controls (Vertical) */}
         {onToggleDevMode && (
