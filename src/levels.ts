@@ -475,130 +475,193 @@ export const LEVELS: LevelDefinition[] = [
   },
   {
     id: 5,
-    name: "Tingkat 5: Kemacetan Total (Grand Master)",
-    description: "Tantangan akhir dengan 10 kendaraan! Struktur saling mengunci secara kompleks. Dapatkah kamu menyusun urutan langkah sempurna untuk membebaskan mobil merah?",
+    name: "Tingkat 5: Kemacetan Total 5 Taxi (Grand Master)",
+    description: "Tantangan pamungkas Computational Thinking! Terdapat 5 Taxi Kuning (2 di area atas dan 3 di area bawah) yang terperangkap di dalam labirin parkir ganda. Rencanakan langkah dekomposisi paling presisi untuk membebaskan kelima Taxi!",
     difficulty: "Ahli",
-    optimalSteps: 9,
+    optimalSteps: 22,
     gridRows: 11,
     gridCols: 12,
     exitRow: 2,
     vehicles: [
       {
         id: "R",
-        direction: "horizontal",
-        row: 2,
-        col: 1,
+        direction: "vertical",
+        row: 3,
+        col: 3,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Taxi Kuning R (Pemain)",
-        isPlayer: true
+        isPlayer: true,
+        exitCol: 3
+      },
+      {
+        id: "T",
+        direction: "vertical",
+        row: 3,
+        col: 7,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi Kuning T (Pemain)",
+        isPlayer: true,
+        exitCol: 7
+      },
+      {
+        id: "S",
+        direction: "vertical",
+        row: 6,
+        col: 3,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi Kuning S (Pemain)",
+        isPlayer: true,
+        exitCol: 3
+      },
+      {
+        id: "U",
+        direction: "vertical",
+        row: 6,
+        col: 5,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi Kuning U (Pemain)",
+        isPlayer: true,
+        exitCol: 5
+      },
+      {
+        id: "V",
+        direction: "vertical",
+        row: 6,
+        col: 7,
+        length: 2,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Taxi Kuning V (Pemain)",
+        isPlayer: true,
+        exitCol: 7
       },
       {
         id: "A",
         direction: "vertical",
-        row: 0,
-        col: 3,
+        row: 3,
+        col: 4,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Merah A"
       },
       {
         id: "B",
-        direction: "horizontal",
-        row: 5,
-        col: 3,
+        direction: "vertical",
+        row: 3,
+        col: 6,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
         label: "Mobil Biru B"
       },
       {
-        id: "C",
+        id: "D",
         direction: "horizontal",
-        row: 0,
-        col: 1,
-        length: 2,
+        row: 2,
+        col: 2,
+        length: 3,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Abu-abu C"
+        label: "Truk Abu-abu D"
       },
       {
-        id: "D",
-        direction: "vertical",
-        row: 0,
-        col: 4,
+        id: "C",
+        direction: "horizontal",
+        row: 2,
+        col: 5,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Hijau D"
+        label: "Mobil Cyan C"
       },
       {
         id: "E",
-        direction: "horizontal",
+        direction: "vertical",
         row: 3,
-        col: 3,
+        col: 1,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Abu-abu E"
-      },
-      {
-        id: "F",
-        direction: "horizontal",
-        row: 5,
-        col: 0,
-        length: 3,
-        color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Truk Hijau F"
-      },
-      {
-        id: "G",
-        direction: "horizontal",
-        row: 4,
-        col: 0,
-        length: 2,
-        color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Cyan G"
+        label: "Mobil Cokelat E"
       },
       {
         id: "H",
+        direction: "horizontal",
+        row: 2,
+        col: 7,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Hijau H"
+      },
+      {
+        id: "J",
+        direction: "horizontal",
+        row: 8,
+        col: 1,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Kuning J"
+      },
+      {
+        id: "P",
+        direction: "horizontal",
+        row: 8,
+        col: 5,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Abu-abu P"
+      },
+      {
+        id: "K",
         direction: "vertical",
-        row: 3,
+        row: 6,
         col: 2,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Cokelat H"
+        label: "Mobil Hijau K"
       },
       {
-        id: "I",
-        direction: "horizontal",
-        row: 2,
-        col: 3,
+        id: "L",
+        direction: "vertical",
+        row: 6,
+        col: 8,
         length: 2,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Mobil Merah I"
+        label: "Mobil Cyan L"
+      },
+      {
+        id: "N",
+        direction: "horizontal",
+        row: 8,
+        col: 8,
+        length: 3,
+        color: "bg-rose-500 shadow-rose-300 border-rose-600",
+        label: "Truk Cokelat N"
       }
     ],
     quizQuestions: [
       {
         id: "q5_1",
-        question: "Ketika masalah terlalu besar (10 kendaraan), strategi dekomposisi apa yang paling tepat kita lakukan?",
+        question: "Kendaraan manakah yang secara langsung menghalangi jalan keluar Taxi Kuning R (kolom 3) dan Taxi Kuning T (kolom 7) ke atas di area atas?",
         options: [
-          "Memfokuskan analisis hanya pada mobil yang menghalangi jalur keluar langsung (seperti Mobil Merah I di baris 2 kolom 3-4), lalu melacak penyebab hambatan mobil tersebut ke belakang",
-          "Menyerah dan membuat level baru saja",
-          "Mencoba memindahkan semua mobil sekaligus secara acak",
-          "Menghapus mobil-mobil yang sulit dipindahkan"
+          "Truk Abu-abu D dan Truk Hijau H",
+          "Mobil Merah A dan Mobil Biru B",
+          "Mobil Cokelat E dan Mobil Cyan C",
+          "Tidak ada kendaraan yang menghalangi"
         ],
         correctAnswerIndex: 0,
-        explanation: "Dekomposisi adalah memecah masalah besar menjadi bagian kecil. Dengan melacak mundur hambatan mulai dari mobil keluar terdekat (seperti Mobil Merah I), kita menyederhanakan pencarian solusi."
+        explanation: "Truk Abu-abu D (kolom 2-4) dan Truk Hijau H (kolom 7-9) melintang di baris 2, secara langsung menutup lintasan vertikal Taxi Kuning R (kolom 3) dan Taxi Kuning T (kolom 7) menuju gerbang EXIT atas."
       },
       {
         id: "q5_2",
-        question: "Langkah terakhir untuk mencapai kata sukses/selesai pada simulasi Computational Thinking ini adalah?",
+        question: "Bagaimana urutan strategi yang tepat untuk membebaskan 3 Taxi di area bawah (Taxi S, U, dan V)?",
         options: [
-          "Mengulangi level dari awal",
-          "Membagikan skor di media sosial saja",
-          "Menunggu petunjuk otomatis keluar",
-          "Melakukan evaluasi seberapa efektif rute kita dibanding rute optimal dan merefleksikannya"
+          "Langsung menjalankan ketiga Taxi ke bawah tanpa memindahkan kendaraan lain",
+          "Geser Mobil Hijau K ke kiri (atau Truk Cokelat N ke kanan) → Geser Truk J dan Truk P ke samping → Bebaskan Taxi S, U, dan V ke bawah",
+          "Menggeser Taxi R dan T di area atas ke bawah untuk membantu",
+          "Menggeser Truk Abu-abu P ke atas melewati dinding pembatas"
         ],
-        correctAnswerIndex: 3,
-        explanation: "Evaluasi dan Refleksi adalah tahap pamungkas Computational Thinking untuk mengevaluasi efektivitas solusi, mengidentifikasi kelebihan, dan belajar strategi yang lebih baik."
+        correctAnswerIndex: 1,
+        explanation: "Truk J dan Truk P di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser Mobil K atau Truk N terlebih dahulu, ruang gerak horizontal Truk J dan P terbuka sehingga jalur keluar Taxi S, U, dan V menjadi bersih."
       }
     ],
     walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}]
