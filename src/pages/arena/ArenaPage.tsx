@@ -10,7 +10,7 @@ import { AlgorithmPanel } from "./components/AlgorithmPanel";
 import { DecompositionModal } from "./components/DecompositionModal";
 import { CollisionModal } from "./components/CollisionModal";
 import { AnalysisWorkspace } from "./components/AnalysisWorkspace";
-import { Info, ChevronRight, Cpu, Flame, Eye, RotateCcw, Play } from "lucide-react";
+import { Info, ChevronRight, Cpu, Flame, Eye, RotateCcw, Play, Footprints } from "lucide-react";
 import { syncQuizQuestionWithVehicles } from "@lib/vehicleHelpers";
 
 export interface SimResult {
@@ -135,8 +135,8 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
         {/* Right Column: Unified Workspace Panel (Modes, Algorithms, Analysis, Sandbox) */}
         <div className="flex-1 h-full w-full min-h-0 flex flex-col bg-white border-l border-slate-200 rounded-l-lg overflow-hidden shadow-sm">
           {/* Header tabs / Mode switcher */}
-          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50/50 p-1.5 md:p-4  flex-shrink-0">
-            <div className="flex gap-2">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50/50 px-2 py-1.5 lg:p-4 flex-shrink-0">
+            <div className="flex gap-1 sm:gap-1.5 items-center">
               <button
                 type="button"
                 onClick={() => {
@@ -144,14 +144,14 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                   props.onSetSandboxMode(false);
                   props.onResetLevel();
                 }}
-                className={`w-9.5 h-9.5 flex items-center justify-center rounded-xl border transition-all cursor-pointer ${
+                className={`w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center rounded-xl border transition-all cursor-pointer ${
                   !props.isSandboxMode
-                    ? "bg-blue-600 border-blue-600 text-white shadow-md scale-105"
+                    ? "bg-blue-600 border-blue-600 text-white shadow-xs"
                     : "bg-white border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800"
                 }`}
                 title="Skenario BK"
               >
-                <Cpu size={16} />
+                <Cpu size={15} />
               </button>
               <button
                 type="button"
@@ -160,14 +160,14 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                   props.onSetSandboxMode(true);
                   props.onResetLevel();
                 }}
-                className={`w-9.5 h-9.5 flex items-center justify-center rounded-xl border transition-all cursor-pointer ${
+                className={`w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center rounded-xl border transition-all cursor-pointer ${
                   props.isSandboxMode
-                    ? "bg-amber-500 border-amber-500 text-white shadow-md scale-105"
+                    ? "bg-amber-500 border-amber-500 text-white shadow-xs"
                     : "bg-white border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800"
                 }`}
                 title="Mode Bebas"
               >
-                <Flame size={16} />
+                <Flame size={15} />
               </button>
 
               {/* Eye icon for game guide, visible only in analysis/algorithm stage and NOT in sandbox mode */}
@@ -178,20 +178,21 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                     audio.playClick();
                     setIsDecompositionModalOpen(true);
                   }}
-                  className="w-9.5 h-9.5 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-all cursor-pointer hover:scale-105"
+                  className="w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-all cursor-pointer"
                   title="Lihat Panduan Game"
                 >
-                  <Eye size={16} />
+                  <Eye size={15} />
                 </button>
               )}
             </div>
 
              {/* Ulangi & Jalankan Buttons on the Right */}
              {!props.isSandboxMode && props.ctStage !== "analysis" && (
-               <div className="flex gap-1.5 sm:gap-2 items-center">
+               <div className="flex gap-1 sm:gap-1.5 items-center">
                  {/* Mobile-only Step Count Badge */}
-                 <div className="h-9.5 hidden mobile-landscape-flex items-center text-[9px] font-mono font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 rounded-xl flex-shrink-0 select-none">
-                   {props.algorithmSteps.length} Langkah
+                 <div className="h-8 lg:h-9.5 hidden mobile-landscape-flex items-center gap-1 text-xs font-mono font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 rounded-xl flex-shrink-0 select-none" title={`${props.algorithmSteps.length} Langkah`}>
+                   <Footprints size={14} className="text-slate-500" />
+                   <span className="text-xs font-bold font-mono">{props.algorithmSteps.length}</span>
                  </div>
 
                  <button
@@ -201,11 +202,11 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                     props.onResetLevel();
                   }}
                   disabled={props.isSimulating}
-                  className="bg-slate-100 hover:bg-slate-200 border border-slate-350 disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 font-extrabold w-9.5 h-9.5 lg:w-auto lg:h-auto lg:px-3 lg:py-1.5 text-xs rounded-xl flex items-center justify-center gap-1 lg:gap-1.5 transition-all cursor-pointer shadow-xs flex-shrink-0"
+                  className="bg-slate-100 hover:bg-slate-200 border border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 font-extrabold w-8 h-8 lg:w-auto lg:h-9.5 lg:px-3 text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs flex-shrink-0"
                   title="Ulangi simulasi dari awal"
                 >
-                  <RotateCcw size={14} className="lg:w-[13px] lg:h-[13px]" />
-                  <span className="hidden lg:inline">Ulangi</span>
+                  <RotateCcw size={15} />
+                  <span className="hidden lg:inline text-xs">Ulangi</span>
                 </button>
 
                 <button
@@ -215,18 +216,18 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                     props.onStartSimulation();
                   }}
                   disabled={props.isSimulating || props.algorithmSteps.length === 0}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-105 disabled:text-slate-400 disabled:border-slate-100 text-white font-black w-9.5 h-9.5 lg:w-auto lg:h-auto lg:px-3 lg:py-1.5 text-xs rounded-xl flex items-center justify-center gap-1 lg:gap-1.5 transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer border-none flex-shrink-0"
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-105 disabled:text-slate-400 disabled:border-slate-100 text-white font-black w-8 h-8 lg:w-auto lg:h-9.5 lg:px-3 text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer border-none flex-shrink-0"
                   title="Jalankan algoritma langkah"
                 >
-                  <Play size={14} className="fill-current lg:w-[13px] lg:h-[13px]" />
-                  <span className="hidden lg:inline">Jalankan</span>
+                  <Play size={15} className="fill-current" />
+                  <span className="hidden lg:inline text-xs">Jalankan</span>
                 </button>
               </div>
             )}
           </div>
 
           {/* Content Body */}
-          <div className="flex-1 min-h-0 md:px-4 md:pb-4 overflow-hidden">
+          <div className="flex-1 min-h-0 2xl:pb-4 overflow-hidden">
             {props.isSandboxMode ? (
               <SandboxPanel onResetLevel={props.onResetLevel} />
             ) : props.ctStage === "analysis" ? (

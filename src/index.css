@@ -1,10 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'CCRegeneration';
+  src: url('/font/FONNTS.COM-CCREGENERATION.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('/font/NotoSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('/font/NotoSans-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "NotoSans", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "CCRegeneration", "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", "NotoSans", ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
@@ -12,6 +35,10 @@ body {
   color: #1E293B; /* slate-800 fallback */
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+button, .font-display {
+  font-family: var(--font-display);
 }
 
 @keyframes fadeInUp {

@@ -14,7 +14,7 @@ export const AnalysisWorkspace: React.FC<AnalysisWorkspaceProps> = ({
   onOpenQuiz,
 }) => {
   return (
-    <div className="flex flex-col justify-end h-full w-full">
+    <div className="flex flex-col justify-end h-full w-full p-1.5 md:p-4">
       {/* Mulai Kuis Button (Icon & Title only, positioned at the bottom, no subtext) */}
       <button
         type="button"
@@ -22,7 +22,7 @@ export const AnalysisWorkspace: React.FC<AnalysisWorkspaceProps> = ({
           audio.playClick();
           onOpenQuiz();
         }}
-        className="flex items-center justify-center gap-2.5 p-3.5 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 rounded-2xl text-center cursor-pointer transition-all hover:scale-[1.01] w-full font-black text-xs shadow-xs"
+        className="flex items-center justify-center gap-2.5 p-1.5 md:p-4 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 rounded-2xl text-center cursor-pointer transition-all hover:scale-[1.01] w-full font-black text-xs shadow-xs"
       >
         <Compass size={16} className="animate-pulse" />
         <span>Mulai Kuis Pemahaman</span>

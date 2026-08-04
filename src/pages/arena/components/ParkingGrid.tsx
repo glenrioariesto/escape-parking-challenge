@@ -509,7 +509,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         // Grid coordinates text (only in dev mode)
         if (isDevModeRef.current) {
           ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
-          ctx.font = "bold 8px monospace";
+          ctx.font = "bold 8px 'JetBrains Mono', monospace";
           ctx.fillText(`${r},${c}`, c * cellSize + 4, r * cellSize + 11);
         }
       }
@@ -544,7 +544,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
           // Draw Top Exit Gate (for upper area player cars)
           ctx.fillStyle = "#10B981";
           ctx.fillRect(col * cellSize, 0, cellSize, 5);
-          ctx.font = "bold 9px monospace";
+          ctx.font = "bold 9px 'JetBrains Mono', monospace";
           ctx.textAlign = "center";
           ctx.textBaseline = "bottom";
           ctx.fillText("EXIT ▲", col * cellSize + cellSize / 2, -2);
@@ -552,7 +552,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
           // Draw Bottom Exit Gate (for lower area player cars)
           ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
           ctx.fillStyle = "#10B981";
-          ctx.font = "bold 9px monospace";
+          ctx.font = "bold 9px 'JetBrains Mono', monospace";
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
           ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
@@ -563,7 +563,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.fillRect(exitLeftOnGrid - 5, row * cellSize, 5, cellSize);
 
         ctx.fillStyle = "#10B981";
-        ctx.font = "bold 9px monospace";
+        ctx.font = "bold 9px 'JetBrains Mono', monospace";
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
         ctx.fillText("EXIT ➔", exitLeftOnGrid + 4, row * cellSize + cellSize / 2);
@@ -610,7 +610,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         
         // Text
         ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 8px sans-serif";
+        ctx.font = "bold 8px 'NotoSans', sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("WALL", wx + cellSize / 2, wy + cellSize / 2);
@@ -712,7 +712,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       // Label text with shadow (vehicle labels are only shown in Dev Mode)
       if (isDevModeRef.current) {
         ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 9px sans-serif";
+        ctx.font = "bold 9px 'NotoSans', sans-serif";
         ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
         ctx.shadowBlur = 4;
         ctx.textAlign = "center";

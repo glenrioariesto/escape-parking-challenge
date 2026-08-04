@@ -386,11 +386,11 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
   };
 
   return (
-    <div id="step-builder-root" className="flex flex-col h-full min-h-0 justify-between text-slate-800 pt-2">
+    <div id="step-builder-root" className="flex flex-col h-full min-h-0 justify-between text-slate-800 p-1.5 lg:p-4">
       <div id="step-builder-panel" className="flex-1 min-h-0 flex flex-col justify-between">
         <div className="flex-1 min-h-0 flex flex-col">
           {/* Builder Panel Form */}
-          <div id="builder-form-panel" className="bg-slate-50 border border-slate-200 rounded-xl p-1 sm:p-3 space-y-1 sm:space-y-3 flex-shrink-0 mb-1 sm:mb-2">
+          <div id="builder-form-panel" className="bg-slate-50 border border-slate-200 rounded-xl p-1.5 lg:p-4 space-y-1 sm:space-y-3 flex-shrink-0 mb-1 sm:mb-2">
             <div className="grid grid-cols-2 gap-1 sm:gap-3">
               {/* Pick Vehicle */}
               <div className="flex flex-col gap-0.5 sm:gap-1">
@@ -460,9 +460,9 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
           </div>
 
           {/* Header Title */}
-          <div className="flex mobile-landscape-hidden items-center justify-between border-b border-slate-200 pb-1 sm:pb-2 mb-1 sm:mb-2 flex-shrink-0">
+          <div className="flex mobile-landscape-hidden items-center justify-between border-b border-slate-200 p-1.5 md:p-4 mb-1 sm:mb-2 flex-shrink-0">
             <div className="flex flex-col gap-0.5">
-              <h4 className="text-[10px] sm:text-xs font-black text-slate-800 uppercase tracking-wider font-mono">
+              <h4 className="text-[10px] sm:text-xs font-black text-slate-800 uppercase tracking-wider font-display">
                 Algoritma
               </h4>
               {steps.length > 0 && (
@@ -595,9 +595,9 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                         </strong>
                       </div>
                       <div className="flex items-center gap-1 flex-shrink-0 h-5 sm:h-6">
-                        <span className={`flex items-center justify-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 rounded border text-[7px] sm:text-[9px] font-bold ${visuals.badgeClass} whitespace-nowrap h-full`}>
+                        <span className={`inline-flex items-center justify-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 rounded border text-[7px] sm:text-[9px] font-bold ${visuals.badgeClass} whitespace-nowrap h-full`}>
                           <span>{getDirectionSymbol(step.direction)}</span>
-                          <span>{getDirectionText(step.direction)}</span>
+                          <span className="hidden lg:inline">{getDirectionText(step.direction)}</span>
                         </span>
                         <button
                           type="button"
