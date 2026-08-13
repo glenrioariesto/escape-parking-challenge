@@ -265,8 +265,8 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
 
       {/* Quiz Modal */}
       {!props.isSandboxMode && props.ctStage === "analysis" && props.isQuizModalOpen && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 select-none">
-          <div className="relative max-w-xl w-full mx-auto shadow-2xl rounded-3xl overflow-hidden max-h-[90vh] flex flex-col bg-white">
+        <div className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 select-none">
+          <div className="relative max-w-xl w-full m-auto shadow-2xl rounded-3xl overflow-hidden max-h-modal flex flex-col bg-white">
             <button
               type="button"
               onClick={() => { audio.playClick(); props.onCloseQuiz(); }}
@@ -287,7 +287,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
 
       {/* Reflection Modal */}
       {!props.isSandboxMode && props.ctStage === "evaluation" && props.simResult && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 select-none">
+        <div className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 select-none">
           <Reflection
             levelId={props.activeLevelId}
             levelName={activeLevel?.name || ""}

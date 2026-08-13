@@ -64,8 +64,8 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
   const slide = slides[currentSlide];
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 md:p-6 lg:p-8 select-none animate-fadeIn">
-      <div className="relative max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl w-full mx-auto shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col bg-white border border-slate-100">
+    <div className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 md:p-6 lg:p-8 select-none animate-fadeIn">
+      <div className="relative max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl w-full m-auto shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden max-h-modal flex flex-col bg-white border border-slate-100">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 sm:p-4 md:p-5 lg:p-6 pb-2 sm:pb-3 md:pb-4 lg:pb-5 relative flex-shrink-0">
           <div className="flex items-center">
@@ -85,8 +85,8 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="p-3 sm:p-5 md:p-6 lg:p-8 flex-1 min-h-0 overflow-y-auto flex flex-col justify-center">
-          <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border rounded-xl sm:rounded-2xl transition-all duration-300 ${slide.bgClass}`}>
+        <div className="p-3 sm:p-5 md:p-6 lg:p-8 flex-1 min-h-0 overflow-y-auto flex flex-col">
+          <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border rounded-xl sm:rounded-2xl transition-all duration-300 m-auto ${slide.bgClass}`}>
             <div className="flex-1 min-w-0">
               <h4 className="text-[10px] sm:text-xs md:text-sm lg:text-base font-black text-slate-800 font-display uppercase tracking-wide">
                 {slide.title}

@@ -23,8 +23,8 @@ export const CollisionModal: React.FC<CollisionModalProps> = ({
   const isIncomplete = collisionInfo.type === "incomplete";
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fadeIn">
-      <div className={`relative max-w-md w-full bg-slate-900 border-2 ${isIncomplete ? "border-amber-500/50" : "border-red-500/50"} shadow-2xl rounded-3xl p-6 sm:p-7 flex flex-col items-center text-center text-white animate-scaleIn`}>
+    <div className="fixed inset-0 z-[9999] flex justify-center overflow-y-auto bg-slate-950/70 backdrop-blur-md p-4 animate-fadeIn">
+      <div className={`relative max-w-md w-full m-auto bg-slate-900 border-2 ${isIncomplete ? "border-amber-500/50" : "border-red-500/50"} shadow-2xl rounded-3xl p-6 sm:p-7 max-h-modal overflow-y-auto flex flex-col items-center text-center text-white animate-scaleIn`}>
         
         {/* Close Button */}
         <button

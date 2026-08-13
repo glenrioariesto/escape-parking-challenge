@@ -22,11 +22,11 @@ export const Reflection: React.FC<ReflectionProps> = ({
   isLastLevel
 }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm relative overflow-hidden max-w-[500px] w-full mx-auto select-none text-slate-800">
+    <div className="bg-white border border-slate-200 rounded-2xl p-4 ld:p-6 shadow-sm relative max-h-modal overflow-y-auto max-w-[500px] w-full m-auto select-none text-slate-800">
       {/* Decorative Golden Ambient Background */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-rose-500" />
 
-      <div className="text-center mb-5">
+      <div className="text-center">
         <span className="text-4xl mb-2 inline-block animate-bounce">🏆</span>
         <h2 className="text-lg font-black font-sans text-slate-800 tracking-tight">
           Skenario Simulasi Berhasil!
@@ -34,7 +34,7 @@ export const Reflection: React.FC<ReflectionProps> = ({
       </div>
 
       {/* Step Comparison Metrics */}
-      <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-5 text-center">
+      <div className="bg-slate-50 rounded-xl p-1.5 lg:p-4 border border-slate-200 mb-2 text-center">
         <span className="text-xs font-mono text-slate-400 uppercase tracking-widest block mb-1 font-bold">
           Evaluasi Efisiensi Solusi
         </span>

@@ -154,6 +154,14 @@ button, .font-display {
   scrollbar-width: none; /* Firefox */
 }
 
+/* Responsive modal card height: cap at 90% of the visible viewport.
+   Falls back to vh, then uses dvh so mobile browser chrome (URL bar)
+   doesn't cause overflow. */
+@utility max-h-modal {
+  max-height: 90vh;
+  max-height: 90dvh;
+}
+
 /* Custom Scale-in Animation for Modals */
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.95); }
