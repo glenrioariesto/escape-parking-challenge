@@ -1,5 +1,6 @@
 import React from "react";
 import { audio } from "@lib/audio";
+import { MuteButton } from "../../components/MuteButton";
 
 interface SplashPageProps {
   onStart: () => void;
@@ -10,9 +11,15 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
     <div
       className="fixed inset-0 w-screen h-screen z-40 bg-cover bg-center bg-no-repeat overflow-hidden"
       style={{ backgroundImage: `url('${import.meta.env.BASE_URL}img/background-judul.webp')` }}
+      onClick={() => audio.startBgm()}
     >
       {/* Decorative gradient overlay to enhance visual depth */}
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/10 via-transparent to-slate-950/20 pointer-events-none" />
+
+      {/* Mute/Unmute Audio Button — Top-Right on 2xl+, Bottom-Left on <2xl */}
+      <div className="fixed z-50 bottom-3 left-3 sm:bottom-4 sm:left-4 md:bottom-4 md:left-4 2xl:bottom-auto 2xl:left-auto 2xl:top-4 2xl:right-4">
+        <MuteButton variant="floating" size="logo" />
+      </div>
 
       {/* Safe layout boundary: max-w-7xl container centered on viewport, aligning content to side on desktop */}
       <div className="w-full h-full flex justify-end items-center">
@@ -46,6 +53,7 @@ export const SplashPage: React.FC<SplashPageProps> = ({ onStart }) => {
           <button
             onClick={() => {
               audio.playClick();
+              audio.startBgm();
               onStart();
             }}
             className="mt-6 sm:mt-8 2xl:mt-10 cursor-pointer transform hover:scale-110 active:scale-95 transition-all duration-300 hover:brightness-110 focus:outline-none animate-[pulse_2s_infinite] drop-shadow-2xl"

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Vehicle } from "../../../types";
 import { HelpCircle } from "lucide-react";
 import audio from "../../../lib/audio";
+import { MuteButton } from "../../../components/MuteButton";
 import { getVehicleImagePath, getVehicleDisplayNamesMap, getVehicleBaseName } from "../../../lib/vehicleHelpers";
 
 // Computes which cells are occupied around the board
@@ -1102,9 +1103,14 @@ const canvas = canvasRef.current;
           </div>
         )}
 
+        {/* Top Right Floating Mute/Unmute Button on Parking Canvas (Matching Logo Size & Form) */}
+        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 z-40 select-none">
+          <MuteButton variant="floating" size="logo" />
+        </div>
+
         {/* Floating Dev Mode Controls (Vertical) */}
         {onToggleDevMode && (
-          <div className="absolute top-3 right-3 z-40 hidden flex-col items-center gap-1.5 select-none">
+          <div className="absolute top-12 right-2.5 sm:top-14 sm:right-3 z-40 hidden flex-col items-center gap-1.5 select-none">
             <button
               type="button"
               onClick={() => {

@@ -48,6 +48,11 @@ export default function App() {
     };
   }, []);
 
+  // 3. Initialize background music
+  useEffect(() => {
+    audio.startBgm();
+  }, []);
+
   const handleLoadLevel = (levelId: number) => {
     game.handleLoadLevel(levelId);
     setCurrentScreen("arena");

@@ -1,6 +1,7 @@
 import React from "react";
 import { PlayerProgress } from "@types";
 import { LevelSelector } from "./components/LevelSelector";
+import { MuteButton } from "../../components/MuteButton";
 
 interface DashboardPageProps {
   progress: PlayerProgress;
@@ -18,9 +19,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onLoadLevel,
 }) => (
   <div
-    className="flex-1 overflow-hidden flex flex-col h-full min-h-0 w-full bg-cover bg-center bg-no-repeat"
+    className="flex-1 overflow-hidden flex flex-col h-full min-h-0 w-full bg-cover bg-center bg-no-repeat relative"
     style={{ backgroundImage: `url('${import.meta.env.BASE_URL}img/background-level.webp')` }}
   >
+    {/* Top Right Audio Controls (Matching Logo Size & Position) */}
+    <div className="fixed top-3 right-3 md:top-4 md:right-4 z-50">
+      <MuteButton variant="floating" size="logo" />
+    </div>
+
     <LevelSelector
       progress={progress}
       onLoadLevel={onLoadLevel}
@@ -29,3 +35,4 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     />
   </div>
 );
+
