@@ -204,12 +204,12 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
     levelId: 4,
     name: 'Tingkat 4: Labirin 3 Taxi',
     difficulty: 'Sulit',
-    optimalSteps: 18,
-    threeStarThreshold: 18,
+    optimalSteps: 16,
+    threeStarThreshold: 16,
     moveCount: 7,
     totalDistance: 16,
     liveUrl: 'https://glenrioariesto.github.io/escape-parking-challenge/',
-    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kanan 2 petak, Taxi Kuning 1 ke atas 3 petak; Truk Biru ke kiri 1 petak, Taxi Kuning 3 ke atas 3 petak. 2) Zona Bawah: Jeep Hijau ke kiri 2 petak, Truk Kuning ke kiri 2 petak, lalu Taxi Kuning 2 ke bawah 3 petak (total hanya 16 petak, berhasil meraih 3 Bintang di bawah batas optimal 18 petak).',
+    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kanan 2 petak, Taxi Kuning 1 ke atas 3 petak; Truk Biru ke kiri 1 petak, Taxi Kuning 3 ke atas 3 petak. 2) Zona Bawah: Jeep Hijau ke kiri 2 petak, Truk Kuning ke kiri 2 petak, lalu Taxi Kuning 2 ke bawah 3 petak (optimalSteps = 2 + 3 + 1 + 3 + 2 + 2 + 3 = 16 petak, tepat sesuai target game).',
     algorithmSteps: [
       {
         vehicleId: 'D',
@@ -284,12 +284,12 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
     levelId: 5,
     name: 'Tingkat 5: Kemacetan Total 5 Taxi (Grand Master)',
     difficulty: 'Ahli',
-    optimalSteps: 22,
-    threeStarThreshold: 22,
+    optimalSteps: 23,
+    threeStarThreshold: 23,
     moveCount: 11,
     totalDistance: 23,
     liveUrl: 'https://glenrioariesto.github.io/escape-parking-challenge/',
-    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kiri 2 petak, Truk Biru ke kanan 1 petak saja (ke kolom 8-10), Taxi Kuning 1 dan 3 ke atas 3 petak. 2) Zona Bawah: Truk Kuning ke kiri 1 petak, Taxi Kuning 2 ke bawah 3 petak; Truk Hijau ke kiri 1 petak, Taxi Kuning 5 ke bawah 3 petak; Truk Merah ke kanan 1 petak, Truk Hijau ke kanan 2 petak, lalu Taxi Kuning 4 ke bawah 3 petak (dalam mode CT algoritma tercatat 11 aksi langkah, meraih 3 Bintang dengan aman di bawah batas 22).',
+    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kiri 2 petak, Truk Biru ke kanan 1 petak saja (ke kolom 8-10), Taxi Kuning 1 dan 3 ke atas 3 petak. 2) Zona Bawah: Truk Kuning ke kiri 1 petak, Taxi Kuning 2 ke bawah 3 petak; Truk Hijau ke kiri 1 petak, Taxi Kuning 5 ke bawah 3 petak; Truk Merah ke kanan 1 petak, Truk Hijau ke kanan 2 petak, lalu Taxi Kuning 4 ke bawah 3 petak (optimalSteps = 2 + 1 + 3 + 3 + 1 + 3 + 1 + 3 + 1 + 2 + 3 = 23 petak, tepat sesuai target game).',
     algorithmSteps: [
       {
         vehicleId: 'D',
