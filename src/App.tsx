@@ -70,10 +70,10 @@ export default function App() {
   return (
     <div className="h-screen max-h-screen overflow-hidden bg-slate-100 flex flex-col font-sans select-none antialiased text-slate-800">
 
-      {/* Tut Wuri Handayani Logo — fixed top-left screen corner */}
+      {/* Pusbuk Jenama Logo — fixed top-left screen corner */}
       <img
-        src={`${import.meta.env.BASE_URL}img/tut-wuri-handayani.png`}
-        alt="Tut Wuri Handayani"
+        src={`${import.meta.env.BASE_URL}img/logo-jenama.webp?v2`}
+        alt="Logo Jenama"
         className="fixed top-3 left-3 md:top-4 md:left-4 w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full shadow-md z-50 pointer-events-none"
       />
 
