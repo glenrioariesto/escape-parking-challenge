@@ -466,7 +466,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                 Algoritma
               </h4>
               {steps.length > 0 && (
-                <span className="text-[7px] sm:text-[9px] text-slate-400 font-medium">
+                <span className="text-[10px] sm:text-xs md:text-sm text-black font-bold">
                   Seret langkah untuk mengurutkan, tarik ke luar untuk menghapus.
                 </span>
               )}
