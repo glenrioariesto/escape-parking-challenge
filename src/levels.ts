@@ -83,7 +83,13 @@ export const LEVELS: LevelDefinition[] = [
         explanation: "Karena Mobil Biru B berorientasi horizontal (mendatar), ia harus digeser ke kiri atau kanan agar kolom 6 menjadi kosong, sehingga Taxi Kuning R bisa melaju ke bawah."
       }
     ],
-    walls: [{"row":4,"col":1},{"row":4,"col":2},{"row":4,"col":3},{"row":4,"col":4},{"row":4,"col":5},{"row":4,"col":6},{"row":4,"col":7},{"row":4,"col":8},{"row":4,"col":9},{"row":4,"col":10}]
+    walls: [{"row":4,"col":1},{"row":4,"col":2},{"row":4,"col":3},{"row":4,"col":4},{"row":4,"col":5},{"row":4,"col":6},{"row":4,"col":7},{"row":4,"col":8},{"row":4,"col":9},{"row":4,"col":10}],
+    focus: "Berpikir Komputasional - Pengenalan Pola dan Algoritma Dasar: Mengenali pola gerakan kendaraan agar dapat menyusun urutan langkah sederhana untuk membebaskan Taxi Kuning R.",
+    outcomes: [
+      "Mengenali kendaraan yang menghalangi jalan keluar Taxi Kuning.",
+      "Menentukan arah potensial kendaraan berdasarkan orientasinya (mendatar/tegak).",
+      "Menyusun urutan langkah berurutan untuk membebaskan jalan keluar."
+    ]
   },
   {
     id: 2,
@@ -189,6 +195,12 @@ export const LEVELS: LevelDefinition[] = [
         correctAnswerIndex: 2,
         explanation: "Kita perlu membuka ruang gerak untuk C dengan menggeser G ke kiri (atau B ke kanan) terlebih dahulu, baru kemudian menggeser C ke samping agar kolom 6 bersih, lalu menjalankan Taxi Kuning R ke bawah."
       }
+    ],
+    focus: "Berpikir Komputasional - Dekomposisi: Menguraikan masalah kemacetan yang berantai menjadi langkah-langkah kecil yang saling bergantung.",
+    outcomes: [
+      "Mengidentifikasi kendaraan yang terkunci oleh kendaraan lain (hambatan berantai).",
+      "Menentukan urutan pelepasan yang tepat agar setiap kendaraan dapat bergerak.",
+      "Menyusun algoritma bertahap untuk mengosongkan kolom jalan keluar."
     ]
   },
   {
@@ -306,6 +318,12 @@ export const LEVELS: LevelDefinition[] = [
         correctAnswerIndex: 0,
         explanation: "Truk Putih G di kolom 9 menghalangi Truk D untuk bergeser ke kanan. Dengan menurunkan G ke bawah, Truk D memiliki ruang untuk bergeser ke kanan (kolom 7-9 menjadi bersih untuk R)."
       }
+    ],
+    focus: "Berpikir Komputasional - Abstraksi: Memilah informasi penting (kendaraan penghambat) dari detail yang tidak relevan untuk merancang strategi labirin parkir padat.",
+    outcomes: [
+      "Menemukan kendaraan terpanjang yang menjadi hambatan utama (dekomposisi).",
+      "Merancang urutan langkah efisien untuk membebaskan dua Taxi Kuning.",
+      "Membaca dan menjelaskan alasan di balik setiap langkah yang dipilih."
     ]
   },
   {
@@ -471,7 +489,13 @@ export const LEVELS: LevelDefinition[] = [
         explanation: "Truk Abu-abu P di baris 8 kolom 4-6 menghalangi Taxi S. Namun P terkunci oleh Sedan Kuning J di kiri dan Truk Cokelat N di kanan. Kita perlu menggeser J ke kiri atau N ke kanan terlebih dahulu agar P memiliki ruang untuk bergeser ke samping, baru Taxi S bisa meluncur ke bawah."
       }
     ],
-    walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}]
+    walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],
+    focus: "Berpikir Komputasional - Algoritma dan Perencanaan: Merancang strategi terkoordinasi untuk membebaskan tiga Taxi Kuning secara bersamaan dalam labirin padat.",
+    outcomes: [
+      "Menguraikan masalah multi-Taxi menjadi sub-masalah yang lebih kecil.",
+      "Memprioritaskan urutan pelepasan kendaraan penghambat yang saling terkunci.",
+      "Merancang algoritma efisien dan mengevaluasi jumlah langkah minimal."
+    ]
   },
   {
     id: 5,
@@ -664,6 +688,12 @@ export const LEVELS: LevelDefinition[] = [
         explanation: "Truk J dan Truk P di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser Mobil K atau Truk N terlebih dahulu, ruang gerak horizontal Truk J dan P terbuka sehingga jalur keluar Taxi S, U, dan V menjadi bersih."
       }
     ],
-    walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}]
+    walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],
+    focus: "Berpikir Komputasional - Integrasi dan Evaluasi: Menerapkan seluruh konsep computational thinking untuk memecahkan kemacetan paling kompleks secara presisi.",
+    outcomes: [
+      "Mengintegrasikan dekomposisi, pengenalan pola, abstraksi, dan algoritma.",
+      "Merencanakan strategi panjang yang akurat untuk membebaskan lima Taxi Kuning.",
+      "Mengevaluasi solusi dan menyajikan alasan setiap langkah secara logis."
+    ]
   }
 ];

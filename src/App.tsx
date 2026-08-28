@@ -3,6 +3,7 @@ import { LEVELS } from "@levels";
 import { useGameState } from "@hooks/useGameState";
 import { SplashPage } from "@pages/splash/SplashPage";
 import { DashboardPage } from "@pages/dashboard/DashboardPage";
+import { ObjectivesModal } from "@pages/dashboard/components/ObjectivesModal";
 import { ArenaPage } from "@pages/arena/ArenaPage";
 import { audio } from "@lib/audio";
 
@@ -14,6 +15,7 @@ export default function App() {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [activeTooltipLevelId, setActiveTooltipLevelId] = useState<number | null>(null);
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false);
+  const [showObjectivesModal, setShowObjectivesModal] = useState(false);
 
   const game = useGameState();
 
@@ -53,6 +55,11 @@ export default function App() {
     audio.startBgm();
   }, []);
 
+  // 4. Auto-show the fullscreen prompt every time the page opens or refreshes
+  useEffect(() => {
+    setShowFullscreenPrompt(true);
+  }, []);
+
   const handleLoadLevel = (levelId: number) => {
     game.handleLoadLevel(levelId);
     setCurrentScreen("arena");
@@ -74,7 +81,7 @@ export default function App() {
       <img
         src={`${import.meta.env.BASE_URL}img/logo-jenama.webp?v2`}
         alt="Logo Jenama"
-        className="fixed top-3 left-3 md:top-4 md:left-4 w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full shadow-md z-50 pointer-events-none"
+        className="fixed top-3 left-3 md:top-4 md:left-4 h-12 w-auto md:h-16 lg:h-20 object-contain z-50 pointer-events-none"
       />
 
       {/* Mandatory Landscape Overlay — shown on ALL devices in portrait */}
@@ -148,7 +155,6 @@ export default function App() {
                     console.warn("Fullscreen permission denied or not supported by browser", err);
                   }
                   setShowFullscreenPrompt(false);
-                  setCurrentScreen("dashboard");
                 }}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-2.5 rounded-xl transition-all shadow-md shadow-blue-500/10 active:scale-95 cursor-pointer border-none"
               >
@@ -160,7 +166,6 @@ export default function App() {
                 onClick={() => {
                   audio.playClick();
                   setShowFullscreenPrompt(false);
-                  setCurrentScreen("dashboard");
                 }}
                 className="flex-1 bg-slate-100 hover:bg-slate-200 border border-slate-250 text-slate-700 font-extrabold py-2.5 rounded-xl transition-all active:scale-95 cursor-pointer"
               >
@@ -175,13 +180,8 @@ export default function App() {
         {currentScreen === "splash" && (
           <SplashPage
             onStart={() => {
-              const isFullscreenSupported = typeof document !== "undefined" && !!document.documentElement.requestFullscreen;
-              const isCurrentlyFullscreen = typeof document !== "undefined" && !!document.fullscreenElement;
-              if (isFullscreenSupported && !isCurrentlyFullscreen) {
-                setShowFullscreenPrompt(true);
-              } else {
-                setCurrentScreen("dashboard");
-              }
+              setCurrentScreen("dashboard");
+              setShowObjectivesModal(true);
             }}
           />
         )}
@@ -231,6 +231,14 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Objectives Modal - Tujuan Pembelajaran (shown once when dashboard opens) */}
+      <ObjectivesModal
+        isOpen={showObjectivesModal}
+        onContinue={() => {
+          setShowObjectivesModal(false);
+        }}
+      />
 
     </div>
   );

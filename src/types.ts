@@ -39,6 +39,8 @@ export interface LevelDefinition {
   exitRow: number;
   quizQuestions: QuizQuestion[];
   walls?: { row: number; col: number }[];
+  focus: string;
+  outcomes: string[];
 }
 
 export type CTStage = "analysis" | "sandbox" | "algorithm" | "simulation" | "evaluation";

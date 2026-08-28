@@ -460,18 +460,19 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
           </div>
 
           {/* Header Title */}
-          <div className="flex mobile-landscape-hidden items-center justify-between border-b border-slate-200 p-1.5 md:p-4 mb-1 sm:mb-2 flex-shrink-0">
-            <div className="flex flex-col gap-0.5">
-              <h4 className="text-[10px] sm:text-xs font-black text-slate-800 uppercase tracking-wider font-display">
+          <div className="flex mobile-landscape-hidden flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-200 p-2 sm:p-3 md:p-4 mb-1 sm:mb-2 flex-shrink-0">
+            <div className="flex flex-col gap-0.5 min-w-0">
+              <h4 className="text-[10px] sm:text-xs md:text-sm font-black text-slate-800 uppercase tracking-wider font-display">
                 Algoritma
               </h4>
               {steps.length > 0 && (
-                <span className="text-[10px] sm:text-xs md:text-sm text-black font-bold">
-                  Seret langkah untuk mengurutkan, tarik ke luar untuk menghapus.
-                </span>
+                <ul className="text-[9px] sm:text-[10px] md:text-xs text-slate-800 font-medium leading-snug break-words space-y-0.5 list-disc pl-4">
+                  <li>Seret langkah untuk mengurutkan</li>
+                  <li>Tarik ke luar untuk menghapus</li>
+                </ul>
               )}
             </div>
-            <span className="text-[8px] sm:text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full text-slate-600 font-mono self-start">
+            <span className="shrink-0 self-start sm:self-auto text-[8px] sm:text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full text-slate-600 font-mono whitespace-nowrap">
               {steps.length} Langkah
             </span>
           </div>
