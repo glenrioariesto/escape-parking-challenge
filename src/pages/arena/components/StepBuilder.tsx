@@ -592,7 +592,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                           #{idx + 1}
                         </span>
                         <strong className="font-extrabold text-[9px] sm:text-xs truncate min-w-0 flex-1">
-                          {matchedVehicle ? getVehicleDisplayName(matchedVehicle) : `Mobil [${step.vehicleId}]`}
+                          {matchedVehicle ? getVehicleDisplayName(matchedVehicle) : "Mobil"}
                         </strong>
                       </div>
                       <div className="flex items-center gap-1 flex-shrink-0 h-5 sm:h-6">

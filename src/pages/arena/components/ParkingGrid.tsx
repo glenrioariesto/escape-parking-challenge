@@ -719,7 +719,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(
-          v.id === "R" ? "TAXI" : `MOBIL ${v.id}`,
+          v.id === "R" ? "TAXI" : getVehicleBaseName(v, vehiclesRef.current).toUpperCase(),
           vx + vw / 2,
           vy + vh / 2
         );

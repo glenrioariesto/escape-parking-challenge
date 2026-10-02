@@ -172,7 +172,7 @@ export function useSimulation(
     const timer = setTimeout(() => {
       const target = activeVehicles.find((v) => v.id === step.vehicleId);
       if (!target) {
-        appendLog(`⛔ Gagal pada Langkah #${currentStepIndex + 1}: Mobil ${step.vehicleId} tidak ditemukan!`);
+        appendLog(`⛔ Gagal pada Langkah #${currentStepIndex + 1}: Kendaraan tidak ditemukan!`);
         audio.playError();
         setTimeout(() => {
           setIsSimulating(false);

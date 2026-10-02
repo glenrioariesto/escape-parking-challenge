@@ -194,31 +194,38 @@ export function getVehicleDisplayNamesMap(vehicles: Vehicle[]): { [id: string]: 
 export function syncTextWithVehicleNames(text: string, vehicles: Vehicle[]): string {
   if (!text) return "";
   let updatedText = text;
-  const nameMap = getVehicleDisplayNamesMap(vehicles);
 
-  // Sort vehicles so we replace longer patterns first to avoid partial replacement issues
+  // If the text does not contain any vehicle ID letter patterns, return as-is
+  const hasVehicleIdPattern = vehicles.some((v) =>
+    new RegExp(`\\b(Mobil|Truk|Taxi|Kendaraan)\\s+${v.id}\\b`).test(updatedText) ||
+    new RegExp(`\\[${v.id}\\]`).test(updatedText) ||
+    (v.label && v.label.includes(` ${v.id}`) && updatedText.includes(v.label.replace(/\s*\(Pemain\)/g, "")))
+  );
+
+  if (!hasVehicleIdPattern) {
+    return updatedText;
+  }
+
+  const nameMap = getVehicleDisplayNamesMap(vehicles);
   const sortedVehicles = [...vehicles].sort((a, b) => b.id.localeCompare(a.id));
 
-  // 1. Replace specific long labels/patterns first (e.g. "Taxi Kuning R (Pemain)", "Mobil Merah A")
   sortedVehicles.forEach((v) => {
     const displayName = nameMap[v.id] || getVehicleBaseName(v);
-    
-    // Replace labels with (Pemain) or without
-    const cleanLabel = v.label.replace(/\s*\(Pemain\)/g, "");
-    updatedText = updatedText.replace(new RegExp(escapeRegExp(v.label), "gi"), displayName);
-    updatedText = updatedText.replace(new RegExp(escapeRegExp(cleanLabel), "gi"), displayName);
 
-    // Replace generic pattern like "Mobil Merah A" or "Truk Abu-abu D"
+    if (v.label && v.label.includes(` ${v.id}`)) {
+      const cleanLabel = v.label.replace(/\s*\(Pemain\)/g, "");
+      updatedText = updatedText.replace(new RegExp(escapeRegExp(v.label), "gi"), displayName);
+      updatedText = updatedText.replace(new RegExp(escapeRegExp(cleanLabel), "gi"), displayName);
+    }
+
     const genericPattern = `${getVehicleBaseName(v)} ${v.id}`;
     updatedText = updatedText.replace(new RegExp(escapeRegExp(genericPattern), "gi"), displayName);
-  });
 
-  // 2. Replace standalone single letters (e.g. " A ", " B ", " F ")
-  sortedVehicles.forEach((v) => {
-    const displayName = nameMap[v.id] || getVehicleBaseName(v);
-    // Use word boundary to match the letter alone
-    const regex = new RegExp(`\\b${v.id}\\b`, "g");
-    updatedText = updatedText.replace(regex, displayName);
+    const prefixPattern = new RegExp(`\\b(Mobil|Truk|Taxi|Kendaraan)\\s+${v.id}\\b`, "g");
+    updatedText = updatedText.replace(prefixPattern, displayName);
+
+    const bracketPattern = new RegExp(`\\[${v.id}\\]`, "g");
+    updatedText = updatedText.replace(bracketPattern, displayName);
   });
 
   return updatedText;
