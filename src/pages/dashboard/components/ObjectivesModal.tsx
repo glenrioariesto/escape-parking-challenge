@@ -39,7 +39,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
     {
       title: "1. Tujuan Pembelajaran",
       icon: <Target className="w-4 h-4 sm:w-5 sm:h-5" />,
-      iconWrap: "bg-blue-600 text-white",
+      iconWrap: "bg-[#2852b0] text-white",
       accent: "border-blue-200 bg-blue-50/50",
       text: (
         <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-slate-650 leading-relaxed font-medium">
@@ -52,8 +52,8 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
     {
       title: "2. Mengenali Pola & Hambatan",
       icon: <Puzzle className="w-4 h-4 sm:w-5 sm:h-5" />,
-      iconWrap: "bg-emerald-600 text-white",
-      accent: "border-emerald-200 bg-emerald-50/50",
+      iconWrap: "bg-[#2852b0] text-white",
+      accent: "border-blue-200 bg-blue-50/50",
       text: (
         <ul className="text-[10px] sm:text-xs md:text-sm lg:text-base text-slate-650 space-y-1.5 list-disc pl-4 font-medium leading-relaxed">
           <li>{OUTCOMES[0]}</li>
@@ -64,8 +64,8 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
     {
       title: "3. Menyusun & Mengevaluasi",
       icon: <ListChecks className="w-4 h-4 sm:w-5 sm:h-5" />,
-      iconWrap: "bg-amber-600 text-white",
-      accent: "border-amber-200 bg-amber-50/50",
+      iconWrap: "bg-[#2852b0] text-white",
+      accent: "border-blue-200 bg-blue-50/50",
       text: (
         <ul className="text-[10px] sm:text-xs md:text-sm lg:text-base text-slate-650 space-y-1.5 list-disc pl-4 font-medium leading-relaxed">
           <li>{OUTCOMES[2]}</li>
@@ -82,7 +82,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
     <div className="fixed inset-0 z-[998] flex justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 md:p-6 lg:p-8 select-none animate-fadeIn">
       <div className="relative max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl w-full m-auto shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden max-h-modal flex flex-col bg-white border border-slate-100">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 sm:p-4 md:p-5 lg:p-6 pb-2 sm:pb-3 md:pb-4 lg:pb-5 relative flex-shrink-0">
+        <div className="bg-gradient-to-r from-[#2852b0] to-[#12a7ff] text-white p-3 sm:p-4 md:p-5 lg:p-6 pb-2 sm:pb-3 md:pb-4 lg:pb-5 relative flex-shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0">
               <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
@@ -131,7 +131,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
               <span
                 key={idx}
                 className={`h-1.5 md:h-2 lg:h-2.5 rounded-full transition-all duration-300 ${
-                  idx === currentSlide ? "w-4 md:w-5 lg:w-6 bg-blue-600" : "w-1.5 md:w-2 lg:w-2.5 bg-slate-300"
+                  idx === currentSlide ? "w-4 md:w-5 lg:w-6 bg-[#2852b0]" : "w-1.5 md:w-2 lg:w-2.5 bg-slate-300"
                 }`}
               />
             ))}
@@ -154,7 +154,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 md:px-4 md:py-2.5 lg:px-5 lg:py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[10px] sm:text-xs md:text-sm lg:text-base rounded-lg sm:rounded-xl cursor-pointer transition-all flex items-center gap-1 md:gap-1.5 shadow-md border-none"
+                className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 md:px-4 md:py-2.5 lg:px-5 lg:py-3 bg-[#2852b0] hover:bg-[#1e4294] text-white font-extrabold text-[10px] sm:text-xs md:text-sm lg:text-base rounded-lg sm:rounded-xl cursor-pointer transition-all flex items-center gap-1 md:gap-1.5 shadow-md border-none"
               >
                 Lanjut
                 <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5" />
@@ -163,7 +163,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] sm:text-xs md:text-sm lg:text-base rounded-lg sm:rounded-xl cursor-pointer transition-all shadow-md active:scale-95 flex items-center gap-1 md:gap-1.5 border-none"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 bg-[#2852b0] hover:bg-[#1e4294] text-white font-black text-[10px] sm:text-xs md:text-sm lg:text-base rounded-lg sm:rounded-xl cursor-pointer transition-all shadow-md active:scale-95 flex items-center gap-1 md:gap-1.5 border-none"
               >
                 Selesai
                 <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5" />
