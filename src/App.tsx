@@ -81,7 +81,11 @@ export default function App() {
       <img
         src={`${import.meta.env.BASE_URL}img/logo-jenama.webp?v2`}
         alt="Logo Jenama"
-        className="fixed top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 h-8 sm:h-11 md:h-14 lg:h-16 xl:h-20 w-auto object-contain drop-shadow-[0_6px_12px_rgba(56,69,91,0.45)] z-50 pointer-events-none"
+        className={`fixed top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 ${
+          currentScreen === 'splash'
+            ? 'h-12 sm:h-16 md:h-20 lg:h-24 xl:h-28 2xl:h-32 drop-shadow-[0_8px_16px_rgba(56,69,91,0.55)]'
+            : 'h-10 sm:h-14 md:h-16 lg:h-20 xl:h-24 2xl:h-28 drop-shadow-[0_6px_12px_rgba(56,69,91,0.45)]'
+        } w-auto object-contain z-50 pointer-events-none transition-all duration-300`}
       />
 
       {/* Mandatory Landscape Overlay — shown on ALL devices in portrait */}
