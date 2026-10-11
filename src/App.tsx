@@ -77,11 +77,11 @@ export default function App() {
   return (
     <div className="h-screen max-h-screen overflow-hidden bg-slate-100 flex flex-col font-sans select-none antialiased text-slate-800">
 
-      {/* Pusbuk Jenama Logo — fixed top-left screen corner */}
+      {/* Pusbuk Jenama Logo — fixed top-left screen corner (matching detektif digital) */}
       <img
         src={`${import.meta.env.BASE_URL}img/logo-jenama.webp?v2`}
         alt="Logo Jenama"
-        className="fixed top-3 left-3 md:top-4 md:left-4 h-12 w-auto md:h-16 lg:h-20 object-contain z-50 pointer-events-none"
+        className="fixed top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 h-8 sm:h-11 md:h-14 lg:h-16 xl:h-20 w-auto object-contain drop-shadow-[0_6px_12px_rgba(56,69,91,0.45)] z-50 pointer-events-none"
       />
 
       {/* Mandatory Landscape Overlay — shown on ALL devices in portrait */}
