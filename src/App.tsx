@@ -83,8 +83,8 @@ export default function App() {
         alt="Logo Jenama"
         className={`fixed top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 ${
           currentScreen === 'splash'
-            ? 'h-12 sm:h-16 md:h-20 lg:h-24 xl:h-28 2xl:h-32 drop-shadow-[0_8px_16px_rgba(56,69,91,0.55)]'
-            : 'h-10 sm:h-14 md:h-16 lg:h-20 xl:h-24 2xl:h-28 drop-shadow-[0_6px_12px_rgba(56,69,91,0.45)]'
+            ? 'h-7 sm:h-10 md:h-14 lg:h-16 2xl:h-28 drop-shadow-[0_8px_16px_rgba(56,69,91,0.55)]'
+            : 'h-6 sm:h-9 md:h-14 lg:h-18 2xl:h-28 drop-shadow-[0_6px_12px_rgba(56,69,91,0.45)]'
         } w-auto object-contain z-50 pointer-events-none transition-all duration-300`}
       />
 
