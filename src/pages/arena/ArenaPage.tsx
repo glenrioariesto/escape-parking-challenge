@@ -50,6 +50,7 @@ interface ArenaPageProps {
   onToggleDevMode: () => void;
   collisionInfo?: { stepIndex: number; vehicleName: string; reason: string } | null;
   onDismissCollision?: () => void;
+  onGoToDashboard?: () => void;
 }
 
 export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
@@ -130,6 +131,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
             onChangeWalls={props.onChangeWalls}
             isDevMode={props.isDevMode}
             onToggleDevMode={props.onToggleDevMode}
+            onGoToDashboard={props.onGoToDashboard}
           />
         </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vehicle } from "../../../types";
-import { HelpCircle } from "lucide-react";
+import { ArrowLeft, HelpCircle } from "lucide-react";
 import audio from "../../../lib/audio";
 import { MuteButton } from "../../../components/MuteButton";
 import { getVehicleImagePath, getVehicleDisplayNamesMap, getVehicleBaseName, getVehicleNumbersMap } from "../../../lib/vehicleHelpers";
@@ -194,6 +194,7 @@ interface ParkingGridProps {
   onChangeWalls?: (walls: { row: number; col: number }[]) => void;
   isDevMode?: boolean;
   onToggleDevMode?: () => void;
+  onGoToDashboard?: () => void;
 }
 
 export const ParkingGrid: React.FC<ParkingGridProps> = ({
@@ -211,6 +212,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
   onChangeWalls,
   isDevMode = false,
   onToggleDevMode,
+  onGoToDashboard,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -735,8 +737,8 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
       if (vehicleNum !== undefined) {
         ctx.save();
-        // Shift downwards so the badge is not dead-center
-        const yShift = v.direction === "vertical" ? cellSize * 0.24 : cellSize * 0.08;
+        // Shift downwards for vertical vehicles so the badge is not dead-center (horizontal vehicles remain centered)
+        const yShift = v.direction === "vertical" ? cellSize * 0.24 : 0;
         const cx = vx + vw / 2;
         const cy = vy + vh / 2 + yShift;
 
@@ -1180,8 +1182,22 @@ const canvas = canvasRef.current;
           </div>
         )}
 
-        {/* Top Right Floating Mute/Unmute Button on Parking Canvas (Matching Logo Size & Form) */}
-        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 z-40 select-none">
+        {/* Top Right Floating Controls: Back to Level Menu + Mute/Unmute Button */}
+        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 z-40 select-none flex items-center gap-2 sm:gap-3">
+          {onGoToDashboard && (
+            <button
+              type="button"
+              onClick={() => {
+                audio.playClick();
+                onGoToDashboard();
+              }}
+              className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-2xl md:rounded-3xl shadow-md bg-white/95 hover:bg-white text-slate-700 hover:text-blue-600 border border-slate-200 backdrop-blur-md hover:shadow-lg hover:border-slate-300 flex items-center justify-center cursor-pointer transition-all duration-200 select-none active:scale-95"
+              title="Kembali ke Menu Level"
+              aria-label="Kembali ke Menu Level"
+            >
+              <ArrowLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 stroke-[2.2]" />
+            </button>
+          )}
           <MuteButton variant="floating" size="logo" />
         </div>
 

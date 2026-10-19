@@ -245,6 +245,10 @@ export default function App() {
             onToggleDevMode={() => game.setIsDevMode(prev => !prev)}
             collisionInfo={game.collisionInfo}
             onDismissCollision={game.dismissCollision}
+            onGoToDashboard={() => {
+              audio.playClick();
+              setCurrentScreen("dashboard");
+            }}
           />
         )}
       </main>

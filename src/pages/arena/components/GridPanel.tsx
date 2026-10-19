@@ -25,6 +25,7 @@ interface GridPanelProps {
   onChangeWalls?: (walls: { row: number; col: number }[]) => void;
   isDevMode?: boolean;
   onToggleDevMode?: () => void;
+  onGoToDashboard?: () => void;
 }
 
 export const GridPanel: React.FC<GridPanelProps> = ({
@@ -48,6 +49,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
   onChangeWalls,
   isDevMode = false,
   onToggleDevMode,
+  onGoToDashboard,
 }) => {
   return (
     <div>
@@ -68,6 +70,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
           onChangeWalls={onChangeWalls}
           isDevMode={isDevMode}
           onToggleDevMode={onToggleDevMode}
+          onGoToDashboard={onGoToDashboard}
         />
       <div className="flex flex-col gap-2 p-1.5 bg-slate-100/90 backdrop-blur-md border border-slate-200 rounded-2xl shadow-xs w-fit flex-shrink-0">
         <button
