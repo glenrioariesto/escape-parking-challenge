@@ -41,12 +41,12 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
   const slides = [
     {
       title: "1. Tujuan Utama",
-      text: "Bantu Taxi Kuning keluar dari area parkir menuju pintu keluar yang ditandai dengan panah hijau di tepi jalan.",
+      text: "Bantu Taxi Kuning (Mobil nomor 1 atau 2 dengan kartu putih berbingkai hitam) keluar dari area parkir menuju pintu keluar yang ditandai dengan panah hijau di tepi jalan.",
       bgClass: "bg-amber-50/40 border-amber-100",
     },
     {
-      title: "2. Aturan Gerakan",
-      text: "Setiap mobil hanya bisa bergerak maju atau mundur sesuai orientasinya. Mobil Mendatar (Horizontal) hanya bisa digeser Kiri/Kanan, sedangkan mobil Tegak (Vertikal) hanya bisa digeser Atas/Bawah.",
+      title: "2. Aturan Gerakan & Identifikasi Mobil",
+      text: "Setiap mobil memiliki kartu angka di atas atapnya agar mudah dikenali (ramah buta warna). Mobil Taxi Kuning ditandai dengan kartu putih nomor 1 atau 2. Setiap mobil hanya bisa bergerak maju atau mundur sesuai orientasinya: mobil Mendatar (Horizontal) hanya bisa digeser Kiri/Kanan, sedangkan mobil Tegak (Vertikal) hanya bisa digeser Atas/Bawah.",
       bgClass: "bg-blue-50/40 border-blue-100",
     },
     {

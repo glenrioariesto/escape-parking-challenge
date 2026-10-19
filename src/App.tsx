@@ -10,14 +10,18 @@ import { audio } from "@lib/audio";
 type Screen = "splash" | "dashboard" | "arena";
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>("splash");
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const initialScreen = (searchParams?.get("screen") as Screen) || "splash";
+  const initialLevel = parseInt(searchParams?.get("level") || "1", 10);
+
+  const [currentScreen, setCurrentScreen] = useState<Screen>(initialScreen);
   const [isPortrait, setIsPortrait] = useState(false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [activeTooltipLevelId, setActiveTooltipLevelId] = useState<number | null>(null);
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false);
   const [showObjectivesModal, setShowObjectivesModal] = useState(false);
 
-  const game = useGameState();
+  const game = useGameState(initialLevel);
 
   // 1. Try to lock orientation to landscape via Screen Orientation API
   useEffect(() => {
@@ -55,9 +59,18 @@ export default function App() {
     audio.startBgm();
   }, []);
 
-  // 4. Auto-show the fullscreen prompt every time the page opens or refreshes
+  // 4. Auto-show the fullscreen prompt on normal flow
   useEffect(() => {
-    setShowFullscreenPrompt(true);
+    if (!searchParams?.has("screen")) {
+      setShowFullscreenPrompt(true);
+    }
+  }, []);
+
+  // 5. Direct level load when navigated via URL
+  useEffect(() => {
+    if (initialLevel > 1 && searchParams?.get("screen") === "arena") {
+      game.handleLoadLevel(initialLevel);
+    }
   }, []);
 
   const handleLoadLevel = (levelId: number) => {

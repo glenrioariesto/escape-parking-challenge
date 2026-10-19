@@ -160,10 +160,47 @@ export function getVehicleBaseName(v: Vehicle, allVehicles?: Vehicle[]): string 
   return `${type} ${color}`;
 }
 
+// Assigns a unique, deterministic display number (1, 2, 3...) to every vehicle in a level.
+// Taxis (player vehicles) always get numbers 1 and 2 (or 1..N for N taxis).
+// Other obstacle vehicles get subsequent numbers (N+1, N+2, ...).
+export function getVehicleNumbersMap(vehicles: Vehicle[]): { [id: string]: number } {
+  const map: { [id: string]: number } = {};
+
+  // Separate player taxis and obstacle vehicles
+  const playerTaxis = vehicles
+    .filter((v) => v.isPlayer || v.id === "R" || v.id === "T" || v.id === "S" || v.id === "U" || v.id === "V" || (v.label && v.label.toLowerCase().includes("taxi")))
+    .sort((a, b) => {
+      // Sort taxis from top to bottom, then left to right
+      if (a.row !== b.row) return a.row - b.row;
+      return a.col - b.col;
+    });
+
+  // Taxis get numbers 1, 2, ...
+  playerTaxis.forEach((v, index) => {
+    map[v.id] = index + 1;
+  });
+
+  // Obstacle vehicles get subsequent numbers (ordered by row then col for intuitive layout)
+  let nextNum = playerTaxis.length + 1;
+  const obstacleCars = vehicles
+    .filter((v) => !playerTaxis.some((pt) => pt.id === v.id))
+    .sort((a, b) => {
+      if (a.row !== b.row) return a.row - b.row;
+      return a.col - b.col;
+    });
+
+  obstacleCars.forEach((v) => {
+    map[v.id] = nextNum++;
+  });
+
+  return map;
+}
+
 // Build a mapping from vehicle ID to display name for this level
 export function getVehicleDisplayNamesMap(vehicles: Vehicle[]): { [id: string]: string } {
   const vehicleDisplayNames: { [id: string]: string } = {};
   const baseNameCounts: { [base: string]: number } = {};
+  const numbersMap = getVehicleNumbersMap(vehicles);
   
   // First pass: count duplicates
   vehicles.forEach((v) => {
@@ -179,12 +216,13 @@ export function getVehicleDisplayNamesMap(vehicles: Vehicle[]): { [id: string]: 
   
   sortedVehicles.forEach((v) => {
     const base = getVehicleBaseName(v, vehicles);
+    let name = base;
     if (baseNameCounts[base] > 1) {
       baseNameIndices[base] = (baseNameIndices[base] || 0) + 1;
-      vehicleDisplayNames[v.id] = `${base} ${baseNameIndices[base]}`;
-    } else {
-      vehicleDisplayNames[v.id] = base;
+      name = `${base} ${baseNameIndices[base]}`;
     }
+    const num = numbersMap[v.id];
+    vehicleDisplayNames[v.id] = num !== undefined ? `[${num}] ${name}` : name;
   });
 
   return vehicleDisplayNames;

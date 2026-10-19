@@ -54,7 +54,8 @@ interface ArenaPageProps {
 
 export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
   const activeLevel = LEVELS.find((l) => l.id === props.activeLevelId);
-  const [isDecompositionModalOpen, setIsDecompositionModalOpen] = useState(true);
+  const isDirectUrl = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("screen");
+  const [isDecompositionModalOpen, setIsDecompositionModalOpen] = useState(!isDirectUrl);
 
   // Adjust state inline during render when activeLevelId, ctStage or isSandboxMode changes, using Refs to avoid unnecessary re-renders
   const prevLevelIdRef = useRef(props.activeLevelId);
@@ -70,7 +71,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
     prevLevelIdRef.current = props.activeLevelId;
     prevCtStageRef.current = props.ctStage;
     prevIsSandboxModeRef.current = props.isSandboxMode;
-    if (isNewLevel && !props.isSandboxMode && props.ctStage === "algorithm") {
+    if (isNewLevel && !props.isSandboxMode && props.ctStage === "algorithm" && !isDirectUrl) {
       setIsDecompositionModalOpen(true);
     } else if (props.isSandboxMode) {
       setIsDecompositionModalOpen(false);

@@ -7,23 +7,23 @@ function cloneVehicles(vehicles: Vehicle[]): Vehicle[] {
   return JSON.parse(JSON.stringify(vehicles));
 }
 
-export function useLevelManager() {
-  const [activeLevelId, setActiveLevelId] = useState<number>(1);
+export function useLevelManager(initialLevelId: number = 1) {
+  const [activeLevelId, setActiveLevelId] = useState<number>(initialLevelId);
   const [activeVehicles, setActiveVehicles] = useState<Vehicle[]>(() => {
-    const lvl1 = LEVELS.find((l) => l.id === 1);
-    return lvl1 ? cloneVehicles(lvl1.vehicles) : [];
+    const lvl = LEVELS.find((l) => l.id === initialLevelId) || LEVELS[0];
+    return lvl ? cloneVehicles(lvl.vehicles) : [];
   });
   const [originalVehicles, setOriginalVehicles] = useState<Vehicle[]>(() => {
-    const lvl1 = LEVELS.find((l) => l.id === 1);
-    return lvl1 ? cloneVehicles(lvl1.vehicles) : [];
+    const lvl = LEVELS.find((l) => l.id === initialLevelId) || LEVELS[0];
+    return lvl ? cloneVehicles(lvl.vehicles) : [];
   });
   const [activeWalls, setActiveWalls] = useState<{ row: number; col: number }[]>(() => {
-    const lvl1 = LEVELS.find((l) => l.id === 1);
-    return lvl1?.walls ? JSON.parse(JSON.stringify(lvl1.walls)) : [];
+    const lvl = LEVELS.find((l) => l.id === initialLevelId) || LEVELS[0];
+    return lvl?.walls ? JSON.parse(JSON.stringify(lvl.walls)) : [];
   });
   const [originalWalls, setOriginalWalls] = useState<{ row: number; col: number }[]>(() => {
-    const lvl1 = LEVELS.find((l) => l.id === 1);
-    return lvl1?.walls ? JSON.parse(JSON.stringify(lvl1.walls)) : [];
+    const lvl = LEVELS.find((l) => l.id === initialLevelId) || LEVELS[0];
+    return lvl?.walls ? JSON.parse(JSON.stringify(lvl.walls)) : [];
   });
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   const [ctStage, setCtStage] = useState<CTStage>("algorithm");

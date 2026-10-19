@@ -3,7 +3,7 @@ import { Vehicle } from "../../../types";
 import { HelpCircle } from "lucide-react";
 import audio from "../../../lib/audio";
 import { MuteButton } from "../../../components/MuteButton";
-import { getVehicleImagePath, getVehicleDisplayNamesMap, getVehicleBaseName } from "../../../lib/vehicleHelpers";
+import { getVehicleImagePath, getVehicleDisplayNamesMap, getVehicleBaseName, getVehicleNumbersMap } from "../../../lib/vehicleHelpers";
 
 // Computes which cells are occupied around the board
 export function getOccupiedCells(
@@ -621,7 +621,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       ctx.restore();
     });
 
-    // 4. Draw Vehicles
+    // 4. Draw Vehicles (Pass 1: Vehicle bodies & selection outlines)
     vehiclesRef.current.forEach((v) => {
       const isSelected = selectedVehicleIdRef.current === v.id;
 
@@ -710,8 +710,86 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.stroke();
       }
 
+      ctx.restore();
+    });
+
+    // 5. Draw Colorblind-Friendly Vehicle Number Card Badges (Pass 2: drawn strictly on top of all vehicles)
+    const numbersMap = getVehicleNumbersMap(vehiclesRef.current);
+    vehiclesRef.current.forEach((v) => {
+      const isThisVehicleDragged = dragInfoRef.current?.vehicleId === v.id;
+      const visualPos = visualPositionsRef.current[v.id] || { col: v.col, row: v.row };
+      const drawCol = (isThisVehicleDragged && dragInfoRef.current?.direction === "horizontal")
+        ? dragInfoRef.current.visualPos
+        : visualPos.col;
+      const drawRow = (isThisVehicleDragged && dragInfoRef.current?.direction === "vertical")
+        ? dragInfoRef.current.visualPos
+        : visualPos.row;
+
+      const vx = drawCol * cellSize;
+      const vy = drawRow * cellSize;
+      const vw = (v.direction === "horizontal" ? v.length : 1) * cellSize;
+      const vh = (v.direction === "vertical" ? v.length : 1) * cellSize;
+
+      const isTaxi = v.isPlayer || v.id === "R" || v.id === "T" || v.id === "S" || v.id === "U" || v.id === "V" || (v.label && v.label.toLowerCase().includes("taxi"));
+      const vehicleNum = numbersMap[v.id];
+
+      if (vehicleNum !== undefined) {
+        ctx.save();
+        // Shift downwards so the badge is not dead-center
+        const yShift = v.direction === "vertical" ? cellSize * 0.24 : cellSize * 0.08;
+        const cx = vx + vw / 2;
+        const cy = vy + vh / 2 + yShift;
+
+        // Card dimensions (responsive to grid cell size)
+        const numStr = String(vehicleNum);
+        const isDoubleDigit = numStr.length > 1;
+        const baseH = Math.max(16, Math.min(22, cellSize * 0.44));
+        const cardH = baseH;
+        const cardW = isDoubleDigit ? baseH * 1.35 : baseH * 1.05;
+        const cardR = Math.max(3, Math.round(cardH * 0.22));
+
+        const cardX = cx - cardW / 2;
+        const cardY = cy - cardH / 2;
+
+        // Elevated drop shadow for clear separation from vehicle roof texture
+        ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 1.5;
+
+        // Card background: small white card
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath();
+        drawRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+        ctx.fill();
+
+        // Reset shadow for crisp border and text rendering
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+
+        // Card border: black border (bolder 2.2px for Taxi, 1.5px for other cars)
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = isTaxi ? Math.max(2, Math.min(2.8, cellSize * 0.055)) : Math.max(1.4, Math.min(2, cellSize * 0.04));
+        ctx.beginPath();
+        drawRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+        ctx.stroke();
+
+        // Text: black bold number
+        ctx.fillStyle = "#000000";
+        const fontSize = Math.round(cardH * 0.72);
+        ctx.font = `900 ${fontSize}px 'NotoSans', -apple-system, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        // Optical vertical center adjustment (+0.5px)
+        ctx.fillText(numStr, cx, cy + 0.5);
+
+        ctx.restore();
+      }
+
       // Label text with shadow (vehicle labels are only shown in Dev Mode)
       if (isDevModeRef.current) {
+        ctx.save();
         ctx.fillStyle = "#FFFFFF";
         ctx.font = "bold 9px 'NotoSans', sans-serif";
         ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
@@ -721,11 +799,10 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.fillText(
           v.id === "R" ? "TAXI" : getVehicleBaseName(v, vehiclesRef.current).toUpperCase(),
           vx + vw / 2,
-          vy + vh / 2
+          vy + vh / 2 + 14
         );
+        ctx.restore();
       }
-
-      ctx.restore();
     });
 
     ctx.restore();

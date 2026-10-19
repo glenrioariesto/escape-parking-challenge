@@ -12,9 +12,9 @@ export interface SimResult {
   scoreStars: number;
 }
 
-export function useGameState() {
+export function useGameState(initialLevelId: number = 1) {
   const { progress, saveProgress, computeLevelComplete } = useProgress();
-  const level = useLevelManager();
+  const level = useLevelManager(initialLevelId);
   const [simResult, setSimResult] = useState<SimResult | null>(null);
 
   const activeLevel = LEVELS.find((l) => l.id === level.activeLevelId);
@@ -52,8 +52,13 @@ export function useGameState() {
 
   const handleLoadLevel = (levelId: number) => {
     audio.playClick();
+    const l = LEVELS.find((lv) => lv.id === levelId);
     level.loadLevel(levelId);
-    sim.reset(level.originalVehicles);
+    if (l) {
+      sim.reset(JSON.parse(JSON.stringify(l.vehicles)));
+    } else {
+      sim.reset(level.originalVehicles);
+    }
     setSimResult(null);
   };
 
