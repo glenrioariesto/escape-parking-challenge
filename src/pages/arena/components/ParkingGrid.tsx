@@ -743,22 +743,25 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         const cx = vx + vw / 2 + xShift;
         const cy = vy + vh / 2 + yShift;
 
-        // Card dimensions (responsive to grid cell size)
+        // Card dimensions (responsive to grid cell size and mobile viewports)
         const numStr = String(vehicleNum);
         const isDoubleDigit = numStr.length > 1;
-        const baseH = Math.max(16, Math.min(22, cellSize * 0.44));
+        const isMobileGrid = cellSize < 42;
+        const baseH = isMobileGrid
+          ? Math.max(11, Math.min(15, Math.round(cellSize * 0.34)))
+          : Math.max(14, Math.min(20, Math.round(cellSize * 0.32)));
         const cardH = baseH;
-        const cardW = isDoubleDigit ? baseH * 1.35 : baseH * 1.05;
-        const cardR = Math.max(3, Math.round(cardH * 0.22));
+        const cardW = isDoubleDigit ? Math.round(baseH * 1.35) : Math.round(baseH * 1.05);
+        const cardR = Math.max(2, Math.round(cardH * 0.2));
 
         const cardX = cx - cardW / 2;
         const cardY = cy - cardH / 2;
 
-        // Elevated drop shadow for clear separation from vehicle roof texture
-        ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
-        ctx.shadowBlur = 4;
+        // Subtle drop shadow scaled to card size
+        ctx.shadowColor = "rgba(0, 0, 0, 0.32)";
+        ctx.shadowBlur = isMobileGrid ? 2 : 3;
         ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 1.5;
+        ctx.shadowOffsetY = isMobileGrid ? 0.8 : 1.2;
 
         // Card background: small white card
         ctx.fillStyle = "#FFFFFF";
@@ -771,21 +774,23 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.shadowBlur = 0;
         ctx.shadowOffsetY = 0;
 
-        // Card border: black border (bolder 2.2px for Taxi, 1.5px for other cars)
+        // Card border: crisp black outline, scaled down for mobile responsiveness
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = isTaxi ? Math.max(2, Math.min(2.8, cellSize * 0.055)) : Math.max(1.4, Math.min(2, cellSize * 0.04));
+        ctx.lineWidth = isTaxi
+          ? (isMobileGrid ? 1.2 : Math.max(1.4, Math.min(2.0, cellSize * 0.035)))
+          : (isMobileGrid ? 0.85 : Math.max(1.0, Math.min(1.4, cellSize * 0.025)));
         ctx.beginPath();
         drawRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
         ctx.stroke();
 
         // Text: black bold number
         ctx.fillStyle = "#000000";
-        const fontSize = Math.round(cardH * 0.72);
+        const fontSize = Math.max(8, Math.round(cardH * 0.72));
         ctx.font = `900 ${fontSize}px 'NotoSans', -apple-system, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        // Optical vertical center adjustment (+0.5px)
-        ctx.fillText(numStr, cx, cy + 0.5);
+        // Optical vertical center adjustment
+        ctx.fillText(numStr, cx, cy + (fontSize >= 11 ? 0.5 : 0.3));
 
         ctx.restore();
       }
