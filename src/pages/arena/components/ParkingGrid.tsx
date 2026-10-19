@@ -737,9 +737,10 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
       if (vehicleNum !== undefined) {
         ctx.save();
-        // Shift downwards for vertical vehicles so the badge is not dead-center (horizontal vehicles remain centered)
+        // Shift downwards for vertical vehicles, shift to the left for horizontal vehicles
+        const xShift = v.direction === "horizontal" ? -cellSize * 0.24 : 0;
         const yShift = v.direction === "vertical" ? cellSize * 0.24 : 0;
-        const cx = vx + vw / 2;
+        const cx = vx + vw / 2 + xShift;
         const cy = vy + vh / 2 + yShift;
 
         // Card dimensions (responsive to grid cell size)
