@@ -16,12 +16,13 @@ export default function App() {
 
   const [currentScreen, setCurrentScreen] = useState<Screen>(initialScreen);
   const [isPortrait, setIsPortrait] = useState(false);
-  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
+  const isDirectQuiz = searchParams?.get("quiz") === "1";
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState(isDirectQuiz);
   const [activeTooltipLevelId, setActiveTooltipLevelId] = useState<number | null>(null);
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false);
   const [showObjectivesModal, setShowObjectivesModal] = useState(false);
 
-  const game = useGameState(initialLevel);
+  const game = useGameState(initialLevel, isDirectQuiz ? "analysis" : "algorithm");
 
   // 1. Try to lock orientation to landscape via Screen Orientation API
   useEffect(() => {

@@ -7,7 +7,7 @@ function cloneVehicles(vehicles: Vehicle[]): Vehicle[] {
   return JSON.parse(JSON.stringify(vehicles));
 }
 
-export function useLevelManager(initialLevelId: number = 1) {
+export function useLevelManager(initialLevelId: number = 1, initialStage: CTStage = "algorithm") {
   const [activeLevelId, setActiveLevelId] = useState<number>(initialLevelId);
   const [activeVehicles, setActiveVehicles] = useState<Vehicle[]>(() => {
     const lvl = LEVELS.find((l) => l.id === initialLevelId) || LEVELS[0];
@@ -26,7 +26,7 @@ export function useLevelManager(initialLevelId: number = 1) {
     return lvl?.walls ? JSON.parse(JSON.stringify(lvl.walls)) : [];
   });
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
-  const [ctStage, setCtStage] = useState<CTStage>("algorithm");
+  const [ctStage, setCtStage] = useState<CTStage>(initialStage);
   const [isSandboxMode, setIsSandboxMode] = useState(false);
   const [algorithmSteps, setAlgorithmSteps] = useState<MoveAction[]>([]);
   const [sandboxMoveCount, setSandboxMoveCount] = useState(0);

@@ -79,9 +79,12 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
     }
   }
 
-  // Open quiz automatically when stage transitions to 'analysis'
+  // Open quiz automatically when stage transitions to 'analysis' or direct URL param
   useEffect(() => {
-    if (props.ctStage === "analysis") {
+    if (new URLSearchParams(window.location.search).get("quiz") === "1") {
+      props.onSetCtStage("analysis");
+      props.onOpenQuiz();
+    } else if (props.ctStage === "analysis") {
       props.onOpenQuiz();
     }
   }, [props.ctStage]);

@@ -12,9 +12,9 @@ export interface SimResult {
   scoreStars: number;
 }
 
-export function useGameState(initialLevelId: number = 1) {
+export function useGameState(initialLevelId: number = 1, initialStage: CTStage = "algorithm") {
   const { progress, saveProgress, computeLevelComplete } = useProgress();
-  const level = useLevelManager(initialLevelId);
+  const level = useLevelManager(initialLevelId, initialStage);
   const [simResult, setSimResult] = useState<SimResult | null>(null);
 
   const activeLevel = LEVELS.find((l) => l.id === level.activeLevelId);

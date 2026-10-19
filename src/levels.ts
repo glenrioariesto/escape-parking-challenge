@@ -70,17 +70,17 @@ export const LEVELS: LevelDefinition[] = [
     quizQuestions: [
       {
         id: "q1_1",
-        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning secara langsung?",
-        options: ["Bak Biru", "Tidak ada", "Bak Merah", "Semua mobil"],
+        question: "Kendaraan manakah yang menghalangi jalan keluar [1] Taxi Kuning secara langsung?",
+        options: ["[6] Bak Biru", "Tidak ada", "[2] Bak Merah", "Semua mobil"],
         correctAnswerIndex: 0,
-        explanation: "Bak Biru berada di baris 7 kolom 6-7, tepat di lintasan vertikal Taxi Kuning menuju gerbang keluar."
+        explanation: "[6] Bak Biru berada di baris 7 kolom 6-7, tepat di lintasan vertikal [1] Taxi Kuning menuju gerbang keluar."
       },
       {
         id: "q1_2",
-        question: "Ke arah manakah Bak Biru harus digeser agar lintasan Taxi Kuning terbuka?",
+        question: "Ke arah manakah [6] Bak Biru harus digeser agar lintasan [1] Taxi Kuning terbuka?",
         options: ["Hanya bisa digeser ke kanan", "Ke atas atau ke bawah secara vertikal", "Tidak bisa digeser sama sekali", "Mendatar ke kiri atau ke kanan untuk mengosongkan kolom 6"],
         correctAnswerIndex: 3,
-        explanation: "Karena Bak Biru berorientasi horizontal (mendatar), ia cukup digeser 1 petak ke kanan (atau ke kiri) agar kolom 6 menjadi kosong, sehingga Taxi Kuning bisa melaju ke bawah."
+        explanation: "Karena [6] Bak Biru berorientasi horizontal (mendatar), ia cukup digeser 1 petak ke kanan (atau ke kiri) agar kolom 6 menjadi kosong, sehingga [1] Taxi Kuning bisa melaju ke bawah."
       }
     ],
     walls: [{"row":4,"col":1},{"row":4,"col":2},{"row":4,"col":3},{"row":4,"col":4},{"row":4,"col":5},{"row":4,"col":6},{"row":4,"col":7},{"row":4,"col":8},{"row":4,"col":9},{"row":4,"col":10}],
@@ -178,22 +178,22 @@ export const LEVELS: LevelDefinition[] = [
     quizQuestions: [
       {
         id: "q2_1",
-        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning secara langsung?",
-        options: ["Tidak ada", "Bak Putih", "Bak Biru dan Hatchback Abu-abu", "Semua mobil"],
+        question: "Kendaraan manakah yang menghalangi jalan keluar [1] Taxi Kuning secara langsung?",
+        options: ["Tidak ada", "[7] Bak Putih", "[8] Bak Biru dan [4] Hatchback Abu-abu", "Semua mobil"],
         correctAnswerIndex: 1,
-        explanation: "Bak Putih berada di baris 7 kolom 5-6, sehingga secara langsung menutup lintasan vertikal Taxi Kuning di kolom 6."
+        explanation: "[7] Bak Putih berada di baris 7 kolom 5-6, sehingga secara langsung menutup lintasan vertikal [1] Taxi Kuning di kolom 6."
       },
       {
         id: "q2_2",
         question: "Urutan strategi atau algoritma logis manakah yang tepat untuk menyelesaikan tingkat ini?",
         options: [
-          "Geser Taxi Kuning ke bawah langsung",
-          "Geser Bak Merah ke bawah → Geser Taxi Kuning ke bawah",
-          "Geser Hatchback Cyan ke kiri (atau Bak Biru ke kanan) → Geser Bak Putih ke samping → Geser Taxi Kuning ke bawah",
-          "Geser Taxi Kuning ke atas"
+          "Geser [1] Taxi Kuning ke bawah langsung",
+          "Geser [3] Bak Merah ke bawah → Geser [1] Taxi Kuning ke bawah",
+          "Geser [6] Hatchback Cyan ke kiri (atau [8] Bak Biru ke kanan) → Geser [7] Bak Putih ke samping → Geser [1] Taxi Kuning ke bawah",
+          "Geser [1] Taxi Kuning ke atas"
         ],
         correctAnswerIndex: 2,
-        explanation: "Kita perlu membuka ruang gerak untuk Bak Putih dengan menggeser Hatchback Cyan ke kiri 1 petak terlebih dahulu, baru kemudian menggeser Bak Putih ke kiri 1 petak agar kolom 6 bersih, lalu menjalankan Taxi Kuning ke bawah."
+        explanation: "Kita perlu membuka ruang gerak untuk [7] Bak Putih dengan menggeser [6] Hatchback Cyan ke kiri 1 petak terlebih dahulu, baru kemudian menggeser [7] Bak Putih ke kiri 1 petak agar kolom 6 bersih, lalu menjalankan [1] Taxi Kuning ke bawah."
       }
     ],
     focus: "Berpikir Komputasional - Dekomposisi: Menguraikan masalah kemacetan yang berantai menjadi langkah-langkah kecil yang saling bergantung.",
@@ -301,22 +301,22 @@ export const LEVELS: LevelDefinition[] = [
     quizQuestions: [
       {
         id: "q3_1",
-        question: "Kendaraan manakah yang menghalangi jalan keluar Taxi Kuning 2 secara langsung di kolom 3?",
-        options: ["Truk Abu-abu", "Hatchback Abu-abu", "Hatchback Biru", "Truk Biru"],
+        question: "Kendaraan manakah yang menghalangi jalan keluar [1] Taxi Kuning secara langsung di kolom 3?",
+        options: ["[9] Truk Abu-abu", "[3] Hatchback Abu-abu", "[5] Hatchback Biru", "[7] Truk Biru"],
         correctAnswerIndex: 3,
-        explanation: "Truk Biru melintang di baris 7 kolom 1-3, sehingga secara langsung menutup lintasan vertikal Taxi Kuning 2 di kolom 3."
+        explanation: "[7] Truk Biru melintang di baris 7 kolom 1-3, sehingga secara langsung menutup lintasan vertikal [1] Taxi Kuning di kolom 3."
       },
       {
         id: "q3_2",
-        question: "Bagaimana cara yang logis untuk memindahkan Truk Abu-abu agar tidak menghalangi jalan keluar Taxi Kuning 1 (kolom 7)?",
+        question: "Bagaimana cara yang logis untuk memindahkan [9] Truk Abu-abu agar tidak menghalangi jalan keluar [2] Taxi Kuning (kolom 7)?",
         options: [
-          "Geser Truk Cyan ke bawah terlebih dahulu, lalu geser Truk Abu-abu ke kanan",
-          "Langsung geser Truk Abu-abu ke atas",
-          "Truk Abu-abu tidak perlu dipindahkan",
-          "Geser Hatchback Biru ke kanan, lalu geser Truk Abu-abu ke kiri"
+          "Geser [6] Truk Cyan ke bawah terlebih dahulu, lalu geser [9] Truk Abu-abu ke kanan",
+          "Langsung geser [9] Truk Abu-abu ke atas",
+          "[9] Truk Abu-abu tidak perlu dipindahkan",
+          "Geser [5] Hatchback Biru ke kanan, lalu geser [9] Truk Abu-abu ke kiri"
         ],
         correctAnswerIndex: 0,
-        explanation: "Truk Cyan di kolom 9 menghalangi Truk Abu-abu untuk bergeser ke kanan. Dengan menurunkan Truk Cyan ke bawah 3 petak, Truk Abu-abu memiliki ruang untuk bergeser 2 petak ke kanan sehingga kolom 7 menjadi bersih untuk Taxi Kuning 1."
+        explanation: "[6] Truk Cyan di kolom 9 menghalangi [9] Truk Abu-abu untuk bergeser ke kanan. Dengan menurunkan [6] Truk Cyan ke bawah 3 petak, [9] Truk Abu-abu memiliki ruang untuk bergeser 2 petak ke kanan sehingga kolom 7 menjadi bersih untuk [2] Taxi Kuning."
       }
     ],
     focus: "Berpikir Komputasional - Abstraksi: Memilah informasi penting (kendaraan penghambat) dari detail yang tidak relevan untuk merancang strategi labirin parkir padat.",
@@ -471,22 +471,22 @@ export const LEVELS: LevelDefinition[] = [
     quizQuestions: [
       {
         id: "q4_1",
-        question: "Kendaraan manakah yang secara langsung menghalangi jalan keluar Taxi Kuning 1 ke atas di kolom 7?",
-        options: ["Hatchback Biru", "Truk Biru", "Truk Abu-abu", "Bak Biru"],
+        question: "Kendaraan manakah yang secara langsung menghalangi jalan keluar [2] Taxi Kuning ke atas di kolom 7?",
+        options: ["[9] Mobil Biru", "[4] Truk Biru", "[6] Truk Abu-abu", "[11] Sedan Hijau"],
         correctAnswerIndex: 2,
-        explanation: "Truk Abu-abu melintang di baris 2 kolom 6-8, tepat menutup lintasan vertikal Taxi Kuning 1 di kolom 7 menuju gerbang EXIT atas."
+        explanation: "[6] Truk Abu-abu melintang di baris 2 kolom 6-8, tepat menutup lintasan vertikal [2] Taxi Kuning di kolom 7 menuju gerbang EXIT atas."
       },
       {
         id: "q4_2",
-        question: "Bagaimana cara yang logis untuk membebaskan Taxi Kuning 2 agar bisa keluar ke bawah melalui kolom 5?",
+        question: "Bagaimana cara yang logis untuk membebaskan [3] Taxi Kuning agar bisa keluar ke bawah melalui kolom 5?",
         options: [
-          "Langsung geser Taxi Kuning 2 ke bawah tanpa memindahkan kendaraan lain",
-          "Geser Jeep Hijau ke kiri (atau Sedan Merah ke kanan) → Geser Truk Kuning ke samping → Geser Taxi Kuning 2 ke bawah",
-          "Geser Truk Kuning ke atas agar tidak menghalangi",
-          "Geser Jeep Putih ke atas melewati dinding pembatas"
+          "Langsung geser [3] Taxi Kuning ke bawah tanpa memindahkan kendaraan lain",
+          "Geser [12] Jeep Hijau ke kiri (atau [14] Sedan Merah ke kanan) → Geser [13] Truk Kuning ke samping → Geser [3] Taxi Kuning ke bawah",
+          "Geser [13] Truk Kuning ke atas agar tidak menghalangi",
+          "Geser [10] Jeep Putih ke atas melewati dinding pembatas"
         ],
         correctAnswerIndex: 1,
-        explanation: "Truk Kuning di baris 8 kolom 4-6 menghalangi Taxi Kuning 2. Namun Truk Kuning terkunci oleh Jeep Hijau di kiri dan Sedan Merah di kanan. Kita perlu menggeser Jeep Hijau ke kiri atau Sedan Merah ke kanan terlebih dahulu agar Truk Kuning memiliki ruang untuk bergeser ke samping, baru Taxi Kuning 2 bisa meluncur ke bawah."
+        explanation: "[13] Truk Kuning di baris 8 kolom 4-6 menghalangi [3] Taxi Kuning. Namun [13] Truk Kuning terkunci oleh [12] Jeep Hijau di kiri dan [14] Sedan Merah di kanan. Kita perlu menggeser [12] Jeep Hijau ke kiri atau [14] Sedan Merah ke kanan terlebih dahulu agar [13] Truk Kuning memiliki ruang untuk bergeser ke samping, baru [3] Taxi Kuning bisa meluncur ke bawah."
       }
     ],
     walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],
@@ -665,27 +665,27 @@ export const LEVELS: LevelDefinition[] = [
     quizQuestions: [
       {
         id: "q5_1",
-        question: "Kendaraan manakah yang secara langsung menghalangi jalan keluar Taxi Kuning 1 (kolom 3) dan Taxi Kuning 3 (kolom 7) ke atas di area atas?",
+        question: "Kendaraan manakah yang secara langsung menghalangi jalan keluar [1] Taxi Kuning (kolom 3) dan [2] Taxi Kuning (kolom 7) ke atas di area atas?",
         options: [
-          "Truk Abu-abu dan Truk Biru",
-          "Bak Merah dan Bak Biru",
-          "Hatchback Abu-abu dan Bak Putih",
+          "[6] Truk Abu-abu dan [8] Truk Biru",
+          "[10] Mobil Merah dan [11] Mobil Biru",
+          "[9] Mobil Cokelat dan [7] Mobil Cyan",
           "Tidak ada kendaraan yang menghalangi"
         ],
         correctAnswerIndex: 0,
-        explanation: "Truk Abu-abu (kolom 2-4) dan Truk Biru (kolom 7-9) melintang di baris 2, secara langsung menutup lintasan vertikal Taxi Kuning 1 (kolom 3) dan Taxi Kuning 3 (kolom 7) menuju gerbang EXIT atas."
+        explanation: "[6] Truk Abu-abu (kolom 2-4) dan [8] Truk Biru (kolom 7-9) melintang di baris 2, secara langsung menutup lintasan vertikal [1] Taxi Kuning (kolom 3) dan [2] Taxi Kuning (kolom 7) menuju gerbang EXIT atas."
       },
       {
         id: "q5_2",
-        question: "Bagaimana urutan strategi yang tepat untuk membebaskan 3 Taxi di area bawah (Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5)?",
+        question: "Bagaimana urutan strategi yang tepat untuk membebaskan 3 Taxi di area bawah ([3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning)?",
         options: [
           "Langsung menjalankan ketiga Taxi ke bawah tanpa memindahkan kendaraan lain",
-          "Geser Jeep Putih ke kiri (atau Truk Merah ke kanan) → Geser Truk Kuning dan Truk Hijau ke samping → Bebaskan Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 ke bawah",
-          "Menggeser Taxi Kuning 1 dan Taxi Kuning 3 di area atas ke bawah untuk membantu",
-          "Menggeser Truk Hijau ke atas melewati dinding pembatas"
+          "Geser [12] Jeep Putih ke kiri (atau [16] Truk Merah ke kanan) → Geser [14] Truk Kuning dan [15] Truk Hijau ke samping → Bebaskan [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning ke bawah",
+          "Menggeser [1] Taxi Kuning dan [2] Taxi Kuning di area atas ke bawah untuk membantu",
+          "Menggeser [15] Truk Hijau ke atas melewati dinding pembatas"
         ],
         correctAnswerIndex: 1,
-        explanation: "Truk Kuning dan Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser Mobil Jeep Putih atau Truk Merah terlebih dahulu, ruang gerak horizontal Truk Kuning dan Truk Hijau terbuka sehingga jalur keluar Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 menjadi bersih."
+        explanation: "[14] Truk Kuning dan [15] Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser [12] Jeep Putih atau [16] Truk Merah terlebih dahulu, ruang gerak horizontal [14] Truk Kuning dan [15] Truk Hijau terbuka sehingga jalur keluar [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning menjadi bersih."
       }
     ],
     walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],
