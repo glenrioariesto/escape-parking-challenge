@@ -1252,8 +1252,8 @@ const canvas = canvasRef.current;
           <MuteButton variant="floating" size="logo" />
         </div>
 
-        {/* Floating Dev Mode Controls (Vertical) */}
-        {onToggleDevMode && (
+        {/* Floating Dev Mode Controls (Vertical) - Hidden */}
+        {/* {onToggleDevMode && (
           <div className="absolute top-16 right-2 sm:top-17 sm:right-3 md:top-22 md:right-4 lg:top-26 z-40 flex flex-col items-center gap-1.5 select-none">
             <button
               type="button"
@@ -1271,7 +1271,7 @@ const canvas = canvasRef.current;
               DEV
             </button>
           </div>
-        )}
+        )} */}
 
         {/* HTML EXIT Label removed: exit indicators are drawn dynamically on canvas */}
       </div>
