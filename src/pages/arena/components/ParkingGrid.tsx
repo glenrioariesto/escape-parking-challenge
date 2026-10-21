@@ -508,15 +508,83 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
           ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
         }
-
-        // Grid coordinates text (only in dev mode)
-        if (isDevModeRef.current) {
-          ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
-          ctx.font = "bold 8px 'JetBrains Mono', monospace";
-          ctx.fillText(`${r},${c}`, c * cellSize + 4, r * cellSize + 11);
-        }
       }
     }
+
+    // 2. Draw Exit Gate Indicator (Zebra Cross on exit grid cell + EXIT label)
+    const drawZebraCrossCell = (
+      cellX: number,
+      cellY: number,
+      size: number,
+      orientation: "vertical" | "horizontal"
+    ) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(cellX, cellY, size, size);
+      ctx.clip();
+
+      // Base dark asphalt color for zebra cross
+      ctx.fillStyle = "#1E293B";
+      ctx.fillRect(cellX, cellY, size, size);
+
+      // Alternating white stripes
+      const stripeCount = 8;
+      const stripeStep = size / stripeCount;
+      ctx.fillStyle = "#FFFFFF";
+      for (let i = 0; i < stripeCount; i += 2) {
+        if (orientation === "vertical") {
+          ctx.fillRect(cellX + 2, cellY + i * stripeStep, size - 4, stripeStep);
+        } else {
+          ctx.fillRect(cellX + i * stripeStep, cellY + 2, stripeStep, size - 4);
+        }
+      }
+
+      // Subtle border around the zebra cross cell
+      ctx.strokeStyle = "rgba(15, 23, 42, 0.35)";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(cellX + 0.75, cellY + 0.75, size - 1.5, size - 1.5);
+      ctx.restore();
+    };
+
+    const playerCars = vehiclesRef.current.filter((v) => v.isPlayer || v.id === "R");
+    playerCars.forEach((v) => {
+      ctx.save();
+      if (v.direction === "vertical") {
+        const col = v.exitCol !== undefined ? v.exitCol : v.col;
+        const isUpperArea = (levelId === 4 || levelId === 5) ? v.row < 5 : false;
+
+        if (isUpperArea) {
+          // Draw Top Exit Gate Zebra Cross (row 0, col)
+          drawZebraCrossCell(col * cellSize, 0, cellSize, "vertical");
+          ctx.fillStyle = "#10B981";
+          ctx.fillRect(col * cellSize, 0, cellSize, 5);
+          ctx.font = "bold 9px 'JetBrains Mono', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("EXIT ▲", col * cellSize + cellSize / 2, -2);
+        } else {
+          // Draw Bottom Exit Gate Zebra Cross (row gridRows - 1, col)
+          drawZebraCrossCell(col * cellSize, (gridRows - 1) * cellSize, cellSize, "vertical");
+          ctx.fillStyle = "#10B981";
+          ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
+          ctx.font = "bold 9px 'JetBrains Mono', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+        }
+      } else {
+        const row = v.exitRow !== undefined ? v.exitRow : exitRow;
+        const exitLeftOnGrid = gridCols * cellSize;
+        drawZebraCrossCell((gridCols - 1) * cellSize, row * cellSize, cellSize, "horizontal");
+        ctx.fillStyle = "#10B981";
+        ctx.fillRect(exitLeftOnGrid - 5, row * cellSize, 5, cellSize);
+        ctx.font = "bold 9px 'JetBrains Mono', monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText("EXIT ➔", exitLeftOnGrid + 4, row * cellSize + cellSize / 2);
+      }
+      ctx.restore();
+    });
 
     // Overlay thin grid outlines (always visible, only lines, no text)
     ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
@@ -534,45 +602,22 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       ctx.stroke();
     }
 
-    // 2. Draw Exit Gate Indicator
-    const playerCars = vehiclesRef.current.filter((v) => v.isPlayer || v.id === "R");
-    playerCars.forEach((v) => {
+    // Grid coordinates text (only in dev mode, drawn above grid & zebra cross)
+    if (isDevModeRef.current) {
       ctx.save();
-      ctx.fillStyle = "#10B981"; // Emerald 500
-      if (v.direction === "vertical") {
-        const col = v.exitCol !== undefined ? v.exitCol : exitCol;
-        const isUpperArea = v.row < 5;
-        
-        if (isUpperArea) {
-          // Draw Top Exit Gate (for upper area player cars)
-          ctx.fillStyle = "#10B981";
-          ctx.fillRect(col * cellSize, 0, cellSize, 5);
-          ctx.font = "bold 9px 'JetBrains Mono', monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "bottom";
-          ctx.fillText("EXIT ▲", col * cellSize + cellSize / 2, -2);
-        } else {
-          // Draw Bottom Exit Gate (for lower area player cars)
-          ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
-          ctx.fillStyle = "#10B981";
-          ctx.font = "bold 9px 'JetBrains Mono', monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "top";
-          ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+      ctx.font = "bold 8px 'JetBrains Mono', monospace";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.lineWidth = 2.5;
+      ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+      for (let r = 0; r < gridRows; r++) {
+        for (let c = 0; c < gridCols; c++) {
+          const coordText = `${r},${c}`;
+          ctx.strokeText(coordText, c * cellSize + 4, r * cellSize + 11);
+          ctx.fillText(coordText, c * cellSize + 4, r * cellSize + 11);
         }
-      } else {
-        const row = v.exitRow !== undefined ? v.exitRow : exitRow;
-        const exitLeftOnGrid = gridCols * cellSize;
-        ctx.fillRect(exitLeftOnGrid - 5, row * cellSize, 5, cellSize);
-
-        ctx.fillStyle = "#10B981";
-        ctx.font = "bold 9px 'JetBrains Mono', monospace";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        ctx.fillText("EXIT ➔", exitLeftOnGrid + 4, row * cellSize + cellSize / 2);
       }
       ctx.restore();
-    });
+    }
 
     // 3. Draw Walls
     activeWallsRef.current.forEach((w) => {
@@ -1209,17 +1254,17 @@ const canvas = canvasRef.current;
 
         {/* Floating Dev Mode Controls (Vertical) */}
         {onToggleDevMode && (
-          <div className="absolute top-12 right-2.5 sm:top-14 sm:right-3 z-40 hidden flex-col items-center gap-1.5 select-none">
+          <div className="absolute top-16 right-2 sm:top-17 sm:right-3 md:top-22 md:right-4 lg:top-26 z-40 flex flex-col items-center gap-1.5 select-none">
             <button
               type="button"
               onClick={() => {
                 audio.playClick();
                 onToggleDevMode();
               }}
-              className={`w-7.5 h-7.5 flex items-center justify-center text-[9px] font-black rounded-lg cursor-pointer border transition-all select-none ${
+              className={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-[10px] md:text-xs font-black rounded-xl cursor-pointer border transition-all select-none ${
                 isDevMode
                   ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-600 shadow-md scale-105"
-                  : "bg-slate-800 hover:bg-slate-900 text-slate-350 border-slate-700 shadow-sm"
+                  : "bg-slate-800 hover:bg-slate-900 text-white border-slate-700 shadow-sm"
               }`}
               title="Toggle Dev Mode (Click grid to place/remove walls)"
             >

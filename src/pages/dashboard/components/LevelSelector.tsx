@@ -8,11 +8,13 @@ interface LevelSelectorProps {
   onLoadLevel: (levelId: number) => void;
   activeTooltipLevelId: number | null;
   setActiveTooltipLevelId: (id: number | null) => void;
+  isDevMode?: boolean;
 }
 
 export const LevelSelector: React.FC<LevelSelectorProps> = ({
   progress,
-  onLoadLevel
+  onLoadLevel,
+  isDevMode = false,
 }) => {
   return (
     <div className="flex flex-col flex-1 min-h-0 justify-center items-center overflow-hidden px-4 py-2 gap-2">
@@ -37,7 +39,7 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
           <div className="w-2 flex-shrink-0 pointer-events-none" />
 
           {LEVELS.map((level) => {
-            const isUnlocked = level.id <= progress.unlockedLevel;
+            const isUnlocked = isDevMode || level.id <= progress.unlockedLevel;
             const levelImage = isUnlocked
               ? `${import.meta.env.BASE_URL}img/level-${level.id}.svg`
               : `${import.meta.env.BASE_URL}img/level-gembok.svg`;

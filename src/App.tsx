@@ -211,6 +211,8 @@ export default function App() {
             setActiveTooltipLevelId={setActiveTooltipLevelId}
             onGoToSplash={() => setCurrentScreen("splash")}
             onLoadLevel={handleLoadLevel}
+            isDevMode={game.isDevMode}
+            onToggleDevMode={() => game.setIsDevMode(prev => !prev)}
           />
         )}
 
