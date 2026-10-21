@@ -511,7 +511,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       }
     }
 
-    // 2. Draw Exit Gate Indicator (Taxi Yellow cell + "KELUAR" with black outline)
+    // 2. Draw Exit Gate Indicator (Zebra Cross + Taxi Yellow border bar + "KELUAR" with black outline)
     const drawExitGateCell = (
       cellX: number,
       cellY: number,
@@ -523,14 +523,37 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       ctx.rect(cellX, cellY, size, size);
       ctx.clip();
 
-      // Distinct Taxi Yellow background (replaces zebra cross)
-      ctx.fillStyle = "#FFCF01";
+      // Base dark asphalt color for zebra cross
+      ctx.fillStyle = "#1E293B";
       ctx.fillRect(cellX, cellY, size, size);
 
-      // Crisp border around the exit gate cell
-      ctx.strokeStyle = "#1E293B";
+      // Alternating white zebra cross stripes
+      const stripeCount = 8;
+      const stripeStep = size / stripeCount;
+      ctx.fillStyle = "#FFFFFF";
+      for (let i = 0; i < stripeCount; i += 2) {
+        if (position === "top" || position === "bottom") {
+          ctx.fillRect(cellX + 2, cellY + i * stripeStep, size - 4, stripeStep);
+        } else {
+          ctx.fillRect(cellX + i * stripeStep, cellY + 2, stripeStep, size - 4);
+        }
+      }
+
+      // Subtle border around the zebra cross cell
+      ctx.strokeStyle = "rgba(15, 23, 42, 0.35)";
       ctx.lineWidth = 1.5;
       ctx.strokeRect(cellX + 0.75, cellY + 0.75, size - 1.5, size - 1.5);
+
+      // Taxi Yellow border bar on the outer edge (top border for top exit, bottom border for bottom exit)
+      const borderThickness = 5;
+      ctx.fillStyle = "#FFCF01";
+      if (position === "top") {
+        ctx.fillRect(cellX, cellY, size, borderThickness);
+      } else if (position === "bottom") {
+        ctx.fillRect(cellX, cellY + size - borderThickness, size, borderThickness);
+      } else {
+        ctx.fillRect(cellX + size - borderThickness, cellY, borderThickness, size);
+      }
 
       // Draw "KELUAR" text centered inside the cell
       const centerX = cellX + size / 2;
@@ -553,11 +576,11 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
       // Black outline
       ctx.strokeStyle = "#000000";
-      ctx.lineWidth = Math.max(2.5, size * 0.07);
+      ctx.lineWidth = Math.max(3, size * 0.08);
       ctx.strokeText("KELUAR", 0, 0);
 
-      // White fill for crisp contrast against Taxi Yellow & black outline
-      ctx.fillStyle = "#FFFFFF";
+      // Taxi Yellow fill with black outline over the zebra cross
+      ctx.fillStyle = "#FFCF01";
       ctx.fillText("KELUAR", 0, 0);
 
       ctx.restore();
