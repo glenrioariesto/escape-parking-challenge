@@ -209,7 +209,7 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
     moveCount: 7,
     totalDistance: 16,
     liveUrl: 'https://glenrioariesto.github.io/escape-parking-challenge/',
-    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kanan 2 petak, Taxi Kuning 1 ke atas 3 petak; Truk Biru ke kiri 1 petak, Taxi Kuning 3 ke atas 3 petak. 2) Zona Bawah: Jeep Hijau ke kiri 2 petak, Truk Kuning ke kiri 2 petak, lalu Taxi Kuning 2 ke bawah 3 petak (optimalSteps = 2 + 3 + 1 + 3 + 2 + 2 + 3 = 16 petak, tepat sesuai target game).',
+    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kanan 2 petak, Taxi Kuning 1 ke atas 3 petak; Truk Biru ke kiri 1 petak, Taxi Kuning 3 ke atas 3 petak. 2) Zona Bawah: Jeep Hijau ke kiri 2 petak, Truk Oren ke kiri 2 petak, lalu Taxi Kuning 2 ke bawah 3 petak (optimalSteps = 2 + 3 + 1 + 3 + 2 + 2 + 3 = 16 petak, tepat sesuai target game).',
     algorithmSteps: [
       {
         vehicleId: 'D',
@@ -244,14 +244,14 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
         vehicleName: 'Jeep Hijau',
         direction: 'left',
         distance: 2,
-        description: 'Pilih Jeep Hijau, geser ke kiri 2 petak (ke kolom 0-1) membuka ruang minimal 2 petak bagi Truk Kuning.'
+        description: 'Pilih Jeep Hijau, geser ke kiri 2 petak (ke kolom 0-1) membuka ruang minimal 2 petak bagi Truk Oren.'
       },
       {
         vehicleId: 'P',
-        vehicleName: 'Truk Kuning',
+        vehicleName: 'Truk Oren',
         direction: 'left',
         distance: 2,
-        description: 'Pilih Truk Kuning, geser ke kiri 2 petak (ke kolom 2-4) untuk mengosongkan lintasan keluar Taxi Kuning 2 di kolom 5.'
+        description: 'Pilih Truk Oren, geser ke kiri 2 petak (ke kolom 2-4) untuk mengosongkan lintasan keluar Taxi Kuning 2 di kolom 5.'
       },
       {
         vehicleId: 'S',
@@ -273,8 +273,8 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
         questionId: 'q4_2',
         question: 'Bagaimana cara yang logis untuk membebaskan Taxi Kuning 2 agar bisa keluar ke bawah melalui kolom 5?',
         correctOptionIndex: 1,
-        correctAnswerText: 'Geser Jeep Hijau ke kiri (atau Sedan Merah ke kanan) → Geser Truk Kuning ke samping → Geser Taxi Kuning 2 ke bawah',
-        explanation: 'Truk Kuning di baris 8 kolom 4-6 menghalangi Taxi Kuning 2. Namun Truk Kuning terkunci oleh Jeep Hijau di kiri dan Sedan Merah di kanan. Kita perlu menggeser Jeep Hijau ke kiri atau Sedan Merah ke kanan terlebih dahulu agar Truk Kuning memiliki ruang untuk bergeser ke samping, baru Taxi Kuning 2 bisa meluncur ke bawah.'
+        correctAnswerText: 'Geser Jeep Hijau ke kiri (atau Sedan Merah ke kanan) → Geser Truk Oren ke samping → Geser Taxi Kuning 2 ke bawah',
+        explanation: 'Truk Oren di baris 8 kolom 4-6 menghalangi Taxi Kuning 2. Namun Truk Oren terkunci oleh Jeep Hijau di kiri dan Sedan Merah di kanan. Kita perlu menggeser Jeep Hijau ke kiri atau Sedan Merah ke kanan terlebih dahulu agar Truk Oren memiliki ruang untuk bergeser ke samping, baru Taxi Kuning 2 bisa meluncur ke bawah.'
       }
     ]
   },
@@ -289,7 +289,7 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
     moveCount: 11,
     totalDistance: 23,
     liveUrl: 'https://glenrioariesto.github.io/escape-parking-challenge/',
-    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kiri 2 petak, Truk Biru ke kanan 1 petak saja (ke kolom 8-10), Taxi Kuning 1 dan 3 ke atas 3 petak. 2) Zona Bawah: Truk Kuning ke kiri 1 petak, Taxi Kuning 2 ke bawah 3 petak; Truk Hijau ke kiri 1 petak, Taxi Kuning 5 ke bawah 3 petak; Truk Merah ke kanan 1 petak, Truk Hijau ke kanan 2 petak, lalu Taxi Kuning 4 ke bawah 3 petak (optimalSteps = 2 + 1 + 3 + 3 + 1 + 3 + 1 + 3 + 1 + 2 + 3 = 23 petak, tepat sesuai target game).',
+    strategySummary: 'Jarak paling sedikit: 1) Zona Atas: Truk Abu-abu ke kiri 2 petak, Truk Biru ke kanan 1 petak saja (ke kolom 8-10), Taxi Kuning 1 dan 3 ke atas 3 petak. 2) Zona Bawah: Truk Oren ke kiri 1 petak, Taxi Kuning 2 ke bawah 3 petak; Truk Hijau ke kiri 1 petak, Taxi Kuning 5 ke bawah 3 petak; Truk Merah ke kanan 1 petak, Truk Hijau ke kanan 2 petak, lalu Taxi Kuning 4 ke bawah 3 petak (optimalSteps = 2 + 1 + 3 + 3 + 1 + 3 + 1 + 3 + 1 + 2 + 3 = 23 petak, tepat sesuai target game).',
     algorithmSteps: [
       {
         vehicleId: 'D',
@@ -321,10 +321,10 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
       },
       {
         vehicleId: 'J',
-        vehicleName: 'Truk Kuning',
+        vehicleName: 'Truk Oren',
         direction: 'left',
         distance: 1,
-        description: 'Pilih Truk Kuning, geser ke kiri 1 petak (jarak paling sedikit) mengosongkan jalur Taxi Kuning 2 di kolom 3.'
+        description: 'Pilih Truk Oren, geser ke kiri 1 petak (jarak paling sedikit) mengosongkan jalur Taxi Kuning 2 di kolom 3.'
       },
       {
         vehicleId: 'S',
@@ -381,8 +381,8 @@ export const escapeParkingAnswers: EscapeParkingAnswer[] = [
         questionId: 'q5_2',
         question: 'Bagaimana urutan strategi yang tepat untuk membebaskan 3 Taxi di area bawah (Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5)?',
         correctOptionIndex: 1,
-        correctAnswerText: 'Geser Jeep Putih ke kiri (atau Truk Merah ke kanan) → Geser Truk Kuning dan Truk Hijau ke samping → Bebaskan Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 ke bawah',
-        explanation: 'Truk Kuning dan Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser Mobil Jeep Putih atau Truk Merah terlebih dahulu, ruang gerak horizontal Truk Kuning dan Truk Hijau terbuka sehingga jalur keluar Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 menjadi bersih.'
+        correctAnswerText: 'Geser Jeep Putih ke kiri (atau Truk Merah ke kanan) → Geser Truk Oren dan Truk Hijau ke samping → Bebaskan Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 ke bawah',
+        explanation: 'Truk Oren dan Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser Mobil Jeep Putih atau Truk Merah terlebih dahulu, ruang gerak horizontal Truk Oren dan Truk Hijau terbuka sehingga jalur keluar Taxi Kuning 2, Taxi Kuning 4, dan Taxi Kuning 5 menjadi bersih.'
       }
     ]
   }

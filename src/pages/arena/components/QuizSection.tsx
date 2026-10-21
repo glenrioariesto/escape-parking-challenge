@@ -7,50 +7,69 @@ interface QuizSectionProps {
   questions: QuizQuestion[];
   onQuizComplete: (score: number) => void;
   onPrevStage?: () => void;
+  lockedAnswers?: { [questionIdx: number]: number };
+  onLockAnswer?: (questionIdx: number, answerIdx: number) => void;
 }
 
 export const QuizSection: React.FC<QuizSectionProps> = ({
   questions,
   onQuizComplete,
-  onPrevStage
+  onPrevStage,
+  lockedAnswers: externalLockedAnswers,
+  onLockAnswer,
 }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
-  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
+  const [internalLockedAnswers, setInternalLockedAnswers] = useState<{ [questionIdx: number]: number }>({});
+  const lockedAnswers = externalLockedAnswers ?? internalLockedAnswers;
+
+  // Start at the first unanswered question when opened (so reopening after locking Q1 goes directly to Q2)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
+    const firstUnanswered = questions.findIndex((_, idx) => lockedAnswers[idx] === undefined);
+    return firstUnanswered !== -1 ? firstUnanswered : Math.max(0, questions.length - 1);
+  });
+  const [draftSelectedAnswerIndex, setDraftSelectedAnswerIndex] = useState<number | null>(null);
 
   const question = questions[currentQuestionIndex];
+  const isAnswerSubmitted = lockedAnswers[currentQuestionIndex] !== undefined;
+  const selectedAnswerIndex = isAnswerSubmitted
+    ? lockedAnswers[currentQuestionIndex]
+    : draftSelectedAnswerIndex;
   const isCorrect = selectedAnswerIndex === question?.correctAnswerIndex;
 
   const handleSelectAnswer = (index: number) => {
     if (isAnswerSubmitted) return;
     audio.playClick();
-    setSelectedAnswerIndex(index);
+    setDraftSelectedAnswerIndex(index);
   };
 
   const handleSubmitAnswer = () => {
     if (selectedAnswerIndex === null || isAnswerSubmitted) return;
-    
+
     if (selectedAnswerIndex === question.correctAnswerIndex) {
-      setScore((prev) => prev + 1);
       audio.playBeepSuccess();
     } else {
       audio.playError();
     }
-    
-    setIsAnswerSubmitted(true);
+
+    if (onLockAnswer) {
+      onLockAnswer(currentQuestionIndex, selectedAnswerIndex);
+    } else {
+      setInternalLockedAnswers((prev) => ({ ...prev, [currentQuestionIndex]: selectedAnswerIndex }));
+    }
   };
 
   const handleNextQuestion = () => {
-    setSelectedAnswerIndex(null);
-    setIsAnswerSubmitted(false);
+    setDraftSelectedAnswerIndex(null);
 
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex((prev) => prev + 1);
       audio.playClick();
     } else {
-      // Completed last question
-      const finalScorePercentage = Math.round(((score + (isCorrect ? 1 : 0)) / questions.length) * 100);
+      // Completed last question — compute total score from all locked answers
+      const correctCount = questions.reduce(
+        (acc, q, idx) => acc + (lockedAnswers[idx] === q.correctAnswerIndex ? 1 : 0),
+        0
+      );
+      const finalScorePercentage = Math.round((correctCount / questions.length) * 100);
       audio.playSuccess();
       onQuizComplete(finalScorePercentage);
     }
@@ -136,7 +155,6 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
         {onPrevStage && (
           <button
             onClick={onPrevStage}
-            disabled={isAnswerSubmitted}
             className="text-xs text-slate-500 hover:text-slate-800 font-bold transition-colors cursor-pointer"
           >
             ← Kembali ke Arena

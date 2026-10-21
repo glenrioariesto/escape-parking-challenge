@@ -1,7 +1,7 @@
 import React from "react";
 import { Vehicle, CTStage } from "@types";
 import { ParkingGrid } from "@pages/arena/components/ParkingGrid";
-import { Cpu, Flame, Eye, Compass } from "lucide-react";
+import { Cpu, Flame, AlertCircle, Compass } from "lucide-react";
 import { audio } from "@lib/audio";
 
 interface GridPanelProps {
@@ -98,7 +98,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
           <Flame size={14} />
         </button>
 
-        {/* Panduan Game (Eye Icon) */}
+        {/* Panduan Game (Exclamation Icon) */}
         {!isSandboxMode && (ctStage === "analysis" || ctStage === "algorithm") && (
           <button
             type="button"
@@ -109,7 +109,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
             className="w-9 h-9 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-colors cursor-pointer"
             title="Lihat Panduan Game"
           >
-            <Eye size={14} />
+            <AlertCircle size={14} />
           </button>
         )}
 

@@ -438,7 +438,7 @@ export const LEVELS: LevelDefinition[] = [
         col: 4,
         length: 3,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Truk Kuning"
+        label: "Truk Oren"
       },
       {
         id: "K",
@@ -481,12 +481,12 @@ export const LEVELS: LevelDefinition[] = [
         question: "Bagaimana cara yang logis untuk membebaskan [3] Taxi Kuning agar bisa keluar ke bawah melalui kolom 5?",
         options: [
           "Langsung geser [3] Taxi Kuning ke bawah tanpa memindahkan kendaraan lain",
-          "Geser [12] Jeep Hijau ke kiri (atau [14] Sedan Merah ke kanan) → Geser [13] Truk Kuning ke samping → Geser [3] Taxi Kuning ke bawah",
-          "Geser [13] Truk Kuning ke atas agar tidak menghalangi",
+          "Geser [12] Jeep Hijau ke kiri (atau [14] Sedan Merah ke kanan) → Geser [13] Truk Oren ke samping → Geser [3] Taxi Kuning ke bawah",
+          "Geser [13] Truk Oren ke atas agar tidak menghalangi",
           "Geser [10] Jeep Putih ke atas melewati dinding pembatas"
         ],
         correctAnswerIndex: 1,
-        explanation: "[13] Truk Kuning di baris 8 kolom 4-6 menghalangi [3] Taxi Kuning. Namun [13] Truk Kuning terkunci oleh [12] Jeep Hijau di kiri dan [14] Sedan Merah di kanan. Kita perlu menggeser [12] Jeep Hijau ke kiri atau [14] Sedan Merah ke kanan terlebih dahulu agar [13] Truk Kuning memiliki ruang untuk bergeser ke samping, baru [3] Taxi Kuning bisa meluncur ke bawah."
+        explanation: "[13] Truk Oren di baris 8 kolom 4-6 menghalangi [3] Taxi Kuning. Namun [13] Truk Oren terkunci oleh [12] Jeep Hijau di kiri dan [14] Sedan Merah di kanan. Kita perlu menggeser [12] Jeep Hijau ke kiri atau [14] Sedan Merah ke kanan terlebih dahulu agar [13] Truk Oren memiliki ruang untuk bergeser ke samping, baru [3] Taxi Kuning bisa meluncur ke bawah."
       }
     ],
     walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],
@@ -623,7 +623,7 @@ export const LEVELS: LevelDefinition[] = [
         col: 1,
         length: 3,
         color: "bg-rose-500 shadow-rose-300 border-rose-600",
-        label: "Truk Kuning"
+        label: "Truk Oren"
       },
       {
         id: "P",
@@ -680,12 +680,12 @@ export const LEVELS: LevelDefinition[] = [
         question: "Bagaimana urutan strategi yang tepat untuk membebaskan 3 Taxi di area bawah ([3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning)?",
         options: [
           "Langsung menjalankan ketiga Taxi ke bawah tanpa memindahkan kendaraan lain",
-          "Geser [12] Jeep Putih ke kiri (atau [16] Truk Merah ke kanan) → Geser [14] Truk Kuning dan [15] Truk Hijau ke samping → Bebaskan [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning ke bawah",
+          "Geser [12] Jeep Putih ke kiri (atau [16] Truk Merah ke kanan) → Geser [14] Truk Oren dan [15] Truk Hijau ke samping → Bebaskan [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning ke bawah",
           "Menggeser [1] Taxi Kuning dan [2] Taxi Kuning di area atas ke bawah untuk membantu",
           "Menggeser [15] Truk Hijau ke atas melewati dinding pembatas"
         ],
         correctAnswerIndex: 1,
-        explanation: "[14] Truk Kuning dan [15] Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser [12] Jeep Putih atau [16] Truk Merah terlebih dahulu, ruang gerak horizontal [14] Truk Kuning dan [15] Truk Hijau terbuka sehingga jalur keluar [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning menjadi bersih."
+        explanation: "[14] Truk Oren dan [15] Truk Hijau di baris 8 menghalangi jalur keluar ketiga Taxi di bawah. Dengan menggeser [12] Jeep Putih atau [16] Truk Merah terlebih dahulu, ruang gerak horizontal [14] Truk Oren dan [15] Truk Hijau terbuka sehingga jalur keluar [3] Taxi Kuning, [4] Taxi Kuning, dan [5] Taxi Kuning menjadi bersih."
       }
     ],
     walls: [{"row":5,"col":1},{"row":5,"col":2},{"row":5,"col":3},{"row":5,"col":4},{"row":5,"col":5},{"row":5,"col":6},{"row":5,"col":7},{"row":5,"col":8},{"row":5,"col":9},{"row":5,"col":10}],

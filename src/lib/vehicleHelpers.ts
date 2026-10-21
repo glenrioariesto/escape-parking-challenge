@@ -151,7 +151,7 @@ export function getVehicleBaseName(v: Vehicle, allVehicles?: Vehicle[]): string 
   let color = "Abu-abu";
   if (filename.includes("biru")) color = "Biru";
   else if (filename.includes("merah")) color = "Merah";
-  else if (filename.includes("kuning")) color = "Kuning";
+  else if (filename.includes("kuning")) color = type === "Truk" ? "Oren" : "Kuning";
   else if (filename.includes("hijau")) color = "Hijau";
   else if (filename.includes("cyan")) color = "Cyan";
   else if (filename.includes("cokelat")) color = "Cokelat";

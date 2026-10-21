@@ -10,7 +10,7 @@ import { AlgorithmPanel } from "./components/AlgorithmPanel";
 import { DecompositionModal } from "./components/DecompositionModal";
 import { CollisionModal } from "./components/CollisionModal";
 import { AnalysisWorkspace } from "./components/AnalysisWorkspace";
-import { Info, ChevronRight, Cpu, Flame, Eye, RotateCcw, Play, Footprints } from "lucide-react";
+import { Info, ChevronRight, Cpu, Flame, AlertCircle, RotateCcw, Play, Footprints } from "lucide-react";
 import { syncQuizQuestionWithVehicles } from "@lib/vehicleHelpers";
 
 export interface SimResult {
@@ -57,6 +57,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
   const activeLevel = LEVELS.find((l) => l.id === props.activeLevelId);
   const isDirectUrl = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("screen");
   const [isDecompositionModalOpen, setIsDecompositionModalOpen] = useState(!isDirectUrl);
+  const [lockedQuizAnswers, setLockedQuizAnswers] = useState<{ [questionIdx: number]: number }>({});
 
   // Adjust state inline during render when activeLevelId, ctStage or isSandboxMode changes, using Refs to avoid unnecessary re-renders
   const prevLevelIdRef = useRef(props.activeLevelId);
@@ -72,6 +73,9 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
     prevLevelIdRef.current = props.activeLevelId;
     prevCtStageRef.current = props.ctStage;
     prevIsSandboxModeRef.current = props.isSandboxMode;
+    if (isNewLevel || props.ctStage === "algorithm") {
+      setLockedQuizAnswers({});
+    }
     if (isNewLevel && !props.isSandboxMode && props.ctStage === "algorithm" && !isDirectUrl) {
       setIsDecompositionModalOpen(true);
     } else if (props.isSandboxMode) {
@@ -176,7 +180,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                 <Flame size={15} />
               </button>
 
-              {/* Eye icon for game guide, visible only in analysis/algorithm stage and NOT in sandbox mode */}
+              {/* Exclamation icon for game guide, visible only in analysis/algorithm stage and NOT in sandbox mode */}
               {!props.isSandboxMode && (props.ctStage === "analysis" || props.ctStage === "algorithm") && (
                 <button
                   type="button"
@@ -187,7 +191,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                   className="w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-all cursor-pointer"
                   title="Lihat Panduan Game"
                 >
-                  <Eye size={15} />
+                  <AlertCircle size={15} />
                 </button>
               )}
             </div>
@@ -286,6 +290,10 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
               )}
               onQuizComplete={props.onQuizComplete}
               onPrevStage={props.onCloseQuiz}
+              lockedAnswers={lockedQuizAnswers}
+              onLockAnswer={(qIdx, ansIdx) =>
+                setLockedQuizAnswers((prev) => ({ ...prev, [qIdx]: ansIdx }))
+              }
             />
           </div>
         </div>

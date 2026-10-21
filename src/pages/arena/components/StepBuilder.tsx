@@ -34,6 +34,8 @@ const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean,
     colorKey = "biru";
   } else if (filename.includes("merah")) {
     colorKey = "merah";
+  } else if (filename.includes("truck") && filename.includes("kuning")) {
+    colorKey = "oren";
   } else if (filename.includes("kuning") || filename.includes("taxi")) {
     colorKey = "kuning";
   } else if (filename.includes("hijau")) {
@@ -55,6 +57,14 @@ const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean,
         stroke: "#B91C1C",
         textColor: "text-white",
         badgeClass: "bg-white text-red-600 border-red-200 shadow-xs",
+        numberClass: "bg-black/15 text-white"
+      };
+    case "oren":
+      return {
+        fill: "#F97316",
+        stroke: "#C2410C",
+        textColor: "text-white",
+        badgeClass: "bg-white text-orange-600 border-orange-200 shadow-xs",
         numberClass: "bg-black/15 text-white"
       };
     case "kuning":
@@ -143,6 +153,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
   };
 
   const [direction, setDirection] = useState<"left" | "right" | "up" | "down" | "">("");
+  const [stepMultiplier, setStepMultiplier] = useState<number>(1);
 
   // ── DRAG & DROP ────────────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);
@@ -346,18 +357,20 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
     }
   }, [selectedVehicleId, vehicles]);
 
-  // Handle adding step
+  // Handle adding step (supports adding multiple steps at once via stepMultiplier)
   const handleAddStep = () => {
     if (!selectedVehicleId || !direction) return;
 
-    const newStep: MoveAction = {
+    const count = Math.max(1, stepMultiplier);
+    const newSteps: MoveAction[] = Array.from({ length: count }, () => ({
       vehicleId: selectedVehicleId,
       direction: direction as any,
       distance: 1
-    };
+    }));
 
     audio.playClick();
-    onUpdateSteps([...steps, newStep]);
+    onUpdateSteps([...steps, ...newSteps]);
+    setStepMultiplier(1);
   };
 
   const getDirectionText = (dir: string) => {
@@ -391,9 +404,9 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
         <div className="flex-1 min-h-0 flex flex-col">
           {/* Builder Panel Form */}
           <div id="builder-form-panel" className="bg-slate-50 border border-slate-200 rounded-xl p-1.5 lg:p-4 space-y-1 sm:space-y-3 flex-shrink-0 mb-1 sm:mb-2">
-            <div className="grid grid-cols-2 gap-1 sm:gap-3">
+            <div className="grid grid-cols-[1.3fr_1fr_0.7fr] gap-1 sm:gap-2.5">
               {/* Pick Vehicle */}
-              <div className="flex flex-col gap-0.5 sm:gap-1">
+              <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0">
                 <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
                   Mobil
                 </label>
@@ -405,7 +418,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                     onSelectVehicle(e.target.value || null);
                   }}
                   disabled={isSimulating}
-                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none"
+                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none w-full truncate"
                 >
                   <option value="">-- Pilih --</option>
                   {vehicles.map((v) => (
@@ -417,7 +430,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
               </div>
 
               {/* Pick Direction */}
-              <div className="flex flex-col gap-0.5 sm:gap-1">
+              <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0">
                 <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
                   Arah
                 </label>
@@ -429,7 +442,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                     setDirection(e.target.value as any);
                   }}
                   disabled={isSimulating || !selectedVehicleId}
-                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-50"
+                  className="bg-white text-[9px] sm:text-xs text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-50 w-full truncate"
                 >
                   {!selectedVehicleId && <option value="">Pilih mobil</option>}
                   {selectedVehicle?.direction === "horizontal" && (
@@ -446,6 +459,29 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
                   )}
                 </select>
               </div>
+
+              {/* Pick Step Multiplier (Perkalian Langkah) */}
+              <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0">
+                <label className="text-[7px] sm:text-[10px] uppercase font-mono font-black text-slate-400">
+                  Langkah
+                </label>
+                <select
+                  id="select-multiplier-input"
+                  value={stepMultiplier}
+                  onChange={(e) => {
+                    audio.playClick();
+                    setStepMultiplier(Number(e.target.value));
+                  }}
+                  disabled={isSimulating || !selectedVehicleId}
+                  className="bg-white text-[9px] sm:text-xs font-bold text-slate-700 border border-slate-300 rounded-lg p-0.5 sm:p-2 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-50 w-full"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    <option key={num} value={num}>
+                      {num}x
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <button
@@ -455,7 +491,7 @@ export const StepBuilder: React.FC<StepBuilderProps> = ({
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-[9px] sm:text-xs py-1 px-2.5 sm:py-2 sm:px-3 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm cursor-pointer border-none"
             >
               <Plus size={12} />
-              <span>Tambah Langkah</span>
+              <span>{stepMultiplier > 1 ? `Tambah ${stepMultiplier} Langkah (${stepMultiplier}x)` : "Tambah Langkah"}</span>
             </button>
           </div>
 
