@@ -65,7 +65,6 @@ export function useGameState(initialLevelId: number = 1, initialStage: CTStage =
   const handleResetLevel = () => {
     level.resetLevel(level.originalVehicles);
     sim.reset(level.originalVehicles);
-    level.setAlgorithmSteps([]);
     level.setCtStage("algorithm");
     setSimResult(null);
   };

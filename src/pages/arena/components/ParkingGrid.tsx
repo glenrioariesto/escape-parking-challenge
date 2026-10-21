@@ -511,38 +511,55 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       }
     }
 
-    // 2. Draw Exit Gate Indicator (Zebra Cross on exit grid cell + EXIT label)
-    const drawZebraCrossCell = (
+    // 2. Draw Exit Gate Indicator (Taxi Yellow cell + "KELUAR" with black outline)
+    const drawExitGateCell = (
       cellX: number,
       cellY: number,
       size: number,
-      orientation: "vertical" | "horizontal"
+      position: "top" | "bottom" | "right"
     ) => {
       ctx.save();
       ctx.beginPath();
       ctx.rect(cellX, cellY, size, size);
       ctx.clip();
 
-      // Base dark asphalt color for zebra cross
-      ctx.fillStyle = "#1E293B";
+      // Distinct Taxi Yellow background (replaces zebra cross)
+      ctx.fillStyle = "#FFCF01";
       ctx.fillRect(cellX, cellY, size, size);
 
-      // Alternating white stripes
-      const stripeCount = 8;
-      const stripeStep = size / stripeCount;
-      ctx.fillStyle = "#FFFFFF";
-      for (let i = 0; i < stripeCount; i += 2) {
-        if (orientation === "vertical") {
-          ctx.fillRect(cellX + 2, cellY + i * stripeStep, size - 4, stripeStep);
-        } else {
-          ctx.fillRect(cellX + i * stripeStep, cellY + 2, stripeStep, size - 4);
-        }
-      }
-
-      // Subtle border around the zebra cross cell
-      ctx.strokeStyle = "rgba(15, 23, 42, 0.35)";
+      // Crisp border around the exit gate cell
+      ctx.strokeStyle = "#1E293B";
       ctx.lineWidth = 1.5;
       ctx.strokeRect(cellX + 0.75, cellY + 0.75, size - 1.5, size - 1.5);
+
+      // Draw "KELUAR" text centered inside the cell
+      const centerX = cellX + size / 2;
+      const centerY = cellY + size / 2;
+      ctx.translate(centerX, centerY);
+
+      // Top ("atas") is normal upright; Bottom ("bawah") is rotated 180deg (terbalik mirror)
+      if (position === "bottom") {
+        ctx.rotate(Math.PI);
+      } else if (position === "right") {
+        ctx.rotate(Math.PI / 2);
+      }
+
+      const fontSize = Math.max(7, Math.floor(size * 0.21));
+      ctx.font = `900 ${fontSize}px 'Plus Jakarta Sans', 'Inter', sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.lineJoin = "round";
+      ctx.miterLimit = 2;
+
+      // Black outline
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = Math.max(2.5, size * 0.07);
+      ctx.strokeText("KELUAR", 0, 0);
+
+      // White fill for crisp contrast against Taxi Yellow & black outline
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillText("KELUAR", 0, 0);
+
       ctx.restore();
     };
 
@@ -554,34 +571,15 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         const isUpperArea = (levelId === 4 || levelId === 5) ? v.row < 5 : false;
 
         if (isUpperArea) {
-          // Draw Top Exit Gate Zebra Cross (row 0, col)
-          drawZebraCrossCell(col * cellSize, 0, cellSize, "vertical");
-          ctx.fillStyle = "#10B981";
-          ctx.fillRect(col * cellSize, 0, cellSize, 5);
-          ctx.font = "bold 9px 'JetBrains Mono', monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "bottom";
-          ctx.fillText("EXIT ▲", col * cellSize + cellSize / 2, -2);
+          // Top Exit Gate (row 0, col) — normal upright "KELUAR"
+          drawExitGateCell(col * cellSize, 0, cellSize, "top");
         } else {
-          // Draw Bottom Exit Gate Zebra Cross (row gridRows - 1, col)
-          drawZebraCrossCell(col * cellSize, (gridRows - 1) * cellSize, cellSize, "vertical");
-          ctx.fillStyle = "#10B981";
-          ctx.fillRect(col * cellSize, gridRows * cellSize - 5, cellSize, 5);
-          ctx.font = "bold 9px 'JetBrains Mono', monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "top";
-          ctx.fillText("EXIT ▼", col * cellSize + cellSize / 2, gridRows * cellSize + 2);
+          // Bottom Exit Gate (row gridRows - 1, col) — upside-down / mirrored "KELUAR"
+          drawExitGateCell(col * cellSize, (gridRows - 1) * cellSize, cellSize, "bottom");
         }
       } else {
         const row = v.exitRow !== undefined ? v.exitRow : exitRow;
-        const exitLeftOnGrid = gridCols * cellSize;
-        drawZebraCrossCell((gridCols - 1) * cellSize, row * cellSize, cellSize, "horizontal");
-        ctx.fillStyle = "#10B981";
-        ctx.fillRect(exitLeftOnGrid - 5, row * cellSize, 5, cellSize);
-        ctx.font = "bold 9px 'JetBrains Mono', monospace";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        ctx.fillText("EXIT ➔", exitLeftOnGrid + 4, row * cellSize + cellSize / 2);
+        drawExitGateCell((gridCols - 1) * cellSize, row * cellSize, cellSize, "right");
       }
       ctx.restore();
     });
