@@ -197,7 +197,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
             </div>
 
              {/* Ulangi & Jalankan Buttons on the Right */}
-             {!props.isSandboxMode && props.ctStage !== "analysis" && (
+             {!props.isSandboxMode && (
                <div className="flex gap-1 sm:gap-1.5 items-center">
                  {/* Mobile-only Step Count Badge */}
                  <div className="h-8 lg:h-9.5 hidden mobile-landscape-flex items-center gap-1 text-xs font-mono font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 rounded-xl flex-shrink-0 select-none" title={`${props.algorithmSteps.length} Langkah`}>
@@ -240,12 +240,6 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
           <div className="flex-1 min-h-0 2xl:pb-4 overflow-hidden">
             {props.isSandboxMode ? (
               <SandboxPanel onResetLevel={props.onResetLevel} />
-            ) : props.ctStage === "analysis" ? (
-              <AnalysisWorkspace
-                levelName={activeLevel?.name || ""}
-                onOpenDecompositionModal={() => setIsDecompositionModalOpen(true)}
-                onOpenQuiz={props.onOpenQuiz}
-              />
             ) : (
               <AlgorithmPanel
                 activeVehicles={props.activeVehicles}
@@ -260,6 +254,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                 onSetCtStage={props.onSetCtStage}
                 selectedVehicleId={props.selectedVehicleId}
                 onSelectVehicle={props.onSelectVehicle}
+                onOpenQuiz={props.onOpenQuiz}
               />
             )}
           </div>

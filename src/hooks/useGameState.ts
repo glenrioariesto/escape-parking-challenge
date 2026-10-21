@@ -66,6 +66,7 @@ export function useGameState(initialLevelId: number = 1, initialStage: CTStage =
     level.resetLevel(level.originalVehicles);
     sim.reset(level.originalVehicles);
     level.setAlgorithmSteps([]);
+    level.setCtStage("algorithm");
     setSimResult(null);
   };
 
@@ -118,7 +119,10 @@ export function useGameState(initialLevelId: number = 1, initialStage: CTStage =
     handleLoadLevel,
     handleResetLevel,
     handleQuizComplete,
-    startSimulation: () => sim.start(level.activeVehicles),
+    startSimulation: () => {
+      level.setSelectedVehicleId(null);
+      sim.start(level.activeVehicles);
+    },
     handleSandboxMoveRecorded,
   };
 }

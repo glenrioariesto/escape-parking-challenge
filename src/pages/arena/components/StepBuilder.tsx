@@ -30,13 +30,15 @@ const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean,
   const filename = path.split("/").pop() || "";
 
   let colorKey = "abu";
-  if (filename.includes("biru")) {
+  if (filename.includes("taxi") || matchedVehicle.isPlayer || matchedVehicle.id === "R") {
+    colorKey = "taxi";
+  } else if (filename.includes("biru")) {
     colorKey = "biru";
   } else if (filename.includes("merah")) {
     colorKey = "merah";
   } else if (filename.includes("truck") && filename.includes("kuning")) {
     colorKey = "oren";
-  } else if (filename.includes("kuning") || filename.includes("taxi")) {
+  } else if (filename.includes("kuning")) {
     colorKey = "kuning";
   } else if (filename.includes("hijau")) {
     colorKey = "hijau";
@@ -51,6 +53,14 @@ const getStepVisuals = (matchedVehicle: Vehicle | undefined, isDragged: boolean,
   }
 
   switch (colorKey) {
+    case "taxi":
+      return {
+        fill: "#FFCF01",
+        stroke: "#CA8A04",
+        textColor: "text-black",
+        badgeClass: "bg-white text-black border-yellow-500 shadow-xs",
+        numberClass: "bg-black/10 text-black"
+      };
     case "merah":
       return {
         fill: "#EF4444",
