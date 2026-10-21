@@ -814,9 +814,14 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
 
       if (vehicleNum !== undefined) {
         ctx.save();
-        // Shift downwards for vertical vehicles, shift to the left for horizontal vehicles
+        // Shift towards roof: upwards for top-area vertical vehicles (drawRow < 5), downwards for bottom-area vertical vehicles, leftwards for horizontal vehicles
         const xShift = v.direction === "horizontal" ? -cellSize * 0.24 : 0;
-        const yShift = v.direction === "vertical" ? cellSize * 0.24 : 0;
+        const yShift =
+          v.direction === "vertical"
+            ? drawRow < 5
+              ? -cellSize * 0.24
+              : cellSize * 0.24
+            : 0;
         const cx = vx + vw / 2 + xShift;
         const cy = vy + vh / 2 + yShift;
 
