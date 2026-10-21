@@ -174,7 +174,7 @@ export default function App() {
                   }
                   setShowFullscreenPrompt(false);
                 }}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-2.5 rounded-xl transition-all shadow-md shadow-blue-500/10 active:scale-95 cursor-pointer border-none"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-2.5 rounded-xl transition-all shadow-md shadow-blue-500/10 active:scale-95 cursor-pointer border-none"
               >
                 Yes
               </button>

@@ -106,7 +106,7 @@ export const GridPanel: React.FC<GridPanelProps> = ({
               audio.playClick();
               onOpenDecompositionModal();
             }}
-            className="w-9 h-9 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-colors cursor-pointer"
+            className="w-9 h-9 flex items-center justify-center bg-blue-600 hover:bg-blue-700 border border-blue-600 text-white rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
             title="Lihat Panduan Game"
           >
             <AlertCircle size={14} />

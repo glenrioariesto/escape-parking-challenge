@@ -23,8 +23,8 @@ export const Reflection: React.FC<ReflectionProps> = ({
 }) => {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-4 ld:p-6 shadow-sm relative max-h-modal overflow-y-auto max-w-[500px] w-full m-auto select-none text-slate-800">
-      {/* Decorative Golden Ambient Background */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-rose-500" />
+      {/* Decorative Top Accent */}
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
 
       <div className="text-center">
         <span className="text-4xl mb-2 inline-block animate-bounce">🏆</span>

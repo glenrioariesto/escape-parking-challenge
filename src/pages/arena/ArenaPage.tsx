@@ -188,7 +188,7 @@ export const ArenaPage: React.FC<ArenaPageProps> = (props) => {
                     audio.playClick();
                     setIsDecompositionModalOpen(true);
                   }}
-                  className="w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-xl transition-all cursor-pointer"
+                  className="w-8 h-8 lg:w-9.5 lg:h-9.5 flex items-center justify-center bg-blue-600 hover:bg-blue-700 border border-blue-600 text-white rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
                   title="Lihat Panduan Game"
                 >
                   <AlertCircle size={15} />

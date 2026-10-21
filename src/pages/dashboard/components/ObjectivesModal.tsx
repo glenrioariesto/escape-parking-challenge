@@ -95,19 +95,19 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
       className="fixed inset-0 z-[998] flex items-center justify-center p-3 sm:p-4 select-none animate-fadeIn"
       onClick={handleClose}
     >
-      {/* Deep midnight blue backdrop overlay */}
-      <div id="objectives-modal-overlay" className="absolute inset-0 bg-[#060051]/60 backdrop-blur-xs" />
+      {/* Backdrop overlay */}
+      <div id="objectives-modal-overlay" className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs" />
 
-      {/* Modal Container with #2852b0 border matching level option images */}
+      {/* Modal Container with blue border */}
       <div
         id="objectives-modal-card"
-        className="relative z-10 w-full max-w-[340px] sm:max-w-md md:max-w-lg lg:max-w-xl max-h-[85vh] bg-white border-[3px] sm:border-[4px] md:border-[5px] border-[#2852b0] rounded-[20px] sm:rounded-[26px] md:rounded-[30px] shadow-[0_20px_50px_rgba(6,0,81,0.45)] flex flex-col overflow-hidden"
+        className="relative z-10 w-full max-w-[340px] sm:max-w-md md:max-w-lg lg:max-w-xl max-h-[85vh] bg-white border-[3px] sm:border-[4px] md:border-[5px] border-blue-600 rounded-[20px] sm:rounded-[26px] md:rounded-[30px] shadow-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header - Gradient with primary blue (#2852b0) to cyan (#12a7ff) */}
+        {/* Header - Solid blue matching Play button */}
         <div
           id="objectives-modal-header"
-          className="flex items-center gap-2 sm:gap-2.5 md:gap-3 px-3 sm:px-4 md:px-5 pt-2.5 sm:pt-4 md:pt-5 pb-2 sm:pb-3 md:pb-4 border-b-2 border-[#140092]/30 shrink-0 bg-gradient-to-r from-[#2852b0] via-[#2157c0] to-[#12a7ff] text-white shadow-sm"
+          className="flex items-center gap-2 sm:gap-2.5 md:gap-3 px-3 sm:px-4 md:px-5 pt-2.5 sm:pt-4 md:pt-5 pb-2 sm:pb-3 md:pb-4 border-b border-blue-700/30 shrink-0 bg-blue-600 text-white shadow-sm"
         >
           <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-white shrink-0 shadow-inner">
             {slide.icon}
@@ -189,7 +189,7 @@ export const ObjectivesModal: React.FC<ObjectivesModalProps> = ({ isOpen, onCont
             <button
               id="objectives-modal-next-btn"
               onClick={handleNext}
-              className="flex-1 py-1.5 sm:py-2 md:py-2.5 lg:py-3 px-3 sm:px-4 md:px-5 rounded-lg sm:rounded-xl md:rounded-2xl text-white font-bold text-[9px] sm:text-xs md:text-sm lg:text-base flex items-center justify-center gap-0.5 sm:gap-1 bg-[#2852b0] hover:bg-[#140092] border-b-2 sm:border-b-4 border-[#060051] active:border-b-0 active:translate-y-[2px] sm:active:translate-y-[4px] transition-all font-display tracking-wider cursor-pointer shadow-md"
+              className="flex-1 py-1.5 sm:py-2 md:py-2.5 lg:py-3 px-3 sm:px-4 md:px-5 rounded-lg sm:rounded-xl md:rounded-2xl text-white font-bold text-[9px] sm:text-xs md:text-sm lg:text-base flex items-center justify-center gap-0.5 sm:gap-1 bg-blue-600 hover:bg-blue-700 border-b-2 sm:border-b-4 border-blue-800 active:border-b-0 active:translate-y-[2px] sm:active:translate-y-[4px] transition-all font-display tracking-wider cursor-pointer shadow-md"
             >
               {isLast ? "Mulai Bermain" : "Lanjut"}
               {!isLast && <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />}

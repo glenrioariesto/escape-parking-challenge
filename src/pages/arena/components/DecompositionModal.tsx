@@ -57,7 +57,7 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
     {
       title: "4. Uji Pemahaman Kuis",
       text: "Setelah taxi berhasil lolos dari kemacetan, kamu harus menjawab Kuis Pemahaman untuk menganalisis penyelesaian masalah menggunakan Berpikir Komputasional sebelum maju ke level berikutnya.",
-      bgClass: "bg-purple-50/40 border-purple-100",
+      bgClass: "bg-blue-50/40 border-blue-100",
     },
   ];
 
@@ -67,7 +67,7 @@ export const DecompositionModal: React.FC<DecompositionModalProps> = ({
     <div className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 md:p-6 lg:p-8 select-none animate-fadeIn">
       <div className="relative max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl w-full m-auto shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden max-h-modal flex flex-col bg-white border border-slate-100">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 sm:p-4 md:p-5 lg:p-6 pb-2 sm:pb-3 md:pb-4 lg:pb-5 relative flex-shrink-0">
+        <div className="bg-blue-600 text-white p-3 sm:p-4 md:p-5 lg:p-6 pb-2 sm:pb-3 md:pb-4 lg:pb-5 relative flex-shrink-0">
           <div className="flex items-center">
             <div>
               <h3 className="text-[10px] sm:text-xs md:text-base lg:text-lg font-black tracking-tight">

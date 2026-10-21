@@ -555,7 +555,7 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.fillRect(cellX + size - borderThickness, cellY, borderThickness, size);
       }
 
-      // Draw "KELUAR" text centered inside the cell
+      // Draw "KELUAR" text centered inside the cell with comfortable padding
       const centerX = cellX + size / 2;
       const centerY = cellY + size / 2;
       ctx.translate(centerX, centerY);
@@ -567,21 +567,32 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.rotate(Math.PI / 2);
       }
 
-      const fontSize = Math.max(7, Math.floor(size * 0.21));
+      const fontSize = Math.max(6, Math.floor(size * 0.16));
       ctx.font = `900 ${fontSize}px 'Plus Jakarta Sans', 'Inter', sans-serif`;
       ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textBaseline = "alphabetic";
       ctx.lineJoin = "round";
       ctx.miterLimit = 2;
 
+      // Measure text to guarantee horizontal padding (max 72% of cell width) and exact vertical center
+      const metrics = ctx.measureText("KELUAR");
+      const maxTextWidth = size * 0.72;
+      if (metrics.width > maxTextWidth && metrics.width > 0) {
+        const scaleFactor = maxTextWidth / metrics.width;
+        ctx.scale(scaleFactor, scaleFactor);
+      }
+      const ascent = metrics.actualBoundingBoxAscent || fontSize * 0.72;
+      const descent = metrics.actualBoundingBoxDescent || fontSize * 0.18;
+      const textY = (ascent - descent) / 2;
+
       // Black outline
       ctx.strokeStyle = "#000000";
-      ctx.lineWidth = Math.max(3, size * 0.08);
-      ctx.strokeText("KELUAR", 0, 0);
+      ctx.lineWidth = Math.max(2.5, size * 0.065);
+      ctx.strokeText("KELUAR", 0, textY);
 
       // Taxi Yellow fill with black outline over the zebra cross
       ctx.fillStyle = "#FFCF01";
-      ctx.fillText("KELUAR", 0, 0);
+      ctx.fillText("KELUAR", 0, textY);
 
       ctx.restore();
     };
