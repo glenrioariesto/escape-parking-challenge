@@ -555,17 +555,10 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
         ctx.fillRect(cellX + size - borderThickness, cellY, borderThickness, size);
       }
 
-      // Draw "KELUAR" text centered inside the cell with comfortable padding
+      // Draw "KELUAR" text centered inside the cell with comfortable padding (always upright, never flipped)
       const centerX = cellX + size / 2;
       const centerY = cellY + size / 2;
       ctx.translate(centerX, centerY);
-
-      // Top ("atas") is normal upright; Bottom ("bawah") is rotated 180deg (terbalik mirror)
-      if (position === "bottom") {
-        ctx.rotate(Math.PI);
-      } else if (position === "right") {
-        ctx.rotate(Math.PI / 2);
-      }
 
       const fontSize = Math.max(6, Math.floor(size * 0.16));
       ctx.font = `900 ${fontSize}px 'Plus Jakarta Sans', 'Inter', sans-serif`;
@@ -590,8 +583,8 @@ export const ParkingGrid: React.FC<ParkingGridProps> = ({
       ctx.lineWidth = Math.max(2.5, size * 0.065);
       ctx.strokeText("KELUAR", 0, textY);
 
-      // Taxi Yellow fill with black outline over the zebra cross
-      ctx.fillStyle = "#FFCF01";
+      // White fill with black outline over the zebra cross
+      ctx.fillStyle = "#FFFFFF";
       ctx.fillText("KELUAR", 0, textY);
 
       ctx.restore();
